@@ -12,21 +12,18 @@
 
 #include<QObject>
 
-// avoid a moc error, when including boost
-#ifndef QT_MOC_RUN
-    #include<boost/shared_ptr.hpp>
+#include<memory>
 
-    #include<ramen/nodes/node_fwd.hpp>
+#include<ramen/nodes/node_fwd.hpp>
 
-    #include<ramen/anim/track_fwd.hpp>
-    #include<ramen/anim/keyframe.hpp>
-    #include<ramen/anim/any_curve.hpp>
+#include<ramen/anim/track_fwd.hpp>
+#include<ramen/anim/keyframe.hpp>
+#include<ramen/anim/any_curve.hpp>
 
-    #include<ramen/ui/anim/track_model_fwd.hpp>
-    #include<ramen/ui/anim/anim_editor_command.hpp>
-    #include<ramen/ui/anim/anim_editor_toolbar_fwd.hpp>
-    #include<ramen/ui/anim/anim_curves_view_fwd.hpp>
-#endif
+#include<ramen/ui/anim/track_model_fwd.hpp>
+#include<ramen/ui/anim/anim_editor_command.hpp>
+#include<ramen/ui/anim/anim_editor_toolbar_fwd.hpp>
+#include<ramen/ui/anim/anim_curves_view_fwd.hpp>
 
 class QWidget;
 class QSplitter;
@@ -51,7 +48,7 @@ public:
 	void clear_all();
 
     // tracks
-	boost::shared_ptr<track_model_t> track_model() { return current_;}
+	std::shared_ptr<track_model_t> track_model() { return current_;}
     void recreate_tracks( node_t *n);
 	
     const std::set<anim::track_t*>& active_tracks() const	{ return active_tracks_;}
@@ -122,8 +119,8 @@ private:
 
     void insert_in_active_tracks( anim::track_t *t);
 
-    boost::shared_ptr<track_model_t> current_;
-    boost::shared_ptr<track_model_t> default_model_;
+    std::shared_ptr<track_model_t> current_;
+    std::shared_ptr<track_model_t> default_model_;
 
     std::set<anim::track_t*> active_tracks_;
 

@@ -12,8 +12,8 @@
 #include<vector>
 #include<map>
 
-#include<boost/bind.hpp>
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<functional>
+#include<ramen/container/ptr_vector.hpp>
 
 #include<ramen/nodes/node.hpp>
 #include<ramen/nodes/edge.hpp>
@@ -29,7 +29,7 @@ class node_graph_t
 {
 public:
 
-    typedef boost::ptr_vector<node_t> node_container_type;
+    typedef container::ptr_vector<node_t> node_container_type;
 
     typedef node_container_type::iterator       node_iterator;
     typedef node_container_type::const_iterator	const_node_iterator;

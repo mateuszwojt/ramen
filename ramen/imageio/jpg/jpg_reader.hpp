@@ -16,7 +16,7 @@ class jpg_reader_t : public reader_t
 {
 public:
 
-    jpg_reader_t( const boost::filesystem::path& p);
+    jpg_reader_t( const std::filesystem::path& p);
 
 private:
 

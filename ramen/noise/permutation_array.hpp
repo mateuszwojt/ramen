@@ -4,7 +4,7 @@
 #ifndef RAMEN_NOISE_PERM_ARRAY_HPP
 #define RAMEN_NOISE_PERM_ARRAY_HPP
 
-#include<boost/cstdint.hpp>
+#include<cstdint>
 
 namespace ramen
 {
@@ -37,7 +37,7 @@ private:
 	int size() const { return 256;}
 	int mask() const { return size() - 1;}
 	
-	static boost::uint8_t perm_[256];
+	static std::uint8_t perm_[256];
 };
 
 } // noise

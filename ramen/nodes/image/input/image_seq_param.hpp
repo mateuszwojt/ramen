@@ -7,7 +7,7 @@
 
 #include<ramen/params/static_param.hpp>
 
-#include<boost/signals2/signal.hpp>
+#include<ramen/core/signal.hpp>
 
 #include<QPointer>
 
@@ -28,7 +28,7 @@ public:
 
     image_seq_param_t( const std::string& name, int proxy_level);
 
-    boost::signals2::signal<void ( const::boost::filesystem::path&, int, bool, bool)> file_picked;
+    core::signal_t<void ( const::std::filesystem::path&, int, bool, bool)> file_picked;
 
 	void set_input_text( const std::string& str);
 	

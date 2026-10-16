@@ -7,7 +7,7 @@
 
 #include<ramen/imageio/reader.hpp>
 
-#include<boost/tuple/tuple.hpp>
+#include<tuple>
 
 namespace ramen
 {
@@ -18,7 +18,7 @@ class RAMEN_API multichannel_reader_t : public reader_t
 {
 public:
 
-    multichannel_reader_t( const boost::filesystem::path& p);
+    multichannel_reader_t( const std::filesystem::path& p);
 
     const std::vector<std::string>& channel_list() const { return channels_;}
 
@@ -29,7 +29,7 @@ public:
     void read_image( const image::image_view_t& view,
                      const math::box2i_t& crop,
                      int subsample,
-                     const boost::tuple<int,int,int,int>& channels) const
+                     const std::tuple<int,int,int,int>& channels) const
     {
         do_read_image( view, crop, subsample, channels);
     }
@@ -44,7 +44,7 @@ private:
     virtual void do_read_image( const image::image_view_t& view,
                                 const math::box2i_t& crop,
                                 int subsample,
-                                const boost::tuple<int,int,int,int>& channels) const = 0;
+                                const std::tuple<int,int,int,int>& channels) const = 0;
 
 protected:
 

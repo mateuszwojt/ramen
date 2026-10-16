@@ -4,7 +4,7 @@
 
 #include<ramen/ui/anim/anim_editor_select_tool.hpp>
 
-#include<boost/foreach.hpp>
+
 
 #include<Imath/ImathFun.h>
 #include<Imath/ImathVec.h>
@@ -88,9 +88,9 @@ void anim_editor_select_tool_t::mouse_press_event( anim_curves_view_t& view, QMo
 	if( view.show_tangents())
 	{
 		pick_tangents_visitor v0( view, p);
-		BOOST_FOREACH( anim::track_t *t, app().ui()->anim_editor().active_tracks())
+		for( anim::track_t *t : app().ui()->anim_editor().active_tracks())
 		{
-			boost::apply_visitor( v0, t->curve().get());
+			std::visit( v0, t->curve().value());
 	
 			if( v0.key_index >= 0)
 			{
@@ -105,9 +105,9 @@ void anim_editor_select_tool_t::mouse_press_event( anim_curves_view_t& view, QMo
 	}
 
     pick_keyframe_visitor v1( view, p);
-    BOOST_FOREACH( anim::track_t *t, app().ui()->anim_editor().active_tracks())
+    for( anim::track_t *t : app().ui()->anim_editor().active_tracks())
     {
-        boost::apply_visitor( v1, t->curve().get());
+        std::visit( v1, t->curve().value());
 
         if( v1.key_index >= 0)
         {
@@ -121,16 +121,16 @@ void anim_editor_select_tool_t::mouse_press_event( anim_curves_view_t& view, QMo
 	{
 		can_insert_keyframe_visitor v0( view, p, view.snap_frames());
 		
-		BOOST_FOREACH( anim::track_t *t, app().ui()->anim_editor().active_tracks())
+		for( anim::track_t *t : app().ui()->anim_editor().active_tracks())
 		{
-			boost::apply_visitor( v0, t->curve().get());
+			std::visit( v0, t->curve().value());
 			
 			if( v0.can_insert)
 			{
 				app().ui()->anim_editor().create_command();
 				app().ui()->anim_editor().command()->add_track( t);
 				insert_keyframe_visitor v1( view, p, view.snap_frames());
-				boost::apply_visitor( v1, t->curve().get());
+				std::visit( v1, t->curve().value());
 				
 				track_ = t;
 				key_index_ = v1.key_index;
@@ -148,19 +148,19 @@ void anim_editor_select_tool_t::mouse_press_event( anim_curves_view_t& view, QMo
     {
 		if( !shift_pressed)
 		{
-		    if( !keyframe_is_selected( track_->curve().get(), key_index_))
+		    if( !keyframe_is_selected( track_->curve().value(), key_index_))
 		    {
 				app().ui()->anim_editor().deselect_all();
-				select_keyframe( track_->curve().get(), key_index_);
+				select_keyframe( track_->curve().value(), key_index_);
 		    }
 
 		    drag_keyframes_mode_ = true;
 		}
 		else
 		{
-			toggle_select_keyframe( track_->curve().get(), key_index_);
+			toggle_select_keyframe( track_->curve().value(), key_index_);
 
-		    if( keyframe_is_selected( track_->curve().get(), key_index_))
+		    if( keyframe_is_selected( track_->curve().value(), key_index_))
 				drag_keyframes_mode_ = true;
 		}
 		
@@ -206,7 +206,7 @@ void anim_editor_select_tool_t::mouse_drag_event( anim_curves_view_t& view, QMou
     if( drag_tangents_mode_)
     {		
 		drag_tangents_visitor v( view, key_index_, left_, Imath::V2i( event->x(), event->y()), break_tangents_);
-		boost::apply_visitor( v, track_->curve().get());
+		std::visit( v, track_->curve().value());
         track_->notify();
         app().ui()->active_node()->notify();
     }
@@ -253,9 +253,9 @@ void anim_editor_select_tool_t::mouse_drag_event( anim_curves_view_t& view, QMou
 			}
 
 			drag_command_->start_drag( d, view.snap_frames());
-			BOOST_FOREACH( anim::track_t *t, app().ui()->anim_editor().active_tracks())
+			for( anim::track_t *t : app().ui()->anim_editor().active_tracks())
 			{
-				if( app().ui()->anim_editor().any_keyframe_selected( t->curve().get()))
+				if( app().ui()->anim_editor().any_keyframe_selected( t->curve().value()))
 					drag_command_->drag_curve( t);
 			}
 			
@@ -282,8 +282,8 @@ void anim_editor_select_tool_t::mouse_release_event( anim_curves_view_t& view, Q
 			area.extendBy( Imath::V2i( last_x_, last_y_));
 
 			box_pick_keyframes_visitor v( view, area);
-			BOOST_FOREACH( anim::track_t *t, app().ui()->anim_editor().active_tracks())
-				boost::apply_visitor( v, t->curve().get());
+			for( anim::track_t *t : app().ui()->anim_editor().active_tracks())
+				std::visit( v, t->curve().value());
 		}
    }
 
@@ -305,19 +305,19 @@ void anim_editor_select_tool_t::mouse_release_event( anim_curves_view_t& view, Q
 void anim_editor_select_tool_t::select_keyframe( anim::any_curve_ptr_t& c, int index)
 {
 	select_keyframe_visitor v( index);
-	boost::apply_visitor( v, c);
+	std::visit( v, c);
 }
 
 void anim_editor_select_tool_t::toggle_select_keyframe( anim::any_curve_ptr_t& c, int index)
 {
 	toggle_select_keyframe_visitor v( index);
-	boost::apply_visitor( v, c);
+	std::visit( v, c);
 }
 
 bool anim_editor_select_tool_t::keyframe_is_selected( anim::any_curve_ptr_t& c, int index) const
 {
 	keyframe_is_selected_visitor v( index);
-	boost::apply_visitor( v, c);
+	std::visit( v, c);
 	return v.selected;
 }
 

@@ -9,29 +9,26 @@
 #include<QString>
 #include<QFont>
 
-// avoid a moc error, when including boost
-#ifndef QT_MOC_RUN
-    #include<ramen/config.hpp>
+#include<ramen/config.hpp>
 
-    #include<ramen/ui/user_interface_fwd.hpp>
+#include<ramen/ui/user_interface_fwd.hpp>
 
-    #include<memory>
+#include<memory>
 
-    #include<boost/noncopyable.hpp>
-    #include<boost/thread/future.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<future>
 
-    #include<ramen/filesystem/path.hpp>
-    #include<boost/filesystem/fstream.hpp>
+#include<ramen/filesystem/path.hpp>
+#include<fstream>
 
-    #include<ramen/render/image_node_renderer.hpp>
+#include<ramen/render/image_node_renderer.hpp>
 
-    #include<ramen/ui/main_window_fwd.hpp>
-    #include<ramen/ui/viewer/viewer_fwd.hpp>
-    #include<ramen/ui/inspector/inspector_fwd.hpp>
-    #include<ramen/ui/anim/anim_editor_fwd.hpp>
+#include<ramen/ui/main_window_fwd.hpp>
+#include<ramen/ui/viewer/viewer_fwd.hpp>
+#include<ramen/ui/inspector/inspector_fwd.hpp>
+#include<ramen/ui/anim/anim_editor_fwd.hpp>
 
-    #include<ramen/serialization/archive_fwd.hpp>
-#endif
+#include<ramen/serialization/archive_fwd.hpp>
 
 namespace ramen
 {
@@ -42,7 +39,7 @@ namespace ui
 \ingroup ui
 \brief user interface class.
 */
-class RAMEN_API user_interface_t : public QObject, boost::noncopyable
+class RAMEN_API user_interface_t : public QObject, ramen::core::noncopyable_t
 {
     Q_OBJECT
 
@@ -54,7 +51,7 @@ public:
     void init();
 
     void show();
-    int run( const boost::filesystem::path& p = boost::filesystem::path());
+    int run( const std::filesystem::path& p = std::filesystem::path());
     void quit();
 
     // components
@@ -72,7 +69,7 @@ public:
 
     // document handling
     void create_new_document();
-    void open_document( const boost::filesystem::path& p);
+    void open_document( const std::filesystem::path& p);
     bool save_document();
 
     // nodes
@@ -106,8 +103,8 @@ public:
     bool question( const std::string& what, bool default_answer = true) const;
 
     // sequence file selector
-    bool image_sequence_file_selector( boost::filesystem::path& p, bool& sequence, bool& relative) const;
-    bool image_sequence_file_selector( const std::string& title, const std::string& types, boost::filesystem::path& p,
+    bool image_sequence_file_selector( std::filesystem::path& p, bool& sequence, bool& relative) const;
+    bool image_sequence_file_selector( const std::string& title, const std::string& types, std::filesystem::path& p,
                                         bool& sequence, bool& relative) const;
 
     // serialization
@@ -123,7 +120,7 @@ public:
     virtual bool eventFilter( QObject *watched, QEvent *event);
 
     // render
-    boost::unique_future<bool>& render_image( render::context_t context, render::image_node_renderer_t& renderer);
+    std::future<bool>& render_image( render::context_t context, render::image_node_renderer_t& renderer);
 
     bool rendering() const { return rendering_;}
 

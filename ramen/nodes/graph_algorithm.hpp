@@ -5,9 +5,8 @@
 #ifndef RAMEN_NODES_GRAPH_ALGORITHM_HPP
 #define RAMEN_NODES_GRAPH_ALGORITHM_HPP
 
-#include<boost/range.hpp>
-#include<boost/bind.hpp>
-#include<boost/ref.hpp>
+#include<ranges>
+#include<functional>
 
 #include<ramen/nodes/node.hpp>
 #include<ramen/nodes/edge.hpp>
@@ -23,9 +22,9 @@ void set_inputs_color( node_t& n, graph_color_t c);
 template<class Range>
 void set_multiple_inputs_color( Range& r, graph_color_t c)
 {
-    typedef typename boost::range_iterator<Range>::type iter;
+    typedef std::ranges::iterator_t<Range> iter;
 
-    for( iter it( boost::begin(r)); it != boost::end(r); ++it)
+    for( iter it( std::begin(r)); it != std::end(r); ++it)
         set_inputs_color( *(*it), c);
 }
 
@@ -34,9 +33,9 @@ void set_outputs_color( node_t& n, graph_color_t c);
 template<class Range>
 void set_multiple_outputs_color( Range& r, graph_color_t c)
 {
-    typedef typename boost::range_iterator<Range>::type iter;
+    typedef std::ranges::iterator_t<Range> iter;
 
-    for( iter it( boost::begin(r)); it != boost::end(r); ++it)
+    for( iter it( std::begin(r)); it != std::end(r); ++it)
         set_outputs_color( *(*it), c);
 }
 
@@ -149,17 +148,17 @@ void breadth_first_outputs_search( node_t& first, Visitor f, bool search_first =
 template<class Range, class Visitor>
 void breadth_first_multiple_outputs_search( Range& r, Visitor f, bool search_first = true)
 {
-    typedef typename boost::range_iterator<Range>::type iter;
+    typedef std::ranges::iterator_t<Range> iter;
 
     detail::set_multiple_outputs_color( r, black);
 
     if( !search_first)
     {
-        for( iter it( boost::begin(r)); it != boost::end(r); ++it)
+        for( iter it( std::begin(r)); it != std::end(r); ++it)
             (*it)->set_graph_color( white);
     }
 
-    for( iter it( boost::begin(r)); it != boost::end(r); ++it)
+    for( iter it( std::begin(r)); it != std::end(r); ++it)
         detail::breadth_first_outputs_recursive_search( *(*it), f);
 }
 
@@ -181,8 +180,8 @@ void breadth_first_out_edges_apply( node_t& n, Visitor f)
 {
     for( unsigned int i = 0; i < n.num_outputs(); ++i)
 	{
-		node_t *dst = boost::get<0>( n.output_plug().connections()[i]);
-		int port  = boost::get<2>( n.output_plug().connections()[i]);
+		node_t *dst = std::get<0>( n.output_plug().connections()[i]);
+		int port  = std::get<2>( n.output_plug().connections()[i]);
 		edge_t e( &n, dst, port);
 		f( e);
 

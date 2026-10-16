@@ -3,16 +3,20 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<gtest/gtest.h>
+#include<utility>
 
 #include<cstring>
 #include<iostream>
 
 #include<ramen/core/string.hpp>
 
-#include<boost/range/algorithm/for_each.hpp>
-#include<boost/algorithm/string/find.hpp>
-#include<boost/tokenizer.hpp>
-#include<boost/lexical_cast.hpp>
+#include<algorithm>
+#include<algorithm>
+#include<iterator>
+#include<ranges>
+#include<string>
+#include<vector>
+#include<ramen/util/lexical_cast.hpp>
 
 using namespace ramen::core;
 
@@ -49,11 +53,11 @@ TEST( String8, MoveAssign)
     string_t a( "XYZ");
     string_t b( "XYZ");
 
-    string_t c( boost::move( b));
+    string_t c( std::move( b));
     EXPECT_EQ( a.size(), 3);
     EXPECT_EQ( c, a);
 
-    b = boost::move( c);
+    b = std::move( c);
     EXPECT_EQ( b.size(), 3);
     EXPECT_EQ( b, a);
 }
@@ -146,15 +150,17 @@ struct nop_fun
 TEST( String8, BoostRange)
 {
     string_t a( "XYZ");
-    boost::range::for_each( a, nop_fun());
+    std::ranges::for_each( a, nop_fun());
 }
 
-TEST( String8, BoostStringAlgo)
+TEST( String8, StdAlgorithms)
 {
     string_t str( make_string( "Xyzw ", "Yzw ", "Zw ", "W"));
-    boost::iterator_range<string_t::iterator> range = boost::algorithm::find_last( str, "Z");
-    EXPECT_EQ( *range.begin(), 'Z');
-    EXPECT_EQ( std::distance( str.begin(), range.begin()), 9);
+    std::reverse_iterator<string_t::iterator> rit( std::find( std::make_reverse_iterator( str.end()),
+                                                              std::make_reverse_iterator( str.begin()), 'Z'));
+    string_t::iterator it( rit.base() - 1);
+    EXPECT_EQ( *it, 'Z');
+    EXPECT_EQ( std::distance( str.begin(), it), 9);
 }
 
 TEST( String8, STLString)
@@ -168,38 +174,35 @@ TEST( String8, STLString)
     EXPECT_EQ( stest, xtest);
 }
 
-TEST( String8, BoostTokenizer)
+TEST( String8, Split)
 {
     string_t test_path( "/usr/local/bin/any_bin");
-    boost::char_separator<string_t::char_type> sep( "/");
 
-    typedef boost::tokenizer<boost::char_separator<char>,
-                             string_t::const_iterator,
-                             string_t> tokenizer_type;
+    std::vector<std::string> tokens;
+    for( auto token : std::views::split( test_path, '/'))
+    {
+        if( !std::ranges::empty( token))
+            tokens.emplace_back( std::ranges::begin( token), std::ranges::end( token));
+    }
 
-    tokenizer_type tokens( test_path, sep);
-
-    tokenizer_type::iterator it( tokens.begin());
-    EXPECT_EQ( *it, "usr");
-    ++it;
-    EXPECT_EQ( *it, "local");
-    ++it;
-    EXPECT_EQ( *it, "bin");
-    ++it;
-    EXPECT_EQ( *it, "any_bin");
+    ASSERT_EQ( tokens.size(), 4);
+    EXPECT_EQ( tokens[0], "usr");
+    EXPECT_EQ( tokens[1], "local");
+    EXPECT_EQ( tokens[2], "bin");
+    EXPECT_EQ( tokens[3], "any_bin");
 }
 
-TEST( String8, BoostLexicalCast)
+TEST( String8, LexicalCast)
 {
     string_t str( "751");
-    int x = boost::lexical_cast<int>( str);
+    int x = ramen::util::lexical_cast<int>( str);
     EXPECT_EQ( x, 751);
 
-    string_t str2 = boost::lexical_cast<string_t>( x);
+    string_t str2 = ramen::util::lexical_cast<string_t>( x);
     EXPECT_EQ( str2, str);
 
     string_t str3( "any_string_123");
-    EXPECT_ANY_THROW( boost::lexical_cast<int>( str3));
+    EXPECT_ANY_THROW( ramen::util::lexical_cast<int>( str3));
 }
 
 int main(int argc, char **argv)

@@ -6,7 +6,6 @@
 
 #include<algorithm>
 
-#include<boost/range/algorithm/find_if.hpp>
 
 #include<ramen/nodes/node.hpp>
 
@@ -25,7 +24,7 @@ struct match_output_connection
 
     bool operator()( const node_output_plug_t::connection_t& c) const
     {
-        if( boost::get<0>( c) == node_ && boost::get<1>( c) == id_)
+        if( std::get<0>( c) == node_ && std::get<1>( c) == id_)
             return true;
 
         return false;
@@ -45,7 +44,7 @@ struct match_output_connection_by_port
 
     bool operator()( const node_output_plug_t::connection_t& c) const
     {
-        if( boost::get<0>( c) == node_ && boost::get<2>( c) == num_)
+        if( std::get<0>( c) == node_ && std::get<2>( c) == num_)
             return true;
 
         return false;
@@ -75,25 +74,25 @@ node_output_plug_t::~node_output_plug_t() {}
 
 void node_output_plug_t::add_output( node_t *n, const core::name_t& plug)
 {
-    RAMEN_ASSERT( boost::range::find_if( connections_,
+    RAMEN_ASSERT( std::ranges::find_if( connections_,
                                         match_output_connection( n, plug)) == connections_.end());
 
     int port = n->find_input( plug);
     RAMEN_ASSERT( port >= 0);
 
-    connections_.push_back( boost::tuples::make_tuple( n, plug, port));
+    connections_.push_back( std::make_tuple( n, plug, port));
 }
 
 void node_output_plug_t::add_output( node_t *n, int port)
 {
-    RAMEN_ASSERT( boost::range::find_if( connections_,
+    RAMEN_ASSERT( std::ranges::find_if( connections_,
                                         match_output_connection_by_port( n, port)) == connections_.end());
-    connections_.push_back( boost::tuples::make_tuple( n, n->input_plugs()[port].id(), port));
+    connections_.push_back( std::make_tuple( n, n->input_plugs()[port].id(), port));
 }
 
 void node_output_plug_t::remove_output( node_t *n, const core::name_t& plug)
 {
-    iterator it( boost::range::find_if( connections_,
+    iterator it( std::ranges::find_if( connections_,
                                         match_output_connection( n, plug)));
 
 	if( it != connections_.end())
@@ -102,7 +101,7 @@ void node_output_plug_t::remove_output( node_t *n, const core::name_t& plug)
 
 void node_output_plug_t::remove_output( node_t *n, int port)
 {
-    iterator it( boost::range::find_if( connections_,
+    iterator it( std::ranges::find_if( connections_,
                                         match_output_connection_by_port( n, port)));
 
 	if( it != connections_.end())

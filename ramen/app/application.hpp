@@ -12,8 +12,8 @@
 #include<string>
 #include<memory>
 
-#include<boost/noncopyable.hpp>
-#include<boost/cstdint.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<cstdint>
 
 #include<tbb/global_control.h>
 
@@ -42,7 +42,7 @@ namespace ramen
 \ingroup app
 \brief Application class.
 */
-class RAMEN_API application_t : boost::noncopyable
+class RAMEN_API application_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -84,7 +84,7 @@ public:
 	document_t& document()              { return *document_;}
 
 	void create_new_document();
-	void open_document( const boost::filesystem::path& p);
+	void open_document( const std::filesystem::path& p);
 	void delete_document();
 
 	bool quitting() const       { return quitting_;}
@@ -94,8 +94,8 @@ private:
 
 	// command line
 	bool matches_option( char *arg, const char *opt) const;
-	boost::optional<int> parse_int( int num, int argc, char **argv) const;
-	boost::optional<float> parse_float( int num, int argc, char **argv) const;
+	std::optional<int> parse_int( int num, int argc, char **argv) const;
+	std::optional<float> parse_float( int num, int argc, char **argv) const;
 	void parse_input_file( char *arg);
 	bool parse_common_option( int argc, char **argv, int& num);
 
@@ -109,14 +109,14 @@ private:
 
 	// opencolorio
 	void init_ocio();
-	bool init_ocio_config_from_file( const boost::filesystem::path& p);
+	bool init_ocio_config_from_file( const std::filesystem::path& p);
 
 	// data
     core::auto_ptr_t<util::command_line_parser_t> cmd_parser_;
-	boost::uint64_t img_cache_size_;
+	std::uint64_t img_cache_size_;
 	int max_threads_;
 	bool command_line_;
-	boost::filesystem::path infile_;
+	std::filesystem::path infile_;
 	bool render_mode_;
 
 	std::unique_ptr<tbb::global_control> task_scheduler_;
@@ -129,10 +129,10 @@ private:
 
     core::auto_ptr_t<document_t> document_;
 
-	boost::optional<int> start_frame_, end_frame_, proxy_level_,
+	std::optional<int> start_frame_, end_frame_, proxy_level_,
 						subsample_, mb_extra_samples_;
 
-	boost::optional<float> mb_shutter_factor_;
+	std::optional<float> mb_shutter_factor_;
 
     core::auto_ptr_t<ui::splash_screen_t> splash_;
 

@@ -4,10 +4,10 @@
 
 #include<ramen/params/parameterised.hpp>
 
-#include<boost/foreach.hpp>
-#include<boost/bind.hpp>
 
-#include<boost/range/algorithm/for_each.hpp>
+#include<functional>
+
+#include<algorithm>
 
 #include<ramen/app/composition.hpp>
 
@@ -41,7 +41,7 @@ parameterised_t *parameterised_t::clone() const { return do_clone();}
 void parameterised_t::create_params()
 {
     do_create_params();
-    boost::range::for_each( param_set(), boost::bind( &param_t::init, _1));
+    std::ranges::for_each( param_set(), std::bind( &param_t::init, std::placeholders::_1));
 }
 
 void parameterised_t::set_parent( parameterised_t *parent)
@@ -133,7 +133,7 @@ param_t& parameterised_t::param( const std::string& identifier)
     return param_set().find( identifier);
 }
 
-void parameterised_t::for_each_param( const boost::function<void ( param_t*)>& f)
+void parameterised_t::for_each_param( const std::function<void ( param_t*)>& f)
 {
     param_set().for_each_param( f);
 }
@@ -143,7 +143,7 @@ void parameterised_t::create_tracks( anim::track_t *root)
 {
     std::unique_ptr<anim::track_t> top( new anim::track_t( name()));
 
-    BOOST_FOREACH( param_t& p, param_set())
+    for( param_t& p : param_set())
     {
         p.create_tracks( top.get());
     }
@@ -154,18 +154,18 @@ void parameterised_t::create_tracks( anim::track_t *root)
 
 void parameterised_t::set_frame( float f)
 {
-    boost::range::for_each( param_set(), boost::bind( &param_t::set_frame, _1, f));
+    std::ranges::for_each( param_set(), std::bind( &param_t::set_frame, std::placeholders::_1, f));
     do_set_frame( f);
 }
 
 void parameterised_t::evaluate_params( float frame)
 {
-    boost::range::for_each( param_set(), boost::bind( &param_t::evaluate, _1, frame));
+    std::ranges::for_each( param_set(), std::bind( &param_t::evaluate, std::placeholders::_1, frame));
 }
 
 void parameterised_t::update_widgets()
 {
-    boost::range::for_each( param_set(), boost::bind( &param_t::update_widgets, _1));
+    std::ranges::for_each( param_set(), std::bind( &param_t::update_widgets, std::placeholders::_1));
     do_update_widgets();
 }
 

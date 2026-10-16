@@ -9,66 +9,24 @@
 
 #include<ramen/Concepts/RegularConcept.hpp>
 
+#include<concepts>
+
 namespace ramen
 {
 
 /**
 \ingroup concepts
-\brief concept checking class for param values
+\brief concept for param values
 */
 template<class T>
-struct ParamValueConcept :  boost::DefaultConstructible<T>,
-                            boost::CopyConstructible<T>,
-                            boost::Assignable<T>,
-                            boost::EqualityComparable<T>
-{
-private:
-
-    BOOST_CONCEPT_ASSERT(( RegularConcept<T>));
-
-public:
-
-	BOOST_CONCEPT_USAGE( ParamValueConcept)
-	{
-    }
-};
+concept ParamValueConcept = RegularConcept<T> && std::default_initializable<T> && std::equality_comparable<T>;
 
 /**
 \ingroup concepts
-\brief concept checking class for param values that have operator[] defined
+\brief concept for param values that have operator[] defined
 */
 template<class T>
-struct IndexableParamValueConcept : boost::DefaultConstructible<T>,
-                                    boost::CopyConstructible<T>,
-                                    boost::Assignable<T>,
-                                    boost::EqualityComparable<T>
-{
-private:
-
-    BOOST_CONCEPT_ASSERT(( ParamValueConcept<T>));
-
-public:
-
-	BOOST_CONCEPT_USAGE( IndexableParamValueConcept)
-	{
-        checkIndexOperator( t);
-	}
-
-    T t;
-
-private:
-
-    template<class X>
-    static void nothing( const X& x) {}
-
-    template<class X>
-    static void checkIndexOperator( const X& x)
-    {
-        nothing( x[0]);
-    }
-
-    static void checkIndexOperator( const core::empty_t& x) {}
-};
+concept IndexableParamValueConcept = ParamValueConcept<T> && ( std::same_as<T, core::empty_t> || requires( const T& x) { x[0];});
 
 } // ramen
 

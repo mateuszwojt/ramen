@@ -11,18 +11,15 @@
 #include<QKeyEvent>
 #include<QMouseEvent>
 
-// avoid a moc error, when including boost
-#ifndef QT_MOC_RUN
-    #include<boost/function.hpp>
+#include<functional>
 
-    #include<Imath/ImathBox.h>
-    #include<Imath/ImathColor.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathColor.h>
 
-    #include<ramen/assert.hpp>
+#include<ramen/assert.hpp>
 
-    #include<ramen/nodes/node_fwd.hpp>
-    #include<ramen/ui/viewer/viewer_context_fwd.hpp>
-#endif
+#include<ramen/nodes/node_fwd.hpp>
+#include<ramen/ui/viewer/viewer_context_fwd.hpp>
 
 class QWidget;
 
@@ -98,7 +95,7 @@ public:
 
     // eyedropper & color picking
     virtual Imath::Color4f color_at( int x, int y) const;
-    virtual void pick_colors_in_box( const Imath::Box2i& b, boost::function<void ( const Imath::Color4f&)> f) const;
+    virtual void pick_colors_in_box( const Imath::Box2i& b, std::function<void ( const Imath::Color4f&)> f) const;
 
     // utils
     virtual void frame_rect( const Imath::Box2f& b) const;

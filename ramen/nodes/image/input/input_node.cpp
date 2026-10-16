@@ -8,7 +8,7 @@
 
 #include<sstream>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<Imath/ImathFun.h>
 
@@ -34,7 +34,6 @@
 #include<ramen/params/popup_param.hpp>
 #include<ramen/params/separator_param.hpp>
 
-#include<ramen/app/application.hpp>
 #include<ramen/app/document.hpp>
 #include<ramen/app/preferences.hpp>
 
@@ -74,11 +73,11 @@ input_node_t::input_node_t() : image_node_t()
 {
     set_name( "image_in");
     add_output_plug();
-    param_set().param_changed.connect( boost::bind( &input_node_t::param_changed, this, _1, _2));	
+    param_set().param_changed.connect( std::bind( &input_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));	
 }
 
-input_node_t::input_node_t( const boost::filesystem::path& path, bool sequence,
-										const boost::filesystem::path& from_dir) : image_node_t()
+input_node_t::input_node_t( const std::filesystem::path& path, bool sequence,
+										const std::filesystem::path& from_dir) : image_node_t()
 {
     set_name( "image_in");
     add_output_plug();
@@ -88,50 +87,50 @@ input_node_t::input_node_t( const boost::filesystem::path& path, bool sequence,
 	
 	if( sequence)
 	{
-		boost::filesystem::path abs_dir( path.parent_path());
+		std::filesystem::path abs_dir( path.parent_path());
 	
 		if( path.is_relative())
 			abs_dir = filesystem::make_absolute_path( abs_dir, from_dir);
 
-		boost::filesystem::directory_iterator it( abs_dir);
+		std::filesystem::directory_iterator it( abs_dir);
 		seq.add_paths( it);
 	}
 	
 	clips_[0] = input_clip_t( seq);
 	create_reader( 0, from_dir);
 
-    param_set().param_changed.connect( boost::bind( &input_node_t::param_changed, this, _1, _2));	
+    param_set().param_changed.connect( std::bind( &input_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));	
 }
 
 input_node_t::input_node_t( const input_node_t& other) : image_node_t( other), clips_( other.clips_)
 {
 	image_seq_param_t *seq = dynamic_cast<image_seq_param_t*>( &param( "path"));
-	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
+	seq->file_picked.connect( std::bind( &input_node_t::file_picked, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
 	seq = dynamic_cast<image_seq_param_t*>( &param( "proxy1"));
-	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
+	seq->file_picked.connect( std::bind( &input_node_t::file_picked, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
 	seq = dynamic_cast<image_seq_param_t*>( &param( "proxy2"));
-	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
+	seq->file_picked.connect( std::bind( &input_node_t::file_picked, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
 	readers_.reserve( num_proxy_levels);
 	for( int i = 0; i < num_proxy_levels; ++i)
 	{
-		readers_.push_back( boost::shared_ptr<movieio::reader_t>());
+		readers_.push_back( std::shared_ptr<movieio::reader_t>());
 		
 		if( other.readers_[i])
 			create_reader( i);
 	}
 
-    param_set().param_changed.connect( boost::bind( &input_node_t::param_changed, this, _1, _2));
+    param_set().param_changed.connect( std::bind( &input_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-boost::tuple<int,int,int,int> input_node_t::get_channels() const
+std::tuple<int,int,int,int> input_node_t::get_channels() const
 {
 	return get_value<tuple4i_t>( param( "channels"));
 }
 
-void input_node_t::set_channels( const boost::tuple<int,int,int,int>& c)
+void input_node_t::set_channels( const std::tuple<int,int,int,int>& c)
 {
 	image_channels_param_t *ch = dynamic_cast<image_channels_param_t*>( &param( "channels"));
 	RAMEN_ASSERT( ch);
@@ -171,18 +170,18 @@ void input_node_t::do_create_params()
 		for( int i = 0; i < num_proxy_levels; ++i)
 		{
 			clips_.push_back( input_clip_t());
-			readers_.push_back( boost::shared_ptr<movieio::reader_t>());
+			readers_.push_back( std::shared_ptr<movieio::reader_t>());
 		}
 	}
 }
 
-void input_node_t::create_image_params( const boost::filesystem::path& p)
+void input_node_t::create_image_params( const std::filesystem::path& p)
 {
 	std::unique_ptr<image_seq_param_t> seq( new image_seq_param_t( "Path", 0));
 	seq->set_id( "path");
 	seq->set_include_in_hash( false);
 	seq->set_persist( false);
-	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
+	seq->file_picked.connect( std::bind( &input_node_t::file_picked, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 	add_param( std::move( seq));
 
 	seq.reset( new image_seq_param_t( "Proxy 1", 1));
@@ -190,7 +189,7 @@ void input_node_t::create_image_params( const boost::filesystem::path& p)
 	seq->set_include_in_hash( false);
 	seq->set_persist( false);
 	seq->set_enabled( false);
-	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
+	seq->file_picked.connect( std::bind( &input_node_t::file_picked, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 	add_param( std::move( seq));
 
 	seq.reset( new image_seq_param_t( "Proxy 2", 2));
@@ -198,7 +197,7 @@ void input_node_t::create_image_params( const boost::filesystem::path& p)
 	seq->set_include_in_hash( false);
 	seq->set_persist( false);
 	seq->set_enabled( false);
-	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
+	seq->file_picked.connect( std::bind( &input_node_t::file_picked, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 	add_param( std::move( seq));
 	
 	std::unique_ptr<string_param_t> info( new string_param_t( "Info", true));
@@ -231,7 +230,7 @@ void input_node_t::create_more_params()
 
 	std::unique_ptr<popup_param_t> pop( new popup_param_t( "Out of Range"));
 	pop->set_id( "out_range");
-	pop->menu_items() = boost::assign::list_of( "Hold")( "Loop")( "Black");
+	pop->menu_items() = { "Hold", "Loop", "Black"};
 	pop->set_include_in_hash( false);
 	add_param( std::move( pop));
 	
@@ -263,22 +262,22 @@ bool input_node_t::do_is_valid() const { return readers_[0].get() != 0;}
 
 void input_node_t::do_set_frame( float t)
 {
-	boost::optional<int> frame_num = map_frame_to_sequence( t);
+	std::optional<int> frame_num = map_frame_to_sequence( t);
 	
 	if( frame_num)
 	{
 		for( int i = 0; i < num_proxy_levels; ++i)
 		{
 			if( readers_[i])
-				readers_[i]->set_frame( frame_num.get());
+				readers_[i]->set_frame( frame_num.value());
 		}
 	}
 }
 
-boost::optional<int> input_node_t::map_frame_to_sequence( float t) const
+std::optional<int> input_node_t::map_frame_to_sequence( float t) const
 {
 	if( !readers_[0])
-		return boost::optional<int>();
+		return std::optional<int>();
 	
 	if( !readers_[0]->is_sequence())
 		return 0;
@@ -309,7 +308,7 @@ boost::optional<int> input_node_t::map_frame_to_sequence( float t) const
 			break;
 		
 			case black_frame:
-				return boost::optional<int>();
+				return std::optional<int>();
 			break;
 		}
 	}
@@ -324,7 +323,7 @@ void input_node_t::do_calc_hash_str( const render::context_t& context)
 	
 	int level = index_for_proxy_level( context.proxy_level);
 	
-	boost::optional<int> frame_num = map_frame_to_sequence( context.frame);
+	std::optional<int> frame_num = map_frame_to_sequence( context.frame);
 
 	if( frame_num)
 	{
@@ -333,10 +332,10 @@ void input_node_t::do_calc_hash_str( const render::context_t& context)
 		if( readers_[0]->is_multichannel())
 		{
 			tuple4i_t channels = get_value<tuple4i_t>( param( "channels"));
-			hash_generator()	<< boost::get<0>( channels) << ", "
-								<< boost::get<1>( channels) << ", "
-								<< boost::get<2>( channels) << ", "
-								<< boost::get<3>( channels);
+			hash_generator()	<< std::get<0>( channels) << ", "
+								<< std::get<1>( channels) << ", "
+								<< std::get<2>( channels) << ", "
+								<< std::get<3>( channels);
 		}
 	}
 	else
@@ -389,7 +388,7 @@ void input_node_t::do_calc_defined( const render::context_t& context)
 
 void input_node_t::do_process( const render::context_t& context)
 {
-	boost::optional<int> frame_num = map_frame_to_sequence( context.frame);
+	std::optional<int> frame_num = map_frame_to_sequence( context.frame);
 	
 	if( !frame_num)
 		return;	// black border mode
@@ -451,10 +450,10 @@ void input_node_t::do_read( const serialization::yaml_node_t& node, const std::p
 	{
 		std::string ch0, ch1, ch2, ch3;
 		
-		channels.get()[0] >> ch0;
-		channels.get()[1] >> ch1;
-		channels.get()[2] >> ch2;
-		channels.get()[3] >> ch3;
+		channels.value()[0] >> ch0;
+		channels.value()[1] >> ch1;
+		channels.value()[2] >> ch2;
+		channels.value()[3] >> ch3;
 		
 		// TODO: check here for errors.
 		set_channels( ch0, ch1, ch2, ch3);
@@ -490,7 +489,7 @@ void input_node_t::do_write( serialization::yaml_oarchive_t& out) const
 	}
 }
 
-void input_node_t::convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base)
+void input_node_t::convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base)
 {
 	for( int i = 0; i < clips_.size(); ++i)
 		clips_[i].convert_relative_paths( old_base, new_base);
@@ -529,7 +528,7 @@ void input_node_t::create_reader( int proxy_level)
 	create_reader( proxy_level, composition()->composition_dir());
 }
 
-void input_node_t::create_reader( int proxy_level, const boost::filesystem::path& from_dir)
+void input_node_t::create_reader( int proxy_level, const std::filesystem::path& from_dir)
 {
 	RAMEN_ASSERT( proxy_level >= 0 && proxy_level < num_proxy_levels);
 
@@ -590,7 +589,7 @@ void input_node_t::create_reader( int proxy_level, const boost::filesystem::path
 	}
 }
 
-void input_node_t::file_picked( const boost::filesystem::path& p,
+void input_node_t::file_picked( const std::filesystem::path& p,
                                 int level,
                                 bool sequence,
                                 bool relative)
@@ -603,7 +602,7 @@ void input_node_t::file_picked( const boost::filesystem::path& p,
 			sequence = false;
 	}
 
-	boost::filesystem::path abs_path( p);
+	std::filesystem::path abs_path( p);
 
 	if( p.is_relative())
 		abs_path = composition()->relative_to_absolute( abs_path);
@@ -615,7 +614,7 @@ void input_node_t::file_picked( const boost::filesystem::path& p,
 	
 	if( sequence)
 	{
-		boost::filesystem::directory_iterator it( abs_path.parent_path());
+		std::filesystem::directory_iterator it( abs_path.parent_path());
 		seq.add_paths( it);
 	}
 	
@@ -634,7 +633,7 @@ node_t *create_image_input_node() { return new input_node_t();}
 node_t *create_gui_image_input_node()
 {
     bool sequence, relative;
-    boost::filesystem::path p, dir;
+    std::filesystem::path p, dir;
 
     if( app().ui()->image_sequence_file_selector( p, sequence, relative))
         return new input_node_t( p, sequence, app().document().composition().composition_dir());

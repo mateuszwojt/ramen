@@ -4,7 +4,7 @@
 
 #include<ramen/nodes/image/roto/create_tool.hpp>
 
-#include<boost/foreach.hpp>
+
 
 #include<ramen/app/application.hpp>
 #include<ramen/app/document.hpp>
@@ -18,7 +18,6 @@
 #include<ramen/nodes/image/roto/manipulator.hpp>
 #include<ramen/nodes/image/roto/roto_commands.hpp>
 
-#include<ramen/app/document.hpp>
 
 namespace ramen
 {
@@ -155,14 +154,14 @@ void create_tool_t::close_shape( bool success)
 
 shape_t *create_tool_t::pick_shape( const ui::mouse_press_event_t& event, int& span_index, float& t)
 {
-	BOOST_FOREACH( roto::shape_t& s, parent().scene())
+	for( roto::shape_t& s : parent().scene())
 	{
 		if( !s.is_null())
 		{
 			if( s.inv_global_xform())
 			{
 				Imath::V2f p( event.wpos.x / event.aspect_ratio, event.wpos.y);
-				p = p * s.inv_global_xform().get();
+				p = p * s.inv_global_xform().value();
 				p -= s.offset();
 				
 				Imath::Box2f box( s.bbox());

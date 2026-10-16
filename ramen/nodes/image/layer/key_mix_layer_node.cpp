@@ -54,7 +54,7 @@ void key_mix_layer_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> p( new popup_param_t( "Mode"));
     p->set_id( "mode");
-    p->menu_items() = boost::assign::list_of( "Background")( "Foreground");
+    p->menu_items() = { "Background", "Foreground"};
     add_param( std::move( p));
 
     std::unique_ptr<float_param_t> q( new float_param_t( "Opacity"));

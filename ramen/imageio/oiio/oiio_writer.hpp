@@ -25,7 +25,7 @@ public:
 
 protected:
 
-    void do_write( const boost::filesystem::path& p,
+    void do_write( const std::filesystem::path& p,
                    const OIIO::ImageSpec& spec,
                    const image::const_image_view_t& view);
 	

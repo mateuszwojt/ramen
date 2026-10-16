@@ -19,7 +19,7 @@ namespace math
 \brief Homogeneus two dimensional point.
 */
 template<class T>
-class hpoint2_t : boost::equality_comparable<hpoint2_t<T> >
+class hpoint2_t
 {
 public:
 

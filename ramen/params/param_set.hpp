@@ -11,7 +11,7 @@
 #include<memory>
 #include<string>
 
-#include<boost/signals2/signal.hpp>
+#include<ramen/core/signal.hpp>
 
 #include<ramen/params/param.hpp>
 #include<ramen/params/parameterised_fwd.hpp>
@@ -45,11 +45,11 @@ public:
 
     // iterator and ranges
 
-    const boost::ptr_vector<param_t>& params() const    { return params_;}
-    boost::ptr_vector<param_t>& params()                { return params_;}
+    const container::ptr_vector<param_t>& params() const    { return params_;}
+    container::ptr_vector<param_t>& params()                { return params_;}
 
-    typedef boost::ptr_vector<param_t>::const_iterator const_iterator;
-    typedef boost::ptr_vector<param_t>::iterator iterator;
+    typedef container::ptr_vector<param_t>::const_iterator const_iterator;
+    typedef container::ptr_vector<param_t>::iterator iterator;
 
     const_iterator begin() const    { return params_.begin();}
     const_iterator end() const	    { return params_.end();}
@@ -66,7 +66,7 @@ public:
     const param_t& find( const std::string& id) const;
     param_t& find( const std::string& id);
 
-    boost::signals2::signal<void ( param_t*, param_t::change_reason)> param_changed;
+    core::signal_t<void ( param_t*, param_t::change_reason)> param_changed;
     void notify_parent();
 
     void begin_edit();
@@ -86,7 +86,7 @@ public:
     void add_to_hash( hash::generator_t& hash_gen) const;
 
     // util
-    void for_each_param( const boost::function<void ( param_t*)>& f);
+    void for_each_param( const std::function<void ( param_t*)>& f);
 
     // serialization
     void read( const serialization::yaml_node_t& node);
@@ -99,7 +99,7 @@ private:
     void do_add_param( param_t *p);
 
     parameterised_t *parent_;
-    boost::ptr_vector<param_t> params_;
+    container::ptr_vector<param_t> params_;
     std::unique_ptr<param_set_command_t> command_;
 };
 

@@ -5,22 +5,22 @@
 
 #include<string>
 
-#include<boost/noncopyable.hpp>
-#include<boost/optional.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<optional>
 
 namespace ramen
 {
 namespace util
 {
 
-class calculator_t : boost::noncopyable
+class calculator_t : ramen::core::noncopyable_t
 {
 public:
 
 	calculator_t();
 	~calculator_t();
 
-	boost::optional<double> operator()( const std::string& str) const;
+	std::optional<double> operator()( const std::string& str) const;
 	
 private:
 

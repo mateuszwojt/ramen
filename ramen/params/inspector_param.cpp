@@ -4,7 +4,7 @@
 
 #include<ramen/params/inspector_param.hpp>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<QFrame>
 
@@ -46,7 +46,7 @@ void inspector_param_t::set_parameterised( parameterised_t *p)
 	if( p)
 	{
 		contents_ = p;
-		connection_ = p->deleted.connect( boost::bind( &inspector_param_t::parameterised_deleted, this, _1));
+		connection_ = p->deleted.connect( std::bind( &inspector_param_t::parameterised_deleted, this, std::placeholders::_1));
 	
 		if( widget_)
 		{

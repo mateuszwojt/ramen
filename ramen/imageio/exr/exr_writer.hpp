@@ -22,25 +22,25 @@ public:
 
 private:
 
-    virtual void do_write_image( const boost::filesystem::path& p,
+    virtual void do_write_image( const std::filesystem::path& p,
 								const image::const_image_view_t& view,
                                 const core::dictionary_t& params) const;
 
-    void write_half( const boost::filesystem::path& p,
+    void write_half( const std::filesystem::path& p,
                      Imf::Header& header,
                      const image::const_image_view_t& view,
                      bool save_alpha = true) const;
 
-    void write_half_alpha( const boost::filesystem::path& p,
+    void write_half_alpha( const std::filesystem::path& p,
                            Imf::Header& header,
                            const image::const_image_view_t& view) const;
 
-    void write_float( const boost::filesystem::path& p,
+    void write_float( const std::filesystem::path& p,
                       Imf::Header& header,
                       const image::const_image_view_t& view,
                       bool save_alpha = true) const;
 
-    void write_float_alpha( const boost::filesystem::path& p,
+    void write_float_alpha( const std::filesystem::path& p,
                             Imf::Header& header,
                             const image::const_image_view_t& view) const;
 };

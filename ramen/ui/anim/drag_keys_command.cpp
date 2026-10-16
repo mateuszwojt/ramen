@@ -13,7 +13,7 @@ namespace ramen
 namespace undo
 {
 
-drag_keys_command_t::drag_keys_command_t( node_t *node, const boost::shared_ptr<ui::track_model_t>& model) : anim_editor_command_t( node, model)
+drag_keys_command_t::drag_keys_command_t( node_t *node, const std::shared_ptr<ui::track_model_t>& model) : anim_editor_command_t( node, model)
 {
 }
 
@@ -26,7 +26,7 @@ void drag_keys_command_t::start_drag( const Imath::V2f& offset, bool snap_frames
 void drag_keys_command_t::drag_curve( anim::track_t *t)
 {	
 	ui::can_drag_keys_visitor v0( offset_);
-	boost::apply_visitor( v0, t->curve().get());
+	std::visit( v0, t->curve().value());
 
 	// if keys can be dragged
 	if( v0.result)
@@ -37,11 +37,11 @@ void drag_keys_command_t::drag_curve( anim::track_t *t)
 		RAMEN_ASSERT( it != curves_.end());
 		
 		// restore the original curve
-		anim::copy( it->second, t->curve().get());
+		anim::copy( it->second, t->curve().value());
 	
 		// and drag it.
 		ui::drag_keys_visitor v1( offset_, snap_frames_);
-		boost::apply_visitor( v1, t->curve().get());
+		std::visit( v1, t->curve().value());
 	}
 }
 

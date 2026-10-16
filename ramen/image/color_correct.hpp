@@ -9,8 +9,8 @@
 
 #include<algorithm>
 
-#include<boost/shared_ptr.hpp>
-#include<boost/bind.hpp>
+#include<memory>
+#include<functional>
 
 #include<ramen/functional/constants.hpp>
 
@@ -55,9 +55,9 @@ public:
 
 		if( !identity_)
 		{
-			r_lut_.init( boost::bind( &color_correct_fun::cc_lut_fun, this, _1, r_gamma_, r_gain_, r_offset_, contrast_), 0, HALF_MAX);
-			g_lut_.init( boost::bind( &color_correct_fun::cc_lut_fun, this, _1, g_gamma_, g_gain_, g_offset_, contrast_), 0, HALF_MAX);
-			b_lut_.init( boost::bind( &color_correct_fun::cc_lut_fun, this, _1, b_gamma_, b_gain_, b_offset_, contrast_), 0, HALF_MAX);
+			r_lut_.init( std::bind( &color_correct_fun::cc_lut_fun, this, std::placeholders::_1, r_gamma_, r_gain_, r_offset_, contrast_), 0, HALF_MAX);
+			g_lut_.init( std::bind( &color_correct_fun::cc_lut_fun, this, std::placeholders::_1, g_gamma_, g_gain_, g_offset_, contrast_), 0, HALF_MAX);
+			b_lut_.init( std::bind( &color_correct_fun::cc_lut_fun, this, std::placeholders::_1, b_gamma_, b_gain_, b_offset_, contrast_), 0, HALF_MAX);
 		}
     }
 

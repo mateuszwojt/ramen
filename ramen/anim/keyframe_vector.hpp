@@ -5,10 +5,12 @@
 #ifndef RAMEN_ANIM_KEYFRAME_VECTOR_HPP
 #define RAMEN_ANIM_KEYFRAME_VECTOR_HPP
 
+#include<cassert>
+
 #include<vector>
 #include<iostream>
 
-#include<boost/optional.hpp>
+#include<optional>
 
 #include<ramen/anim/keyframe.hpp>
 

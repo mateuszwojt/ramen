@@ -35,7 +35,7 @@ void exr_format_t::add_extensions( std::vector<std::string>& ext) const
     ext.push_back( "EXR");
 }
 
-core::auto_ptr_t<reader_t> exr_format_t::reader( const boost::filesystem::path& p) const
+core::auto_ptr_t<reader_t> exr_format_t::reader( const std::filesystem::path& p) const
 {
     return core::auto_ptr_t<reader_t>( new exr_reader_t( p));
 }

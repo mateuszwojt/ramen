@@ -15,8 +15,7 @@
 #include<vector>
 #include<utility>
 
-#include<boost/flyweight.hpp>
-#include<boost/filesystem/fstream.hpp>
+#include<fstream>
 
 #include<Imath/ImathBox.h>
 
@@ -174,7 +173,7 @@ public:
     std::unique_ptr<undo::command_t> create_command();
 
     // paths
-    void convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base);
+    void convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base);
     void make_paths_absolute();
     void make_paths_relative();
 
@@ -183,7 +182,7 @@ public:
     void write( serialization::yaml_oarchive_t& out) const;
 
     // util
-    void apply_function( const boost::function<void ( param_t*)>& f);
+    void apply_function( const std::function<void ( param_t*)>& f);
 
     // widgets
     QWidget *create_widgets();
@@ -231,7 +230,7 @@ private:
     virtual void do_add_to_hash( hash::generator_t& hash_gen) const;
 
     // paths
-    virtual void do_convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base);
+    virtual void do_convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base);
     virtual void do_make_paths_absolute();
     virtual void do_make_paths_relative();
 
@@ -240,7 +239,7 @@ private:
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 
     // util
-    virtual void do_apply_function( const boost::function<void ( param_t*)>& f);
+    virtual void do_apply_function( const std::function<void ( param_t*)>& f);
 
     // widgets
     virtual QWidget *do_create_widgets();
@@ -255,11 +254,11 @@ private:
 
     param_set_t *param_set_;
 
-    boost::flyweight<std::string> name_;
-    boost::flyweight<std::string> id_;
-    boost::flyweight<std::string> tooltip_;
+    std::string name_;
+    std::string id_;
+    std::string tooltip_;
 
-    boost::uint32_t flags_;
+    std::uint32_t flags_;
     poly_param_value_t value_;
 };
 

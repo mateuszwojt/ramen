@@ -5,7 +5,7 @@
 
 #include<vector>
 
-#include<boost/foreach.hpp>
+
 
 #include<ramen/app/composition.hpp>
 
@@ -19,7 +19,7 @@ namespace render
 template<class F>
 F for_each_output( composition_t& comp, bool selected_only, F fun)
 {
-	BOOST_FOREACH( node_t& n, comp.nodes())
+	for( node_t& n : comp.nodes())
 	{
 		if( node_output_interface *out = dynamic_cast<node_output_interface*>( &n))
 		{

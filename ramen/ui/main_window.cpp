@@ -7,7 +7,7 @@
 #include<iostream>
 #include<map>
 
-#include<boost/foreach.hpp>
+
 
 #include<QApplication>
 #include<QMenuBar>
@@ -399,7 +399,7 @@ void main_window_t::create_node_actions()
     node_factory_t::instance().sort_by_menu_item();
 
     // add our builtin nodes first
-    BOOST_FOREACH( const node_metaclass_t& mclass, node_factory_t::instance().registered_nodes())
+    for( const node_metaclass_t& mclass : node_factory_t::instance().registered_nodes())
     {
         if( mclass.ui_visible && node_factory_t::instance().is_latest_version( mclass.id))
         {
@@ -454,7 +454,7 @@ void main_window_t::open_document()
 
         if( !( fname.isEmpty()))
         {
-            boost::filesystem::path p( fname.toStdString());
+            std::filesystem::path p( fname.toStdString());
             app().ui()->open_document( p);
         }
     }
@@ -469,7 +469,7 @@ void main_window_t::open_recent_document()
         if( action)
         {
             QString fname = action->data().toString();
-            boost::filesystem::path p( fname.toStdString());
+            std::filesystem::path p( fname.toStdString());
             app().ui()->open_document( p);
         }
     }
@@ -493,12 +493,12 @@ void main_window_t::save_document_as()
 
     if( !(fname.isEmpty()))
     {
-        boost::filesystem::path p( fname.toStdString());
+        std::filesystem::path p( fname.toStdString());
 
         if( p.extension() == std::string())
             p.replace_extension( document_extension());
 
-        boost::filesystem::path old_file = app().document().file();
+        std::filesystem::path old_file = app().document().file();
         app().document().set_file( p);
 
         if( !app().ui()->save_document())
@@ -528,7 +528,7 @@ void main_window_t::import_composition()
         try
         {
             /*
-            boost::filesystem::path p( fname.toStdString());
+            std::filesystem::path p( fname.toStdString());
             std::unique_ptr<serialization::yaml_iarchive_t> in( ramen::import_composition( p));
             app().document().set_dirty( true);
             app().document().undo_stack().clear_all();
@@ -557,7 +557,7 @@ void main_window_t::export_selection()
 
     if( !(fname.isEmpty()))
     {
-        boost::filesystem::path p( fname.toStdString());
+        std::filesystem::path p( fname.toStdString());
 
         if( p.extension() == std::string())
             p.replace_extension( document_extension());
@@ -620,7 +620,7 @@ void main_window_t::ignore_nodes()
 {
     std::unique_ptr<undo::ignore_nodes_command_t> c( new undo::ignore_nodes_command_t());
 
-    BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+    for( node_t& n : app().document().composition().nodes())
     {
         if( n.selected())
             c->add_node( &n);
@@ -640,19 +640,19 @@ void main_window_t::delete_nodes()
 
     std::unique_ptr<undo::delete_command_t> c( new undo::delete_command_t());
 
-    BOOST_FOREACH( edge_t& e, app().document().composition().edges())
+    for( edge_t& e : app().document().composition().edges())
     {
         if( e.src->selected() && !(e.dst->selected()))
             c->add_dependent_node( e.dst);
     }
 
-    BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+    for( node_t& n : app().document().composition().nodes())
     {
         if( n.selected())
             c->add_node( &n);
     }
 
-    BOOST_FOREACH( edge_t& e, app().document().composition().edges())
+    for( edge_t& e : app().document().composition().edges())
     {
         if( e.src->selected() || e.dst->selected())
             c->add_edge_to_remove( e);
@@ -662,7 +662,7 @@ void main_window_t::delete_nodes()
     {
         std::vector<edge_t> edges_to_add;
 
-        BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+        for( node_t& n : app().document().composition().nodes())
         {
             if( n.selected())
             {
@@ -684,10 +684,10 @@ void main_window_t::delete_nodes()
                 if( src)
                 {
                     breadth_first_out_edges_apply( n,
-                                                   boost::bind( &undo::delete_command_t::add_candidate_edge,
-                                                   _1,
+                                                   std::bind( &undo::delete_command_t::add_candidate_edge,
+                                                   std::placeholders::_1,
                                                    src,
-                                                   boost::ref( edges_to_add)));
+                                                   std::ref( edges_to_add)));
                 }
             }
         }
@@ -711,7 +711,7 @@ void main_window_t::duplicate_nodes()
     std::map<node_t*, node_t*> relation;
     std::unique_ptr<undo::duplicate_command_t> c( new undo::duplicate_command_t());
 
-    BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+    for( node_t& n : app().document().composition().nodes())
     {
         if( n.selected())
         {
@@ -722,7 +722,7 @@ void main_window_t::duplicate_nodes()
         }
     }
 
-    BOOST_FOREACH( edge_t& e, app().document().composition().edges())
+    for( edge_t& e : app().document().composition().edges())
     {
         if( e.src->selected() && e.dst->selected())
             c->add_edge( edge_t( relation[e.src], relation[e.dst], e.port));
@@ -743,13 +743,13 @@ void main_window_t::extract_nodes()
 
     std::unique_ptr<undo::extract_command_t> c( new undo::extract_command_t());
 
-    BOOST_FOREACH( edge_t& e, app().document().composition().edges())
+    for( edge_t& e : app().document().composition().edges())
     {
         if( e.src->selected() && !(e.dst->selected()))
             c->add_dependent_node( e.dst);
     }
 
-    BOOST_FOREACH( edge_t& e, app().document().composition().edges())
+    for( edge_t& e : app().document().composition().edges())
     {
         if( e.src->selected() || e.dst->selected())
             c->add_edge_to_remove( e);
@@ -759,7 +759,7 @@ void main_window_t::extract_nodes()
     {
         std::vector<edge_t> edges_to_add;
 
-        BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+        for( node_t& n : app().document().composition().nodes())
         {
             if( n.selected())
             {
@@ -780,10 +780,10 @@ void main_window_t::extract_nodes()
 
                 if( src)
                     breadth_first_out_edges_apply( n,
-                                                   boost::bind( &undo::delete_command_t::add_candidate_edge,
-                                                                _1,
+                                                   std::bind( &undo::delete_command_t::add_candidate_edge,
+                                                                std::placeholders::_1,
                                                                 src,
-                                                                boost::ref( edges_to_add)));
+                                                                std::ref( edges_to_add)));
             }
         }
 
@@ -967,7 +967,7 @@ void main_window_t::update()
     time_controls_->update();
 }
 
-void main_window_t::update_recent_files_menu( const boost::filesystem::path& p)
+void main_window_t::update_recent_files_menu( const std::filesystem::path& p)
 {
     QString fileName( filesystem::file_cstring( p));
 

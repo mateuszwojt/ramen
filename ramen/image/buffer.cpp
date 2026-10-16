@@ -8,7 +8,7 @@
 
 #include<iostream>
 
-#include<boost/static_assert.hpp>
+
 
 #include<ramen/assert.hpp>
 
@@ -47,7 +47,7 @@ struct array_deleter
 // by default, 16 bytes (SSE) alignment. Must be a power of two
 const unsigned int buffer_t::alignment = 16;
 
-BOOST_STATIC_ASSERT( (( buffer_t::alignment - 1) & buffer_t::alignment) == 0);
+static_assert( (( buffer_t::alignment - 1) & buffer_t::alignment) == 0);
 
 buffer_t::buffer_t() { init();}
 

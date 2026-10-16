@@ -6,7 +6,7 @@
 
 #include<ramen/ui/inspector/panel_factory.hpp>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<ramen/params/parameterised.hpp>
 
@@ -54,7 +54,7 @@ void panel_factory_t::do_create_panel( parameterised_t *p)
 {
     panel_t *panel = new panel_t( p);
     panels_[ p] = panel;
-	boost::signals2::connection c = p->deleted.connect( boost::bind( &panel_factory_t::delete_panel, this, _1));
+	core::connection_t c = p->deleted.connect( std::bind( &panel_factory_t::delete_panel, this, std::placeholders::_1));
 	panel->set_connection( c);
 }
 

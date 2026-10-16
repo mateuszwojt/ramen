@@ -4,7 +4,7 @@
 
 #include<ramen/image/denan.hpp>
 
-#include<boost/math/special_functions/fpclassify.hpp>
+#include<cmath>
 
 #include<ramen/gil/extension/algorithm/tbb/tbb_transform.hpp>
 
@@ -26,10 +26,10 @@ struct replace_nan_fun
 		float b = boost::gil::get_color( p, boost::gil::blue_t());
 		float a = boost::gil::get_color( p, boost::gil::alpha_t());
 			
-		if( boost::math::isnan( r)) r = new_val_;
-		if( boost::math::isnan( g)) g = new_val_;
-		if( boost::math::isnan( b)) b = new_val_;
-		if( boost::math::isnan( a)) a = new_val_;
+		if( std::isnan( r)) r = new_val_;
+		if( std::isnan( g)) g = new_val_;
+		if( std::isnan( b)) b = new_val_;
+		if( std::isnan( a)) a = new_val_;
 		return image::pixel_t( r, g, b, a);
 	}
 	

@@ -10,7 +10,7 @@
 #include<vector>
 #include<string>
 
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<ramen/container/ptr_vector.hpp>
 
 #include<ramen/filesystem/path_sequence.hpp>
 
@@ -30,9 +30,9 @@ public:
 
     ~factory_t();
 
-    const boost::ptr_vector<format_t>& formats() const { return formats_;}
+    const container::ptr_vector<format_t>& formats() const { return formats_;}
 
-    typedef boost::ptr_vector<format_t>::const_iterator const_iterator;
+    typedef container::ptr_vector<format_t>::const_iterator const_iterator;
     const_iterator begin() const    { return formats_.begin();}
     const_iterator end() const	    { return formats_.end();}
 
@@ -40,7 +40,7 @@ public:
 
     const std::vector<std::string>& extensions() const;
 	
-    core::auto_ptr_t<reader_t> create_reader( const boost::filesystem::path& p, bool sequence = true) const;
+    core::auto_ptr_t<reader_t> create_reader( const std::filesystem::path& p, bool sequence = true) const;
     core::auto_ptr_t<reader_t> create_reader( const filesystem::path_sequence_t& seq) const;
 	
     core::auto_ptr_t<writer_t> writer_for_tag( const std::string& tag) const;
@@ -53,11 +53,11 @@ private:
     factory_t( const factory_t&);
     factory_t& operator=( const factory_t&);
 
-    const_iterator format_for_extension( const boost::filesystem::path& p) const;
-    const_iterator format_for_file_contents( const boost::filesystem::path& p) const;
+    const_iterator format_for_extension( const std::filesystem::path& p) const;
+    const_iterator format_for_file_contents( const std::filesystem::path& p) const;
 	const_iterator format_for_tag( const std::string& tag) const;
 
-    boost::ptr_vector<format_t> formats_;
+    container::ptr_vector<format_t> formats_;
 	
 	mutable bool imageio_extensions_added_;
     mutable std::vector<std::string> extensions_;

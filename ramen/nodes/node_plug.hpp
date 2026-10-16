@@ -11,8 +11,8 @@
 #include<vector>
 #include<algorithm>
 
-#include<boost/noncopyable.hpp>
-#include<boost/tuple/tuple.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<tuple>
 
 #include<Imath/ImathColor.h>
 
@@ -145,7 +145,7 @@ class RAMEN_API node_output_plug_t : public node_plug_t
 {
 public:
 
-    typedef boost::tuples::tuple<node_t*,core::name_t, int> connection_t;
+    typedef std::tuple<node_t*,core::name_t, int> connection_t;
 
     /// Constructor.
     node_output_plug_t( node_t *parent, const std::string& id,

@@ -10,7 +10,7 @@
 #include<map>
 #include<set>
 
-#include<boost/shared_ptr.hpp>
+#include<memory>
 
 #include<ramen/nodes/node_fwd.hpp>
 
@@ -29,7 +29,7 @@ class anim_editor_command_t : public command_t
 {
 public:
 
-    anim_editor_command_t( node_t *node, const boost::shared_ptr<ui::track_model_t>& model);
+    anim_editor_command_t( node_t *node, const std::shared_ptr<ui::track_model_t>& model);
 	
     bool empty() const;
 
@@ -49,7 +49,7 @@ protected:
 	typedef std::map<anim::track_t*, anim::any_curve_t> map_type;
 	typedef map_type::iterator iterator;
 	
-    boost::shared_ptr<ui::track_model_t> model_;	
+    std::shared_ptr<ui::track_model_t> model_;	
 	std::set<node_t*> nodes_;
 	map_type curves_;
 };

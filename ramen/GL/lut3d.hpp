@@ -5,8 +5,8 @@
 #ifndef RAMEN_GL_LUT3D_HPP
 #define	RAMEN_GL_LUT3D_HPP
 
-#include<boost/noncopyable.hpp>
-#include<boost/scoped_array.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<memory>
 
 #include<Imath/ImathColor.h>
 
@@ -17,7 +17,7 @@ namespace ramen
 namespace gl
 {
 
-class lut3d_t : boost::noncopyable
+class lut3d_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -39,7 +39,7 @@ private:
     GLenum texture_unit_;
 
     int lut_size_;
-    boost::scoped_array<Imath::Color3f> data_;
+    std::unique_ptr<Imath::Color3f[]> data_;
 
     GLuint texture_id_;
 };

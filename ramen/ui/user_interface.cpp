@@ -7,9 +7,12 @@
 #include<utility>
 #include<iostream>
 
-#include<boost/foreach.hpp>
-#include<boost/thread.hpp>
-#include<boost/filesystem/operations.hpp>
+
+#include<thread>
+#include<future>
+#include<mutex>
+#include<condition_variable>
+#include<filesystem>
 
 #include<QApplication>
 #include<QSplashScreen>
@@ -64,7 +67,7 @@ user_interface_t::user_interface_t() : QObject()
 
     image_types_str_ = "Image Files (";
 
-	    BOOST_FOREACH( const std::string& ext, movieio::factory_t::instance().extensions())
+	    for( const std::string& ext : movieio::factory_t::instance().extensions())
 	    {
 			image_types_str_.append( "*.");
 			image_types_str_.append( ext.c_str());
@@ -110,7 +113,7 @@ void user_interface_t::init_ui_style()
 void user_interface_t::save_window_state()
 {
     QByteArray window_state = window_->saveState();
-    boost::filesystem::path p = app().system().application_user_path() / "wstate.ui";
+    std::filesystem::path p = app().system().application_user_path() / "wstate.ui";
     QFile file( filesystem::file_cstring( p));
 
     if( file.open( QIODevice::WriteOnly))
@@ -119,7 +122,7 @@ void user_interface_t::save_window_state()
 
 void user_interface_t::restore_window_state()
 {
-    boost::filesystem::path p = app().system().application_user_path() / "wstate.ui";
+    std::filesystem::path p = app().system().application_user_path() / "wstate.ui";
 	{
 	    QFile file(filesystem::file_cstring( p));
 
@@ -134,7 +137,7 @@ void user_interface_t::restore_window_state()
 
 void user_interface_t::show() { window_->show();}
 
-int user_interface_t::run( const boost::filesystem::path& p)
+int user_interface_t::run( const std::filesystem::path& p)
 { 
 	if( !p.empty())
 		open_document( p);
@@ -159,8 +162,8 @@ void user_interface_t::create_new_document()
 	
 	app().create_new_document();
 
-    app().document().composition().attach_add_observer( boost::bind( &user_interface_t::node_added, this, _1));
-    app().document().composition().attach_release_observer( boost::bind( &user_interface_t::node_released, this, _1));
+    app().document().composition().attach_add_observer( std::bind( &user_interface_t::node_added, this, std::placeholders::_1));
+    app().document().composition().attach_release_observer( std::bind( &user_interface_t::node_released, this, std::placeholders::_1));
 
     render_composition_dialog_t::instance().set_frame_range( app().document().composition().start_frame(),
 																app().document().composition().end_frame());
@@ -169,10 +172,10 @@ void user_interface_t::create_new_document()
     update();
 }
 
-void user_interface_t::open_document( const boost::filesystem::path& p)
+void user_interface_t::open_document( const std::filesystem::path& p)
 {
     create_new_document();
-    boost::filesystem::ifstream ifs( p, serialization::yaml_iarchive_t::file_open_mode());
+    std::ifstream ifs( p, serialization::yaml_iarchive_t::file_open_mode());
 
     if( !ifs.is_open() || !ifs.good())
     {
@@ -416,14 +419,14 @@ bool user_interface_t::question( const std::string& what, bool default_answer) c
     }
 }
 
-bool user_interface_t::image_sequence_file_selector( boost::filesystem::path& p, bool& sequence, bool& relative) const
+bool user_interface_t::image_sequence_file_selector( std::filesystem::path& p, bool& sequence, bool& relative) const
 {
     std::string types( image_types_string().toStdString());
     return image_sequence_file_selector( "Open Image", types, p, sequence, relative);
 }
 
 bool user_interface_t::image_sequence_file_selector( const std::string& title, const std::string& types,
-						       boost::filesystem::path& p, bool& sequence, bool& relative) const
+						       std::filesystem::path& p, bool& sequence, bool& relative) const
 {
     static bool was_relative = false;
     static bool was_sequence = true;
@@ -472,7 +475,7 @@ bool user_interface_t::image_sequence_file_selector( const std::string& title, c
 
         if( relative_check->isChecked())
         {
-            boost::filesystem::path dir = app().document().file().parent_path();
+            std::filesystem::path dir = app().document().file().parent_path();
             p = filesystem::make_relative_path( p, dir);
         }
 
@@ -551,18 +554,18 @@ bool user_interface_t::eventFilter( QObject *watched, QEvent *event)
 	}
 }
 
-boost::unique_future<bool>& user_interface_t::render_image( render::context_t context, render::image_node_renderer_t& renderer)
+std::future<bool>& user_interface_t::render_image( render::context_t context, render::image_node_renderer_t& renderer)
 {
 	RAMEN_ASSERT( !rendering_);
 	
 	cancelled_ = false;
 	context.mode = render::interface_render;
-	context.cancel = boost::bind( &user_interface_t::process_cancelled, this);
+	context.cancel = std::bind( &user_interface_t::process_cancelled, this);
 	renderer.set_context( context);
 	rendering_ = true;
-    boost::unique_future<bool>& future( app().render_thread().render_image( renderer));
+    std::future<bool>& future( app().render_thread().render_image( renderer));
 
-	if( future.is_ready())
+	if( future.wait_for( std::chrono::seconds( 0)) == std::future_status::ready)
 	{
 		rendering_ = false;
 		return future;
@@ -571,7 +574,7 @@ boost::unique_future<bool>& user_interface_t::render_image( render::context_t co
 	/*
 	start_long_process();
 
-	while( !future.timed_wait( boost::posix_time::milliseconds( 30)))
+	while( future.wait_for( std::chrono::milliseconds( 30)) != std::future_status::ready)
 		process_events();
 
 	end_long_process();

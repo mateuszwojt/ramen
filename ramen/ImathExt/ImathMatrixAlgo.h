@@ -5,8 +5,8 @@
 #ifndef RAMEN_IMATHEXT_MATRIX_ALGO_HPP
 #define RAMEN_IMATHEXT_MATRIX_ALGO_HPP
 
-#include<boost/optional.hpp>
-#include<boost/array.hpp>
+#include<optional>
+#include<array>
 
 #include<Imath/ImathMatrix.h>
 
@@ -18,9 +18,9 @@
 IMATH_INTERNAL_NAMESPACE_HEADER_ENTER
 
 template<class T>
-boost::optional<Matrix33<T> > inverse( const Matrix33<T>& m)
+std::optional<Matrix33<T> > inverse( const Matrix33<T>& m)
 {
-	boost::optional<Matrix33<T> > result;
+	std::optional<Matrix33<T> > result;
 	
 	try
 	{
@@ -33,9 +33,9 @@ boost::optional<Matrix33<T> > inverse( const Matrix33<T>& m)
 }
 
 template<class T>
-boost::optional<Matrix44<T> > inverse( const Matrix44<T>& m)
+std::optional<Matrix44<T> > inverse( const Matrix44<T>& m)
 {
-	boost::optional<Matrix44<T> > result;
+	std::optional<Matrix44<T> > result;
 	
 	try
 	{
@@ -55,7 +55,7 @@ bool isAffine( const Matrix33<T>& m)
 
 /*
 template<class T>
-boost::optional<Matrix33<T> > quadToQuadMatrix( const boost::array<Vec2<T> ,4>& src, const boost::array<Vec2<T> ,4>& dst)
+std::optional<Matrix33<T> > quadToQuadMatrix( const std::array<Vec2<T> ,4>& src, const std::array<Vec2<T> ,4>& dst)
 {
     Eigen::Matrix<T, 8, 8> A( Eigen::Matrix<T,8,8>::Zero());
     Eigen::Matrix<T, 8, 1> b, x;
@@ -90,7 +90,7 @@ boost::optional<Matrix33<T> > quadToQuadMatrix( const boost::array<Vec2<T> ,4>& 
                              x[2], x[5], 1);
 	}
 
-	return boost::optional<Matrix33<T> >();
+	return std::optional<Matrix33<T> >();
 }
 */
 

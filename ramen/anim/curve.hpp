@@ -7,10 +7,8 @@
 
 #include<string>
 
-#include<boost/bind.hpp>
-#include<boost/range/algorithm/for_each.hpp>
-#include<boost/range/algorithm/remove_if.hpp>
-#include<boost/range/algorithm/find_if.hpp>
+#include<functional>
+#include<algorithm>
 
 #include<ramen/anim/keyframe_vector.hpp>
 
@@ -92,7 +90,7 @@ public:
 	
 	void erase_selected_keyframes()
 	{
-        keys().erase( boost::range::remove_if( keys(), boost::bind( &key_type::selected, _1)), keys().end());
+        keys().erase( std::remove_if( keys().begin(), keys().end(), std::bind( &key_type::selected, std::placeholders::_1)), keys().end());
 	}
 	
 	iterator iterator_from_keyframe_ptr( key_type *k)
@@ -113,12 +111,12 @@ public:
 	// selection
 	void select_all_keyframes( bool b) const
 	{
-        boost::range::for_each( keys(), boost::bind( &key_type::select, _1, b));
+        std::ranges::for_each( keys(), std::bind( &key_type::select, std::placeholders::_1, b));
 	}
 	
 	bool any_keyframe_selected() const
 	{
-        return boost::range::find_if( keys(), boost::bind( &key_type::selected, _1 )) != keys().end();
+        return std::ranges::find_if( keys(), std::bind( &key_type::selected, std::placeholders::_1 )) != keys().end();
 	}
 	
 	bool has_keyframe_at( time_type time) const { return keys().has_keyframe_at( time);}

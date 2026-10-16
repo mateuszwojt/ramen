@@ -9,8 +9,9 @@
 #define RAMEN_CORE_POLY_COPYABLE_HPP
 
 #include<ramen/core/poly.hpp>
+#include<concepts>
+#include<utility>
 
-#include<boost/concept_check.hpp>
 
 namespace ramen
 {
@@ -20,13 +21,13 @@ namespace core
 template <typename T>
 struct poly_copyable_instance : optimized_storage_type<T, poly_copyable_interface>::type
 {
-    BOOST_CONCEPT_ASSERT(( boost::CopyConstructibleConcept<T>));
+    static_assert( std::copy_constructible<T>);
 
     typedef typename optimized_storage_type<T, poly_copyable_interface>::type base_type;
 
     explicit poly_copyable_instance( const T& x) : base_type( x) {}
 
-    explicit poly_copyable_instance( BOOST_RV_REF( T) x) : base_type( boost::move( x)) {}
+    explicit poly_copyable_instance( T&& x) : base_type( std::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( poly_copyable_instance, base_type)
 };
@@ -39,7 +40,7 @@ struct copyable : poly_base<poly_copyable_interface, poly_copyable_instance>
     explicit copyable( const T& x) : base_type( x)  {}
 
     template <typename T>
-    explicit copyable( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : base_type( boost::move( x)) {}
+    explicit copyable( T&& x, std::enable_if_t<!std::is_lvalue_reference_v<T> >* = nullptr) : base_type( std::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( copyable, base_type)
 };

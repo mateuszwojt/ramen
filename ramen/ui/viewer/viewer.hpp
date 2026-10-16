@@ -13,9 +13,8 @@
 
 #include<QObject>
 
-#include<map>
 
-#include<boost/function.hpp>
+#include<functional>
 
 #include<ramen/nodes/node_fwd.hpp>
 

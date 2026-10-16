@@ -6,7 +6,7 @@
 
 #include<vector>
 
-#include<boost/foreach.hpp>
+
 
 #include<ramen/ImathExt/ImathBoxAlgo.h>
 #include<ramen/ImathExt/ImathMatrixAlgo.h>
@@ -358,7 +358,7 @@ void xform2d_node_t::do_process_mipmap( const render::context_t& context, const 
     }
 }
 
-bool xform2d_node_t::quad_is_convex(const boost::array<vector2_type,4>& quad) const
+bool xform2d_node_t::quad_is_convex(const std::array<vector2_type,4>& quad) const
 {
     float verts[4][2];
 

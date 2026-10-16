@@ -4,8 +4,8 @@
 
 #include<ramen/nodes/node_factory.hpp>
 
-#include<boost/foreach.hpp>
-#include<boost/algorithm/string/predicate.hpp>
+
+
 
 #include<ramen/nodes/node.hpp>
 
@@ -28,7 +28,7 @@ struct compare_menu_items
 
 bool check_node_class( const std::string& c)
 {
-    if( boost::starts_with( c, "image."))
+    if( c.starts_with( "image."))
         return true;
 
     return false;
@@ -70,7 +70,7 @@ bool node_factory_t::register_node( const node_metaclass_t& m)
     RAMEN_ASSERT( !m.submenu.empty());
     RAMEN_ASSERT( !m.menu_item.empty());
 
-    BOOST_FOREACH( const node_metaclass_t& metaclass, metaclasses_)
+    for( const node_metaclass_t& metaclass : metaclasses_)
     {
         if( metaclass.id == m.id && metaclass.major_version == m.major_version && metaclass.minor_version == m.minor_version)
         {

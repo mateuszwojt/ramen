@@ -7,9 +7,9 @@
 
 #include<memory>
 
-#include<boost/noncopyable.hpp>
-#include<boost/ptr_container/ptr_vector.hpp>
-#include<boost/signals2/signal.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<ramen/container/ptr_vector.hpp>
+#include<ramen/core/signal.hpp>
 
 #include<ramen/manipulators/manipulator.hpp>
 
@@ -20,7 +20,7 @@ namespace ramen
 \ingroup manips
 \brief Base class for objects that can have manipulators, react to events and draw an on-screen overlay using GL.
 */
-class RAMEN_API manipulable_t : boost::noncopyable
+class RAMEN_API manipulable_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -39,11 +39,11 @@ public:
         active_ = manipulators_.end();
     }
 
-    const boost::ptr_vector<manipulator_t>& manipulators() const    { return manipulators_;}
-    boost::ptr_vector<manipulator_t>& manipulators()                { return manipulators_;}
+    const container::ptr_vector<manipulator_t>& manipulators() const    { return manipulators_;}
+    container::ptr_vector<manipulator_t>& manipulators()                { return manipulators_;}
 
-    typedef boost::ptr_vector<manipulator_t>::const_iterator const_iterator;
-    typedef boost::ptr_vector<manipulator_t>::iterator iterator;
+    typedef container::ptr_vector<manipulator_t>::const_iterator const_iterator;
+    typedef container::ptr_vector<manipulator_t>::iterator iterator;
 
     const_iterator begin() const    { return manipulators_.begin();}
     const_iterator end() const	    { return manipulators_.end();}
@@ -52,7 +52,7 @@ public:
     iterator end()	{ return manipulators_.end();}
 
     /// Emitted when the overlay needs redrawing.
-    boost::signals2::signal<void ( manipulable_t*)> overlay_changed;
+    core::signal_t<void ( manipulable_t*)> overlay_changed;
 
     /// Emits the overlay_changed signal.
     void update_overlay() { overlay_changed( this);}
@@ -150,7 +150,7 @@ private:
 	*/
     virtual void do_create_manipulators();
 
-    boost::ptr_vector<manipulator_t> manipulators_;
+    container::ptr_vector<manipulator_t> manipulators_;
     iterator active_;
 };
 

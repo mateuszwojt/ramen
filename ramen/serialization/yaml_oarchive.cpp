@@ -4,7 +4,7 @@
 
 #include<ramen/serialization/yaml_oarchive.hpp>
 
-#include<boost/filesystem/fstream.hpp>
+#include<fstream>
 
 #include<ramen/assert.hpp>
 
@@ -30,14 +30,14 @@ void yaml_oarchive_t::write_composition_header()
 	header_written_ = true;
 }
 
-void yaml_oarchive_t::write_to_file( const boost::filesystem::path& p)
+void yaml_oarchive_t::write_to_file( const std::filesystem::path& p)
 {
 	RAMEN_ASSERT( map_level() <= 1);
 
 	if( map_level() == 1)
 		end_map();
 
-	boost::filesystem::ofstream ofs( p);
+	std::ofstream ofs( p);
 
 	if( !ofs.is_open() || !ofs.good())
 		throw std::runtime_error( "Can't write to file");

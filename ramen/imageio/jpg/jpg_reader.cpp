@@ -11,7 +11,7 @@ extern "C"
 #include <jpeglib.h>
 }
 
-#include<boost/shared_ptr.hpp>
+#include<memory>
 
 #include<ramen/imageio/jpg/jpg_size.hpp>
 
@@ -33,7 +33,7 @@ struct FILE_deleter
 
 } // unamed
 
-jpg_reader_t::jpg_reader_t( const boost::filesystem::path& p) : reader_t( p)
+jpg_reader_t::jpg_reader_t( const std::filesystem::path& p) : reader_t( p)
 {
     int width, height;
 
@@ -54,7 +54,7 @@ void jpg_reader_t::do_read_image( const image::image_view_t& view,
     cinfo.err = jpeg_std_error( &jerr);
     jpeg_create_decompress( &cinfo);
 
-    boost::shared_ptr<FILE> fp( fopen( filesystem::file_cstring( path_), "rb"),
+    std::shared_ptr<FILE> fp( fopen( filesystem::file_cstring( path_), "rb"),
                                 FILE_deleter());
 
     if ( !fp)
@@ -76,9 +76,9 @@ void jpg_reader_t::do_read_image( const image::image_view_t& view,
     }
 
     std::size_t stride = cinfo.output_width * cinfo.output_components;
-    std::vector<boost::uint8_t> scanline_buffer( stride);
+    std::vector<std::uint8_t> scanline_buffer( stride);
 
-    std::vector<boost::uint8_t>::iterator first_item( scanline_buffer.begin());
+    std::vector<std::uint8_t>::iterator first_item( scanline_buffer.begin());
     unsigned char *ptr = &(*first_item);
 
     // skip first lines

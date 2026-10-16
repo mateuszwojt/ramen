@@ -61,7 +61,8 @@ find_package( Threads REQUIRED)
 find_package( OpenGL REQUIRED)
 find_package( GLEW REQUIRED)
 
-find_package( Boost CONFIG REQUIRED COMPONENTS filesystem thread)
+# Boost.GIL ( header only) is the only Boost library used.
+find_package( Boost CONFIG REQUIRED)
 find_package( TBB CONFIG REQUIRED)
 find_package( yaml-cpp CONFIG REQUIRED)
 

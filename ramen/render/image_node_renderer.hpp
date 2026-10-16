@@ -5,7 +5,7 @@
 #ifndef RAMEN_IMAGE_NODE_RENDERER_HPP
 #define	RAMEN_IMAGE_NODE_RENDERER_HPP
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/nodes/node_fwd.hpp>
 #include<ramen/image/buffer.hpp>
@@ -17,7 +17,7 @@ namespace ramen
 namespace render
 {
 
-class RAMEN_API image_node_renderer_t : boost::noncopyable
+class RAMEN_API image_node_renderer_t : ramen::core::noncopyable_t
 {
 public:
 

@@ -4,7 +4,7 @@
 
 #include<ramen/movieio/exceptions.hpp>
 
-#include<boost/lexical_cast.hpp>
+#include<ramen/util/lexical_cast.hpp>
 
 namespace ramen
 {
@@ -29,7 +29,7 @@ unsupported_movie::unsupported_movie( const std::string& msg) : exception( msg) 
 
 frame_out_of_bounds::frame_out_of_bounds( int num) : exception()
 {
-	what_ = std::string( "Frame out of bounds: ") + boost::lexical_cast<std::string>( num);
+	what_ = std::string( "Frame out of bounds: ") + util::lexical_cast<std::string>( num);
 }
 
 } // namespace

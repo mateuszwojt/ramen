@@ -5,7 +5,7 @@
 #ifndef RAMEN_ROTO_TRIPLE_HPP
 #define	RAMEN_ROTO_TRIPLE_HPP
 
-#include<boost/cstdint.hpp>
+#include<cstdint>
 
 #include<Imath/ImathVec.h>
 
@@ -66,7 +66,7 @@ public:
 private:
 
     Imath::V2f p0_, p1_, p2_;
-    mutable boost::uint32_t flags_;
+    mutable std::uint32_t flags_;
 };
 
 } // namespace

@@ -26,7 +26,7 @@ public:
 
 	virtual void draw() const;
 
-	virtual boost::optional<Imath::Color4f> color_at( const Imath::V2i& p) const;
+	virtual std::optional<Imath::Color4f> color_at( const Imath::V2i& p) const;
 };
 
 } // viewer

@@ -4,8 +4,8 @@
 
 #include<ramen/undo/command.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+#include<functional>
+#include<algorithm>
 
 #include<ramen/app/application.hpp>
 #include<ramen/app/document.hpp>
@@ -62,13 +62,13 @@ composite_command_t::composite_command_t( const std::string& name) : command_t( 
 
 void composite_command_t::undo()
 {
-    boost::range::for_each( commands_, boost::bind( &command_t::undo, _1));
+    std::ranges::for_each( commands_, std::bind( &command_t::undo, std::placeholders::_1));
 	command_t::undo();
 }
 
 void composite_command_t::redo()
 {
-    boost::range::for_each( commands_, boost::bind( &command_t::redo, _1));
+    std::ranges::for_each( commands_, std::bind( &command_t::redo, std::placeholders::_1));
 	command_t::redo();
 }
 	

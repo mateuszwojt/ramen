@@ -5,7 +5,7 @@
 #ifndef RAMEN_ANIM_FWD_DIFF_CUBIC_EVALUATOR_HPP
 #define	RAMEN_ANIM_FWD_DIFF_CUBIC_EVALUATOR_HPP
 
-#include<boost/array.hpp>
+#include<array>
 
 namespace ramen
 {
@@ -19,7 +19,7 @@ public:
 
 	typedef T value_type;
 
-    fwd_diff_cubic_evaluator_t( const boost::array<value_type,4>& p, value_type step_size)
+    fwd_diff_cubic_evaluator_t( const std::array<value_type,4>& p, value_type step_size)
     {
         value_type s = step_size;
         value_type s2 = s * s;

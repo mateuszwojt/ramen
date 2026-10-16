@@ -72,16 +72,16 @@ void keyer_node_t::free_input_frame()
 	input_pixels_.clear();
 }
 
-boost::optional<Imath::Color3f> keyer_node_t::sample_input( const Imath::V2i& p) const
+std::optional<Imath::Color3f> keyer_node_t::sample_input( const Imath::V2i& p) const
 {
 	if( input_pixels_.empty())
-		return boost::optional<Imath::Color3f>();
+		return std::optional<Imath::Color3f>();
 	
 	if( p.x < input_data_window_.min.x || p.x > input_data_window_.max.x)
-		return boost::optional<Imath::Color3f>();
+		return std::optional<Imath::Color3f>();
 
 	if( p.y < input_data_window_.min.y || p.y > input_data_window_.max.y)
-		return boost::optional<Imath::Color3f>();
+		return std::optional<Imath::Color3f>();
 
 	image::pixel_t px( input_pixels_.const_rgba_view()( p.x - input_data_window_.min.x, p.y - input_data_window_.min.y));
 	return Imath::Color3f( boost::gil::get_color( px, boost::gil::red_t()),

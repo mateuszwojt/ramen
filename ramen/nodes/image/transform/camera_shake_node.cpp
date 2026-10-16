@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/transform/camera_shake_node.hpp>
 
-#include<boost/lexical_cast.hpp>
+#include<ramen/util/lexical_cast.hpp>
 
 #include<Imath/ImathRandom.h>
 
@@ -85,7 +85,7 @@ void camera_shake_node_t::do_create_params()
 void camera_shake_node_t::do_calc_hash_str( const render::context_t& context)
 {
 	xform2d_node_t::do_calc_hash_str( context);
-    hash_generator() << "(" << boost::lexical_cast<std::string>( context.frame) << ")";
+    hash_generator() << "(" << util::lexical_cast<std::string>( context.frame) << ")";
 }
 
 camera_shake_node_t::matrix3_type camera_shake_node_t::do_calc_transform_matrix_at_frame( float frame, int subsample) const

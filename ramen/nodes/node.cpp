@@ -8,9 +8,8 @@
 #include<stdexcept>
 #include<algorithm>
 
-#include<boost/bind.hpp>
-#include<boost/foreach.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+#include<functional>
+
 
 #include<ramen/nodes/graph_algorithm.hpp>
 
@@ -49,7 +48,7 @@ node_t::node_t( const node_t& other) : composite_parameterised_t( other),
                                         inputs_( other.inputs_),
                                         outputs_( other.outputs_)
 {
-    boost::range::for_each( outputs_, boost::bind( &node_output_plug_t::set_parent_node, _1, this));
+    std::ranges::for_each( outputs_, std::bind( &node_output_plug_t::set_parent_node, std::placeholders::_1, this));
     flags_ = other.flags_;
     loc_ = other.loc_;
     composition_ = other.composition_;
@@ -114,7 +113,7 @@ bool node_t::is_context() const    { return util::test_flag( flags_, context_bit
 int node_t::find_input( const core::name_t& id) const
 {
     int index = 0;
-    BOOST_FOREACH( const node_input_plug_t& i, input_plugs())
+    for( const node_input_plug_t& i : input_plugs())
     {
         if( i.id() == id)
             return index;
@@ -169,14 +168,14 @@ const node_t *node_t::output( std::size_t i) const
 {
     RAMEN_ASSERT( has_output_plug());
     RAMEN_ASSERT( i < num_outputs());
-    return boost::get<0>( outputs_[0].connections()[i]);
+    return std::get<0>( outputs_[0].connections()[i]);
 }
 
 node_t *node_t::output( std::size_t i)
 {
     RAMEN_ASSERT( has_output_plug());
     RAMEN_ASSERT( i < num_outputs());
-    return boost::get<0>( outputs_[0].connections()[i]);
+    return std::get<0>( outputs_[0].connections()[i]);
 }
 
 void node_t::add_output_plug( const std::string &id,
@@ -214,7 +213,7 @@ void node_t::reconnect_node()
 
     if( comp)
     {
-        BOOST_FOREACH( edge_t& e, comp->edges())
+        for( edge_t& e : comp->edges())
         {
             if( e.dst == this)
                 input_plugs()[ e.port].set_input( e.src, core::name_t( "unused"));
@@ -227,7 +226,7 @@ void node_t::param_edit_finished() { notify();}
 
 void node_t::notify()
 {
-    breadth_first_outputs_search( *this, boost::bind( &node_t::do_notify, _1));
+    breadth_first_outputs_search( *this, std::bind( &node_t::do_notify, std::placeholders::_1));
 }
 
 void node_t::do_notify()
@@ -291,7 +290,7 @@ void node_t::end_interaction()
 
 bool node_t::is_valid() const
 {
-    BOOST_FOREACH( const node_input_plug_t& i, input_plugs())
+    for( const node_input_plug_t& i : input_plugs())
     {
         if( !i.connected() && !i.optional())
             return false;
@@ -306,7 +305,7 @@ bool node_t::is_valid() const
         bool all_optional = true;
         bool all_disconnected = true;
 
-        BOOST_FOREACH( const node_input_plug_t& i, input_plugs())
+        for( const node_input_plug_t& i : input_plugs())
         {
             if( i.connected())
                 all_disconnected = false;
@@ -349,7 +348,7 @@ void node_t::clear_hash()
 
     if( cacheable())
     {
-        BOOST_FOREACH( node_input_plug_t& i, input_plugs())
+        for( node_input_plug_t& i : input_plugs())
         {
             if( i.connected())
             {
@@ -456,9 +455,9 @@ void node_t::add_needed_frames_to_hash( const render::context_t& context)
         while( 1)
         {
             node_t *n = input( it->second);
-            depth_first_inputs_search( *n, boost::bind( &node_t::set_frame, _1, cur_frame));
-            depth_first_inputs_search( *n, boost::bind( &node_t::clear_hash, _1));
-            depth_first_inputs_search( *n, boost::bind( &node_t::calc_hash_str, _1, new_context));
+            depth_first_inputs_search( *n, std::bind( &node_t::set_frame, std::placeholders::_1, cur_frame));
+            depth_first_inputs_search( *n, std::bind( &node_t::clear_hash, std::placeholders::_1));
+            depth_first_inputs_search( *n, std::bind( &node_t::calc_hash_str, std::placeholders::_1, new_context));
             hash_generator() << it->second << n->hash_str();
             ++it;
 
@@ -472,9 +471,9 @@ void node_t::add_needed_frames_to_hash( const render::context_t& context)
     {
         if( node_t *n = input( i))
         {
-            depth_first_inputs_search( *n, boost::bind( &node_t::set_frame, _1, context.frame));
-            depth_first_inputs_search( *n, boost::bind( &node_t::clear_hash, _1));
-            depth_first_inputs_search( *n, boost::bind( &node_t::calc_hash_str, _1, context));
+            depth_first_inputs_search( *n, std::bind( &node_t::set_frame, std::placeholders::_1, context.frame));
+            depth_first_inputs_search( *n, std::bind( &node_t::clear_hash, std::placeholders::_1));
+            depth_first_inputs_search( *n, std::bind( &node_t::calc_hash_str, std::placeholders::_1, context));
         }
     }
 }
@@ -490,23 +489,23 @@ const char *node_t::help_string() const
     return metaclass()->help;
 }
 
-void node_t::convert_relative_paths( const boost::filesystem::path& old_base,
-                                     const boost::filesystem::path& new_base)
+void node_t::convert_relative_paths( const std::filesystem::path& old_base,
+                                     const std::filesystem::path& new_base)
 {
-    boost::range::for_each( param_set(),
-                            boost::bind( &param_t::convert_relative_paths,
-                                         _1, old_base, new_base));
+    std::ranges::for_each( param_set(),
+                            std::bind( &param_t::convert_relative_paths,
+                                         std::placeholders::_1, old_base, new_base));
 }
 
 void node_t::make_paths_absolute()
 {
-    boost::range::for_each( param_set(),
-                            boost::bind( &param_t::make_paths_absolute, _1));
+    std::ranges::for_each( param_set(),
+                            std::bind( &param_t::make_paths_absolute, std::placeholders::_1));
 }
 
 void node_t::make_paths_relative()
 {
-    boost::range::for_each( param_set(), boost::bind( &param_t::make_paths_relative, _1));
+    std::ranges::for_each( param_set(), std::bind( &param_t::make_paths_relative, std::placeholders::_1));
 }
 
 // serialization

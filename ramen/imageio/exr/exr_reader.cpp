@@ -81,7 +81,7 @@ math::box2i_t convert_box( const Imath::Box2i& box)
 
 } // unnamed
 
-exr_reader_t::exr_reader_t( const boost::filesystem::path& p) : multichannel_reader_t( p)
+exr_reader_t::exr_reader_t( const std::filesystem::path& p) : multichannel_reader_t( p)
 {
     bool tiled;
 
@@ -184,7 +184,7 @@ bool exr_reader_t::is_luma_chroma() const
 void exr_reader_t::do_read_image( const image::image_view_t& view,
                                   const math::box2i_t& crop,
                                   int subsample,
-                                  const boost::tuple<int,int,int,int>& channels) const
+                                  const std::tuple<int,int,int,int>& channels) const
 {
     // this is to handle luma-chroma image
     if( !has_extra_channels())
@@ -194,25 +194,25 @@ void exr_reader_t::do_read_image( const image::image_view_t& view,
     }
 
     const char *rchannel = 0;
-    int indx = boost::get<0>( channels);
+    int indx = std::get<0>( channels);
 
     if( indx < channel_list().size())
 		rchannel = channel_list()[indx].c_str();
 
     const char *gchannel = 0;
-    indx = boost::get<1>( channels);
+    indx = std::get<1>( channels);
 
     if( indx < channel_list().size())
 		gchannel = channel_list()[indx].c_str();
 
     const char *bchannel = 0;
-    indx = boost::get<2>( channels);
+    indx = std::get<2>( channels);
 
     if( indx < channel_list().size())
 		bchannel = channel_list()[indx].c_str();
 
     const char *achannel = 0;
-    indx = boost::get<3>( channels);
+    indx = std::get<3>( channels);
 
     if( indx < channel_list().size())
 		achannel = channel_list()[indx].c_str();
@@ -220,7 +220,7 @@ void exr_reader_t::do_read_image( const image::image_view_t& view,
 	read_exr_image( path_, view, crop, rchannel, gchannel, bchannel, achannel, subsample);
 }
 
-void exr_reader_t::read_exr_image( const boost::filesystem::path& p,
+void exr_reader_t::read_exr_image( const std::filesystem::path& p,
                                    const image::image_view_t& result_view,
                                    const math::box2i_t& crop,
                                    std::size_t subsample) const
@@ -231,7 +231,7 @@ void exr_reader_t::read_exr_image( const boost::filesystem::path& p,
 	    read_exr_image( p, result_view, crop, "R", "G", "B", "A", subsample);
 }
 
-void exr_reader_t::read_exr_image( const boost::filesystem::path& p,
+void exr_reader_t::read_exr_image( const std::filesystem::path& p,
                                    const image::image_view_t& result_view,
                                    const math::box2i_t& crop,
                                    const char *rchannel,
@@ -301,7 +301,7 @@ void exr_reader_t::read_exr_image( const boost::filesystem::path& p,
     }
 }
 
-void exr_reader_t::read_exr_luma_chroma_image( const boost::filesystem::path& p,
+void exr_reader_t::read_exr_luma_chroma_image( const std::filesystem::path& p,
                                                const image::image_view_t& result_view,
                                                const math::box2i_t& crop,
                                                std::size_t subsample) const

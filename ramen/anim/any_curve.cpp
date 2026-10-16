@@ -14,7 +14,7 @@ namespace anim
 namespace
 {
 
-struct copy_visitor : public boost::static_visitor<>
+struct copy_visitor
 {
     copy_visitor( any_curve_t& dst) : dst_( dst) {}
 
@@ -26,19 +26,19 @@ private:
     any_curve_t& dst_;
 };
 
-struct copy_to_visitor : public boost::static_visitor<>
+struct copy_to_visitor
 {
     copy_to_visitor( any_curve_ptr_t& dst) : dst_( dst) {}
 	
 	void operator()( const float_curve_t& c)
 	{
-		float_curve_t *curve = boost::get<float_curve_t*>( dst_);
+		float_curve_t *curve = std::get<float_curve_t*>( dst_);
 		*curve = c;
 	}
 
 	void operator()( const shape_curve2f_t& c)
 	{
-		shape_curve2f_t *curve = boost::get<shape_curve2f_t*>( dst_);
+		shape_curve2f_t *curve = std::get<shape_curve2f_t*>( dst_);
 		*curve = c;
 	}
 	
@@ -47,14 +47,14 @@ private:
     any_curve_ptr_t& dst_;
 };
 
-struct swap_visitor : public boost::static_visitor<>
+struct swap_visitor
 {
     swap_visitor( any_curve_t& other) : other_( other) {}
 
 	template<class Curve>
     void operator()( Curve *c)
     {
-        Curve& curve = boost::get<Curve>( other_);
+        Curve& curve = std::get<Curve>( other_);
         c->swap( curve);
     }
 
@@ -68,19 +68,19 @@ private:
 void copy( const any_curve_ptr_t& src, any_curve_t& dst)
 {
     copy_visitor v( dst);
-    boost::apply_visitor( v, src);
+    std::visit( v, src);
 }
 
 void copy( const any_curve_t& src, any_curve_ptr_t& dst)
 {
     copy_to_visitor v( dst);
-    boost::apply_visitor( v, src);	
+    std::visit( v, src);	
 }
 
 void swap( any_curve_ptr_t& a, any_curve_t& b)
 {
     swap_visitor v( b);
-    boost::apply_visitor( v, a);
+    std::visit( v, a);
 }
 
 } // anim

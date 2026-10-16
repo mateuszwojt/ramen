@@ -83,12 +83,12 @@ void fractal_noise_node_t::do_create_params()
 
     std::unique_ptr<popup_param_t> type( new popup_param_t( "Noise"));
     type->set_id( "noise_type");
-    type->menu_items() = boost::assign::list_of( "Classic")( "Simplex");
+    type->menu_items() = { "Classic", "Simplex"};
     add_param( std::move( type));
 
     type.reset( new popup_param_t( "Type"));
     type->set_id( "type");
-    type->menu_items() = boost::assign::list_of( "Fbm")( "Turbulence");
+    type->menu_items() = { "Fbm", "Turbulence"};
     add_param( std::move( type));
 
     std::unique_ptr<float2_param_t> p2( new float2_param_t( "Size"));

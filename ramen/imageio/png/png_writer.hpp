@@ -20,7 +20,7 @@ public:
 
 private:
 
-    virtual void do_write_image( const boost::filesystem::path& p,
+    virtual void do_write_image( const std::filesystem::path& p,
                                  const image::const_image_view_t& view,
                                  const core::dictionary_t& params) const;
 };

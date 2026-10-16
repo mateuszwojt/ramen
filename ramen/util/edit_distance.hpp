@@ -6,7 +6,7 @@
 #include<string>
 #include<vector>
 
-#include<boost/scoped_array.hpp>
+#include<memory>
 
 #include<ramen/assert.hpp>
 
@@ -41,7 +41,7 @@ private:
 		return matrix_[i * cols_ + j];
 	}
 	
-	boost::scoped_array<int> matrix_;
+	std::unique_ptr<int[]> matrix_;
 	int rows_, cols_;
 };
 	

@@ -10,7 +10,7 @@
 #include<algorithm>
 #include<limits>
 
-#include<boost/operators.hpp>
+
 
 #include<ramen/math/point3.hpp>
 #include<ramen/math/matrix44.hpp>
@@ -25,7 +25,7 @@ namespace math
 \brief A three dimensional bounding box.
 */
 template<class T>
-class box3_t : boost::equality_comparable<box3_t<T> >
+class box3_t
 {
 public:
 

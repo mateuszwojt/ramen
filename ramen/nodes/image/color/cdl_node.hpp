@@ -26,8 +26,8 @@ public:
 
     cdl_node_t();
 
-	void read_from_file( const boost::filesystem::path& p);
-	void write_to_file( const boost::filesystem::path& p) const;
+	void read_from_file( const std::filesystem::path& p);
+	void write_to_file( const std::filesystem::path& p) const;
 	
 protected:
 

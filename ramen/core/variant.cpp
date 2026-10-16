@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/core/variant.hpp>
+#include<utility>
 
 namespace ramen
 {
@@ -62,7 +63,7 @@ struct variant_t::vtable_impl<string_t>
             // From here, nothing can throw.
             new( dst.storage()) string_t();
             string_t& dst_str( *reinterpret_cast<string_t*>( dst.storage()));
-            dst_str = boost::move( tmp);
+            dst_str = std::move( tmp);
             dst.vptr_ = src.vptr_;
         }
         catch( ...)
@@ -81,8 +82,8 @@ struct variant_t::vtable_impl<string_t>
 
 variant_t::variant_t()                              { init<bool>( false);}
 variant_t::variant_t( bool x)                       { init<bool>( x);}
-variant_t::variant_t( boost::int32_t x)             { init<boost::int32_t>( x);}
-variant_t::variant_t( boost::uint32_t x)            { init<boost::uint32_t>( x);}
+variant_t::variant_t( std::int32_t x)             { init<std::int32_t>( x);}
+variant_t::variant_t( std::uint32_t x)            { init<std::uint32_t>( x);}
 variant_t::variant_t( float x)                      { init<float>( x);}
 variant_t::variant_t( const math::point2i_t& x)     { init<math::point2i_t>( x);}
 variant_t::variant_t( const math::point2f_t& x)     { init<math::point2f_t>( x);}
@@ -160,11 +161,11 @@ std::ostream& operator<<( std::ostream& os, const variant_t& x)
         break;
 
         case int32_k:
-            os << get<boost::int32_t>( x);
+            os << get<std::int32_t>( x);
         break;
 
         case uint32_k:
-            os << get<boost::uint32_t>( x);
+            os << get<std::uint32_t>( x);
         break;
 
         case float_k:

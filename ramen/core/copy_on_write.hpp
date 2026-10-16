@@ -6,13 +6,11 @@
 #define RAMEN_CORE_COPY_ON_WRITE_HPP
 
 #include<ramen/config.hpp>
+#include<concepts>
+#include<type_traits>
 
-#include<boost/shared_ptr.hpp>
-#include<boost/move/move.hpp>
-#include<boost/utility/enable_if.hpp>
-#include<boost/type_traits/has_equal_to.hpp>
-#include<boost/type_traits/has_not_equal_to.hpp>
-#include<boost/swap.hpp>
+#include<memory>
+#include<utility>
 
 #include<ramen/Concepts/RegularConcept.hpp>
 
@@ -30,7 +28,7 @@ namespace core
 template <typename T> // T models Regular
 class copy_on_write_t
 {
-    BOOST_CONCEPT_ASSERT(( RegularConcept<T>));
+    static_assert( RegularConcept<T>);
 
 public:
 
@@ -46,9 +44,9 @@ public:
         object_.reset( new implementation_t( x), capture_deleter_t());
     }
 
-    explicit copy_on_write_t( BOOST_RV_REF( T) x)
+    explicit copy_on_write_t( T&& x)
     {
-        object_.reset( new implementation_t( boost::move( x)), capture_deleter_t());
+        object_.reset( new implementation_t( std::move( x)), capture_deleter_t());
     }
 
     const value_type& read() const
@@ -79,7 +77,7 @@ public:
 
     void swap( copy_on_write_t& other)
     {
-        boost::swap( object_, other.object_);
+        std::swap( object_, other.object_);
     }
 
 private:
@@ -90,7 +88,7 @@ private:
 
         explicit implementation_t( const value_type& x) : value_( x) {}
 
-        explicit implementation_t( BOOST_RV_REF( value_type) x) : value_( boost::move( x)) {}
+        explicit implementation_t( value_type&& x) : value_( std::move( x)) {}
 
         value_type value_;
     };
@@ -100,7 +98,7 @@ private:
         void operator()( implementation_t *x) const { delete x;}
     };
 
-    typedef boost::shared_ptr<implementation_t> implementation_ptr_t;
+    typedef std::shared_ptr<implementation_t> implementation_ptr_t;
 
     implementation_ptr_t object_;
 };
@@ -112,14 +110,14 @@ inline void swap( copy_on_write_t<T>& x, copy_on_write_t<T>& y)
 }
 
 template<class T>
-typename boost::enable_if<boost::has_equal_to<T>, bool>::type
+std::enable_if_t<std::equality_comparable<T>, bool>
 operator==( const copy_on_write_t<T>& a, const copy_on_write_t<T>& b)
 {
     return a.read() == b.read();
 }
 
 template<class T>
-typename boost::enable_if<boost::has_not_equal_to<T>, bool>::type
+std::enable_if_t<std::equality_comparable<T>, bool>
 operator!=( const copy_on_write_t<T>& a, const copy_on_write_t<T>& b)
 {
     return a.read() != b.read();

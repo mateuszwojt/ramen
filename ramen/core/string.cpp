@@ -10,7 +10,7 @@
 #include<algorithm>
 #include<cstring>
 
-#include<boost/container/vector.hpp>
+#include<vector>
 
 #include<ramen/core/memory.hpp>
 #include<ramen/core/exceptions.hpp>
@@ -70,7 +70,7 @@ int string_compare( const Char *a, const Char *b)
 
 struct string_t::impl
 {
-    boost::container::vector<string_t::char_type> str_;
+    std::vector<string_t::char_type> str_;
 };
 
 string_t::string_t() : pimpl_( 0)
@@ -192,7 +192,7 @@ string_t::const_iterator string_t::begin() const
 {
     RAMEN_ASSERT( pimpl_);
 
-    return pimpl_->str_.begin().get_ptr();
+    return pimpl_->str_.data();
 }
 
 string_t::const_iterator string_t::end() const
@@ -200,16 +200,16 @@ string_t::const_iterator string_t::end() const
     RAMEN_ASSERT( pimpl_);
 
     if( !pimpl_->str_.empty())
-        return pimpl_->str_.end().get_ptr() - 1;
+        return ( pimpl_->str_.data() + pimpl_->str_.size()) - 1;
 
-    return pimpl_->str_.end().get_ptr();
+    return ( pimpl_->str_.data() + pimpl_->str_.size());
 }
 
 string_t::iterator string_t::begin()
 {
     RAMEN_ASSERT( pimpl_);
 
-    return pimpl_->str_.begin().get_ptr();
+    return pimpl_->str_.data();
 }
 
 string_t::iterator string_t::end()
@@ -217,9 +217,9 @@ string_t::iterator string_t::end()
     RAMEN_ASSERT( pimpl_);
 
     if( !pimpl_->str_.empty())
-        return pimpl_->str_.end().get_ptr() - 1;
+        return ( pimpl_->str_.data() + pimpl_->str_.size()) - 1;
 
-    return pimpl_->str_.end().get_ptr();
+    return ( pimpl_->str_.data() + pimpl_->str_.size());
 }
 
 string_t& string_t::operator+=( const char_type *str)

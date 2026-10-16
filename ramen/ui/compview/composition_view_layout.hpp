@@ -5,7 +5,7 @@
 #ifndef RAMEN_UI_COMPOSITION_VIEW_LAYOUT_HPP
 #define	RAMEN_UI_COMPOSITION_VIEW_LAYOUT_HPP
 
-#include<boost/optional.hpp>
+#include<optional>
 
 #include<Imath/ImathBox.h>
 #include<Imath/ImathRandom.h>
@@ -38,7 +38,7 @@ private:
 	void do_place_node( node_t *n, const Imath::V2f& p) const;
 	
 	Imath::Box2f world_;
-	boost::optional<Imath::V2f> interest_point_;
+	std::optional<Imath::V2f> interest_point_;
 
 	mutable Imath::Rand48 rng_;
 };

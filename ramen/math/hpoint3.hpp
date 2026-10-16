@@ -19,7 +19,7 @@ namespace math
 \brief Homogeneous three dimensional point.
 */
 template<class T>
-class hpoint3_t : boost::equality_comparable<hpoint3_t<T> >
+class hpoint3_t
 {
 public:
 

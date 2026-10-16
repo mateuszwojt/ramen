@@ -9,7 +9,7 @@
 
 #include<ramen/params/param.hpp>
 
-#include<boost/tuple/tuple.hpp>
+#include<tuple>
 
 #include<ramen/anim/float_curve.hpp>
 #include<ramen/anim/any_curve.hpp>
@@ -86,7 +86,7 @@ private:
 
 	anim::float_curve_t *find_curve( const std::string& name);
 	
-	typedef boost::tuple<boost::flyweight<std::string>, anim::float_curve_t> curve_entry_type;
+	typedef std::tuple<std::string, anim::float_curve_t> curve_entry_type;
     std::vector<curve_entry_type> curves_;
 
     float step_;

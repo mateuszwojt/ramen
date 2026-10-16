@@ -7,9 +7,8 @@
 #include<stdlib.h>
 #include<stdio.h>
 
-#include<boost/filesystem/fstream.hpp>
-#include<boost/filesystem/operations.hpp>
-#include<boost/filesystem/operations.hpp>
+#include<fstream>
+#include<filesystem>
 
 #include<ramen/app/application.hpp>
 
@@ -37,8 +36,8 @@ void preferences_t::set_defaults()
 
 void preferences_t::load()
 {
-    boost::filesystem::path p = app().system().application_user_path() / "prefs.yaml";
-    boost::filesystem::ifstream ifs( p);
+    std::filesystem::path p = app().system().application_user_path() / "prefs.yaml";
+    std::ifstream ifs( p);
     if( !ifs.is_open() || !ifs.good())
     {
         save();
@@ -67,8 +66,8 @@ void preferences_t::load()
 
 void preferences_t::save()
 {
-    boost::filesystem::path p = app().system().application_user_path() / "prefs.yaml";
-    boost::filesystem::ofstream ofs( p);
+    std::filesystem::path p = app().system().application_user_path() / "prefs.yaml";
+    std::ofstream ofs( p);
 
     if( !ofs.is_open() || !ofs.good())
     {

@@ -6,7 +6,7 @@
 
 #include<fstream>
 
-#include<boost/filesystem/operations.hpp>
+#include<filesystem>
 
 #include<QApplication>
 #include<QSplashScreen>
@@ -24,7 +24,7 @@ namespace ui
 namespace
 {
 /*
-class splash_expression_t : public SeExpression, boost::noncopyable
+class splash_expression_t : public SeExpression, ramen::core::noncopyable_t
 {
 public:
 
@@ -105,7 +105,7 @@ void splash_screen_t::finish( QWidget *w)
 bool splash_screen_t::render_splash()
 {
     /*
-	boost::filesystem::path splash_sexpr_path = app().system().app_user_path() / "ui/splash.se";
+	std::filesystem::path splash_sexpr_path = app().system().app_user_path() / "ui/splash.se";
 	if( do_render_splash( splash_sexpr_path))
 		return true;
 	
@@ -116,12 +116,12 @@ bool splash_screen_t::render_splash()
 	return false;
 }
 
-bool splash_screen_t::do_render_splash( const boost::filesystem::path& p)
+bool splash_screen_t::do_render_splash( const std::filesystem::path& p)
 {
     /*
 	try
 	{
-		if( !boost::filesystem::exists( p))
+		if( !std::filesystem::exists( p))
 			return false;
 		
 		std::ifstream istream( filesystem::file_cstring( p));

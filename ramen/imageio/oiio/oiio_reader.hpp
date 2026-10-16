@@ -19,7 +19,7 @@ class oiio_reader_t : public reader_t
 {
 public:
 
-    oiio_reader_t( const boost::filesystem::path& p);
+    oiio_reader_t( const std::filesystem::path& p);
 
 private:
 

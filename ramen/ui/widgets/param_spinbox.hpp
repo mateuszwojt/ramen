@@ -10,7 +10,7 @@
 #include<ramen/ui/widgets/param_spinbox_fwd.hpp>
 #include<ramen/ui/widgets/spinbox.hpp>
 
-#include<boost/variant.hpp>
+#include<variant>
 
 #include<ramen/params/param_fwd.hpp>
 #include<ramen/params/animated_param_fwd.hpp>
@@ -29,7 +29,7 @@ class param_spinbox_t : public spinbox_t
 
 public:
 
-	typedef boost::variant<double, std::string> value_type;
+	typedef std::variant<double, std::string> value_type;
 	
 	param_spinbox_t( param_t& param, int comp_index, QWidget *parent = 0);
 	

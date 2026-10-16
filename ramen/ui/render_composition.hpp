@@ -5,7 +5,7 @@
 
 #include<ramen/app/composition_fwd.hpp>
 
-#include<boost/function.hpp>
+#include<functional>
 
 namespace ramen
 {

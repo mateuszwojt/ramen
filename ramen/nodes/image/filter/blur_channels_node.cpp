@@ -61,7 +61,7 @@ void blur_channels_node_t::do_create_params()
 
     std::unique_ptr<popup_param_t> b( new popup_param_t( "Border Mode"));
     b->set_id( "border");
-    b->menu_items() = boost::assign::list_of( "Black")( "Repeat")( "Reflect");
+    b->menu_items() = { "Black", "Repeat", "Reflect"};
     add_param( std::move( b));
 }
 

@@ -41,7 +41,7 @@ public:
 	void frame_data_window() const;
 
 	// get colors
-	boost::optional<Imath::Color4f> color_at( const Imath::V2i& p) const;
+	std::optional<Imath::Color4f> color_at( const Imath::V2i& p) const;
 
 private:
 

@@ -7,7 +7,7 @@
 
 #include<ramen/nodes/image/xform_node.hpp>
 
-#include<boost/array.hpp>
+#include<array>
 
 #include<ramen/image/generic/samplers.hpp>
 
@@ -32,7 +32,7 @@ protected:
 	
     matrix3_type global_matrix_at_frame( float frame, const std::vector<const xform2d_node_t*>& xforms, int subsample = 1) const;
 
-	bool quad_is_convex(const boost::array<vector2_type,4>& quad) const;
+	bool quad_is_convex(const std::array<vector2_type,4>& quad) const;
 
     Imath::Box2i transform_box( const Imath::Box2i& box, const matrix3_type& m, int step, bool round_up = false) const;
 

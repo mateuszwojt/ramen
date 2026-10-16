@@ -4,8 +4,10 @@
 
 #include<ramen/nodes/image/output/output_node.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/format.hpp>
+#include<functional>
+#include<cctype>
+#include<cstdio>
+#include<cstring>
 
 #include<ramen/ImathExt/ImathBoxAlgo.h>
 
@@ -44,12 +46,12 @@ enum output_format
 output_node_t::output_node_t() : base_output_node_t()
 {
     set_name( "image_out");
-    param_set().param_changed.connect( boost::bind( &output_node_t::param_changed, this, _1, _2));
+    param_set().param_changed.connect( std::bind( &output_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 output_node_t::output_node_t( const output_node_t& other) : base_output_node_t( other)
 {
-    param_set().param_changed.connect( boost::bind( &output_node_t::param_changed, this, _1, _2));
+    param_set().param_changed.connect( std::bind( &output_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void output_node_t::do_create_params()
@@ -82,17 +84,17 @@ void output_node_t::do_create_params()
 
         std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
         p->set_id( "exr_channels");
-        p->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
+        p->menu_items() = { "RGBA", "RGB", "Alpha"};
         group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Type"));
         p->set_id( "exr_type");
-        p->menu_items() = boost::assign::list_of( "Half")( "Float");
+        p->menu_items() = { "Half", "Float"};
         group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Compress"));
         p->set_id( "exr_compress");
-        p->menu_items() = boost::assign::list_of( "None")( "RLE")( "ZIPS")( "ZIP")( "PIZ")( "PXR24")( "B44")( "B44A");
+        p->menu_items() = { "None", "RLE", "ZIPS", "ZIP", "PIZ", "PXR24", "B44", "B44A"};
         p->set_default_value( (int) 4);
         group->add_param( std::move( p));
 
@@ -142,17 +144,17 @@ void output_node_t::do_create_params()
 
         std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
         p->set_id( "tiff_channels");
-        p->menu_items() = boost::assign::list_of( "RGBA")( "RGB");
+        p->menu_items() = { "RGBA", "RGB"};
         group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Type"));
         p->set_id( "tiff_type");
-        p->menu_items() = boost::assign::list_of( "8 Bits")( "16 Bits")( "Float");
+        p->menu_items() = { "8 Bits", "16 Bits", "Float"};
         group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Compress"));
         p->set_id( "tiff_compress");
-        p->menu_items() = boost::assign::list_of( "None")( "LZW")( "ZIP");
+        p->menu_items() = { "None", "LZW", "ZIP"};
         group->add_param( std::move( p));
 
         top->add_param( std::move( group));
@@ -165,12 +167,12 @@ void output_node_t::do_create_params()
 
         std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
         p->set_id( "tga_channels");
-        p->menu_items() = boost::assign::list_of( "RGBA")( "RGB");
+        p->menu_items() = { "RGBA", "RGB"};
         group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Compress"));
         p->set_id( "tga_compress");
-        p->menu_items() = boost::assign::list_of( "None")( "RLE");
+        p->menu_items() = { "None", "RLE"};
         group->add_param( std::move( p));
 
         top->add_param( std::move( group));
@@ -183,7 +185,7 @@ void output_node_t::do_create_params()
 
         std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
         p->set_id( "png_channels");
-        p->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
+        p->menu_items() = { "RGBA", "RGB", "Alpha"};
         group->add_param( std::move( p));
 
         top->add_param( std::move( group));
@@ -243,16 +245,74 @@ math::box2i_t convert_box( const Imath::Box2i& box)
                           math::point2i_t( box.max.x, box.max.y));
 }
 
+// Replaces the printf style integer directives ( %d, %04d, ...) and
+// positional directives ( %1%) in pattern with the frame number.
+std::string format_frame_path( const std::string& pattern, int frame)
+{
+    std::string result;
+    std::size_t i = 0;
+
+    while( i < pattern.size())
+    {
+        if( pattern[i] != '%')
+        {
+            result += pattern[i++];
+            continue;
+        }
+
+        if( i + 1 < pattern.size() && pattern[i + 1] == '%')
+        {
+            result += '%';
+            i += 2;
+            continue;
+        }
+
+        // %N%
+        std::size_t j = i + 1;
+        while( j < pattern.size() && std::isdigit( static_cast<unsigned char>( pattern[j])))
+            ++j;
+
+        if( j > i + 1 && j < pattern.size() && pattern[j] == '%')
+        {
+            result += std::to_string( frame);
+            i = j + 1;
+            continue;
+        }
+
+        // %[flags][width][.precision]conversion
+        j = i + 1;
+        while( j < pattern.size() && std::strchr( "-+ #0", pattern[j]))
+            ++j;
+
+        while( j < pattern.size() && ( std::isdigit( static_cast<unsigned char>( pattern[j])) || pattern[j] == '.'))
+            ++j;
+
+        if( j < pattern.size() && std::strchr( "diu", pattern[j]))
+        {
+            std::string spec( pattern, i, j - i);
+            spec += 'd';
+
+            char buffer[64];
+            std::snprintf( buffer, sizeof( buffer), spec.c_str(), frame);
+            result += buffer;
+            i = j + 1;
+            continue;
+        }
+
+        // not a directive, copy it.
+        result += pattern[i++];
+    }
+
+    return result;
+}
+
 } // unnamed
 
 void output_node_t::write( const render::context_t& context)
 {
-    boost::filesystem::path p( get_value<boost::filesystem::path>( param( "output")));
+    std::filesystem::path p( get_value<std::filesystem::path>( param( "output")));
     std::string in( p.string());
-    boost::format formater( in);
-    formater.exceptions( boost::io::all_error_bits ^ ( boost::io::too_many_args_bit | boost::io::too_few_args_bit));
-    formater % ( (int) context.frame);
-    p = formater.str();
+    p = format_frame_path( in, (int) context.frame);
 
     if( p.empty())
         throw( std::runtime_error( "Image output empty path"));

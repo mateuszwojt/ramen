@@ -13,8 +13,8 @@
 
 #include<QOpenGLWidget>
 
-#include<boost/shared_ptr.hpp>
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<memory>
+#include<ramen/container/ptr_vector.hpp>
 
 #include<Imath/ImathColor.h>
 
@@ -68,7 +68,7 @@ public:
     OCIO::ConstConfigRcPtr ocio_config() const;
     OCIO::DisplayViewTransformRcPtr ocio_transform();
 
-    boost::shared_ptr<ocio::gl_lut3d_t>& display_lut();
+    std::shared_ptr<ocio::gl_lut3d_t>& display_lut();
     const std::string& display_device() const;
     const std::string& display_transform() const;
     float exposure() const;
@@ -113,7 +113,7 @@ protected:
 
 private:
 
-    typedef boost::ptr_vector<viewer_strategy_t>::reverse_iterator strategy_iterator;
+    typedef container::ptr_vector<viewer_strategy_t>::reverse_iterator strategy_iterator;
 
     void test_gl_extensions();
 
@@ -122,13 +122,13 @@ private:
 
     bool first_time_;
 
-    boost::ptr_vector<viewer_strategy_t> strategies_;
+    container::ptr_vector<viewer_strategy_t> strategies_;
     strategy_iterator current_;
 
     view_mode_t view_mode_;
     bool autoupdate_;
 
-    boost::shared_ptr<ocio::gl_lut3d_t> display_lut_;
+    std::shared_ptr<ocio::gl_lut3d_t> display_lut_;
 
     Imath::Color3f back_color_, fg_color_;
 };

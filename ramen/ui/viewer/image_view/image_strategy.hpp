@@ -7,8 +7,8 @@
 
 #include<Imath/ImathColor.h>
 
-#include<boost/noncopyable.hpp>
-#include<boost/optional.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<optional>
 
 #include<ramen/GL/gl.hpp>
 
@@ -21,7 +21,7 @@ namespace ui
 namespace viewer
 {
 
-class image_strategy_t : boost::noncopyable
+class image_strategy_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -43,7 +43,7 @@ public:
 
 	virtual void draw() const = 0;
 
-	virtual boost::optional<Imath::Color4f> color_at( const Imath::V2i& p) const = 0;
+	virtual std::optional<Imath::Color4f> color_at( const Imath::V2i& p) const = 0;
 
 protected:
 

@@ -93,7 +93,7 @@ void clamp_colors_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> r( new popup_param_t( "Channels"));
     r->set_id( "channels");
-    r->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
+    r->menu_items() = { "RGBA", "RGB", "Alpha"};
 	r->set_default_value( 1);
     add_param( std::move( r));
 	

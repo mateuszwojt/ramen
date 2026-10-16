@@ -31,7 +31,7 @@ void copy_subsampled( SrcIter src_begin, SrcIter src_end, DstIter dst_begin, Dst
 template<class SrcRange, class DstRange>
 void copy_subsampled( const SrcRange& src, DstRange& dst, int subsample = 1)
 {
-    copy_subsampled( boost::begin( src), boost::end( src), boost::begin( dst), boost::end( dst), subsample);
+    copy_subsampled( std::begin( src), std::end( src), std::begin( dst), std::end( dst), subsample);
 }
 
 
@@ -57,7 +57,7 @@ void transform_subsampled( SrcIter src_begin, SrcIter src_end, DstIter dst_begin
 template<class SrcRange, class DstRange, class Fun>
 void transform_subsampled( const SrcRange& src, DstRange& dst, Fun f, int subsample = 1)
 {
-    transform_subsampled( boost::begin( src), boost::end( src), boost::begin( dst), boost::end( dst), f, subsample);
+    transform_subsampled( std::begin( src), std::end( src), std::begin( dst), std::end( dst), f, subsample);
 }
 
 } // namespace

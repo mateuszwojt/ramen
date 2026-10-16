@@ -60,7 +60,7 @@ void image_input_command_t::redo()
 
 void image_input_command_t::swap_values()
 {
-	boost::tuple<int,int,int,int> tmp_ch = node_.get_channels();
+	std::tuple<int,int,int,int> tmp_ch = node_.get_channels();
 	float tmp_aspect = node_.get_aspect_param_value();
 	
 	node_.set_channels( channels_);

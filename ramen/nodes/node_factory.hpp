@@ -10,7 +10,7 @@
 #include<memory>
 #include<map>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/nodes/node_metaclass.hpp>
 
@@ -21,7 +21,7 @@ namespace ramen
 \ingroup nodes
 \brief Singleton node factory.
 */
-class node_factory_t : boost::noncopyable
+class node_factory_t : ramen::core::noncopyable_t
 {
 public:
 

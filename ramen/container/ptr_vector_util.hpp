@@ -8,7 +8,7 @@
 #include<memory>
 #include<algorithm>
 
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<ramen/container/ptr_vector.hpp>
 
 #include<ramen/assert.hpp>
 
@@ -17,16 +17,16 @@ namespace ramen
 namespace container
 {
 
-template<class T, class C, class A>
-std::unique_ptr<T> release_ptr( T *p, boost::ptr_vector<T,C,A>& vec)
+template<class T>
+std::unique_ptr<T> release_ptr( T *p, container::ptr_vector<T>& vec)
 {
     std::unique_ptr<T> result;
 
-	for( typename boost::ptr_vector<T,C,A>::iterator it( vec.begin()), e( vec.end()); it != e; ++it)
+	for( typename container::ptr_vector<T>::iterator it( vec.begin()), e( vec.end()); it != e; ++it)
 	{
 		if( &(*it) == p)
 		{
-			typename boost::ptr_vector<T,C,A>::auto_type ptr = vec.release( it);
+			typename container::ptr_vector<T>::auto_type ptr = vec.release( it);
             result.reset( ptr.release());
             break;
 		}
@@ -35,8 +35,8 @@ std::unique_ptr<T> release_ptr( T *p, boost::ptr_vector<T,C,A>& vec)
 	return result;
 }
 
-template<class Iter, class T, class C, class A>
-void swap_elements( Iter first, Iter second, boost::ptr_vector<T,C,A>& vec)
+template<class Iter, class T>
+void swap_elements( Iter first, Iter second, container::ptr_vector<T>& vec)
 {
     std::swap( *first.base(), *second.base());
 }

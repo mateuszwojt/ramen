@@ -9,7 +9,7 @@
 
 #include<algorithm>
 
-#include<boost/scoped_array.hpp>
+#include<memory>
 
 #include<ramen/algorithm/clamp.hpp>
 

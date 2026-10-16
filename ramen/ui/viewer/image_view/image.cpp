@@ -105,12 +105,12 @@ void image_t::frame_data_window() const
 		frame_rect( strategy_->data_window());
 }
 
-boost::optional<Imath::Color4f> image_t::color_at( const Imath::V2i& p) const
+std::optional<Imath::Color4f> image_t::color_at( const Imath::V2i& p) const
 {
 	if( strategy_.get())
 		return strategy_->color_at( p);
 
-	return boost::optional<Imath::Color4f>();
+	return std::optional<Imath::Color4f>();
 }
 
 // draw utils

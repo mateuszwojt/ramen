@@ -11,8 +11,7 @@
 
 #include<vector>
 
-#include<boost/tuple/tuple.hpp>
-#include<boost/tuple/tuple_comparison.hpp>
+#include<tuple>
 
 #include<QPointer>
 #include<QComboBox>
@@ -20,7 +19,7 @@
 namespace ramen
 {
 
-typedef boost::tuple<int,int,int,int> tuple4i_t;
+typedef std::tuple<int,int,int,int> tuple4i_t;
 	
 class image_channels_param_t : public static_param_t
 {

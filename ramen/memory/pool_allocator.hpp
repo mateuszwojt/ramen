@@ -10,12 +10,10 @@
 #include<vector>
 #include<memory>
 
-#include<boost/noncopyable.hpp>
-#include<boost/cstdint.hpp>
-#include<boost/thread/locks.hpp>
-#include<boost/exception/all.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<cstdint>
+#include<mutex>
 
-#include<boost/thread/recursive_mutex.hpp>
 
 #include<ramen/assert.hpp>
 
@@ -27,25 +25,25 @@ namespace memory
 {
 
 template<class MemPool>
-class pool_allocator_t : boost::noncopyable
+class pool_allocator_t : ramen::core::noncopyable_t
 {
 public:
 
-    explicit pool_allocator_t( boost::uint64_t size)
+    explicit pool_allocator_t( std::uint64_t size)
     {
         pool_.init( size);
     }
 
 	void add_cache( lru_cache_interface *c) { caches_.push_back( c);}
 
-    boost::uint64_t max_size() const { return pool_.pool_size();}
+    std::uint64_t max_size() const { return pool_.pool_size();}
 
     unsigned char *allocate( std::size_t& s)
 	{
 		if( s == 0)
 			return 0;
 
-	    boost::lock_guard<boost::recursive_mutex> lock( mutex_);
+	    std::lock_guard<std::recursive_mutex> lock( mutex_);
 
 		while( 1)
 	    {
@@ -59,7 +57,7 @@ public:
 		}
 
         // if we get here, it means there's not enough memory & all caches are empty.
-	    throw boost::enable_error_info( std::bad_alloc());
+	    throw std::bad_alloc();
 		s = 0;
 		return 0;
 	}
@@ -71,7 +69,7 @@ public:
 
 		RAMEN_ASSERT( s != 0);
 
-	    boost::lock_guard<boost::recursive_mutex> lock( mutex_);
+	    std::lock_guard<std::recursive_mutex> lock( mutex_);
 	    pool_.deallocate( p, s);
 	}
 
@@ -80,13 +78,13 @@ private:
 	bool erase_lru()
 	{
 		int lru_cache = -1;
-		boost::posix_time::ptime oldest = boost::posix_time::microsec_clock::universal_time();
+		std::chrono::steady_clock::time_point oldest = std::chrono::steady_clock::now();
 
 		for( int i = 0, ie = caches_.size(); i < ie; ++i)
 		{
 			if( !caches_[i]->empty())
 			{
-				boost::posix_time::ptime touch_time = caches_[i]->lru_time();
+				std::chrono::steady_clock::time_point touch_time = caches_[i]->lru_time();
 
 				if( touch_time < oldest)
 				{
@@ -103,7 +101,7 @@ private:
 		return true;
 	}
 
-    boost::recursive_mutex mutex_;
+    std::recursive_mutex mutex_;
     MemPool pool_;
 
 	std::vector<lru_cache_interface*> caches_;

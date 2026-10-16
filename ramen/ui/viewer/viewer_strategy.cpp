@@ -62,7 +62,7 @@ Imath::Color4f viewer_strategy_t::color_at( int x, int y) const
 }
 
 void viewer_strategy_t::pick_colors_in_box( const Imath::Box2i& b,
-                                            boost::function<void ( const Imath::Color4f&)> f) const
+                                            std::function<void ( const Imath::Color4f&)> f) const
 {
 }
 

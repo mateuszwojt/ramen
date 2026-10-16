@@ -35,7 +35,7 @@ quad_manipulator_t::quad_manipulator_t( float2_param_t *topleft, float2_param_t 
 
 void quad_manipulator_t::do_draw_overlay( const ui::paint_event_t& event) const
 {	
-	boost::array<Imath::V2f, 4> dst_pts;
+	std::array<Imath::V2f, 4> dst_pts;
 	get_corners( dst_pts, event.aspect_ratio);
 
 	gl_line_width( default_line_width());
@@ -80,7 +80,7 @@ bool quad_manipulator_t::do_mouse_press_event( const ui::mouse_press_event_t& ev
 {
 	picked_corner_ = -1;
 
-	boost::array<Imath::V2f, 4> dst_pts;
+	std::array<Imath::V2f, 4> dst_pts;
 	get_corners( dst_pts, event.aspect_ratio);
 	
 	for( int i = 0; i < 4; ++i)
@@ -150,7 +150,7 @@ void quad_manipulator_t::do_mouse_release_event( const ui::mouse_release_event_t
 	}
 }
 
-void quad_manipulator_t::get_corners( boost::array<Imath::V2f, 4>& pts, float aspect, int scale) const
+void quad_manipulator_t::get_corners( std::array<Imath::V2f, 4>& pts, float aspect, int scale) const
 {
     pts[0] = get_absolute_value<Imath::V2f>( *topleft_) * scale;
     pts[1] = get_absolute_value<Imath::V2f>( *topright_) * scale;

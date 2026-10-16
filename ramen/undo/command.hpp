@@ -7,8 +7,8 @@
 
 #include<string>
 
-#include<boost/function.hpp>
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<functional>
+#include<ramen/container/ptr_vector.hpp>
 
 namespace ramen
 {
@@ -65,13 +65,13 @@ protected:
 
 /*!
 \ingroup undo
-\brief Generic command that uses boost::functions for undo and redo.
+\brief Generic command that uses std::functions for undo and redo.
 */
 class generic_command_t : public command_t
 {
 public:
 
-    typedef boost::function<void()> function_type;
+    typedef std::function<void()> function_type;
 
     /*!
 	 Constructor
@@ -114,7 +114,7 @@ public:
 
 protected:
 
-    boost::ptr_vector<command_t> commands_;
+    container::ptr_vector<command_t> commands_;
 };
 
 } // namespace

@@ -5,7 +5,7 @@
 #ifndef RAMEN_ANIM_ANY_CURVE_HPP
 #define	RAMEN_ANIM_ANY_CURVE_HPP
 
-#include<boost/variant.hpp>
+#include<variant>
 
 #include<ramen/anim/curve_fwd.hpp>
 
@@ -14,8 +14,8 @@ namespace ramen
 namespace anim
 {
 
-typedef boost::variant<float_curve_t, shape_curve2f_t> any_curve_t;
-typedef boost::variant<float_curve_t*, shape_curve2f_t*> any_curve_ptr_t;
+typedef std::variant<float_curve_t, shape_curve2f_t> any_curve_t;
+typedef std::variant<float_curve_t*, shape_curve2f_t*> any_curve_ptr_t;
 
 void copy( const any_curve_ptr_t& src, any_curve_t& dst);
 void copy( const any_curve_t& src, any_curve_ptr_t& dst);

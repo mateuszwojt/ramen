@@ -8,7 +8,7 @@
 
 #include<ramen/GL/glew.hpp>
 
-#include<boost/exception_ptr.hpp>
+#include<exception>
 
 #include<ramen/GL/glu.hpp>
 
@@ -79,14 +79,14 @@ void image_viewer_strategy_t::do_begin_active_view()
 
     if( node_t *n = app().ui()->active_node())
     {
-        active_connection_ = n->changed.connect( boost::bind( &image_viewer_strategy_t::active_node_changed, this));
-        active_overlay_connection_ = n->overlay_changed.connect( boost::bind( &image_viewer_strategy_t::active_overlay_changed, this));
+        active_connection_ = n->changed.connect( std::bind( &image_viewer_strategy_t::active_node_changed, this));
+        active_overlay_connection_ = n->overlay_changed.connect( std::bind( &image_viewer_strategy_t::active_overlay_changed, this));
     }
 
     if( node_t *n = app().ui()->context_node())
     {
-        context_connection_ = n->changed.connect( boost::bind( &image_viewer_strategy_t::context_node_changed, this));
-        context_overlay_connection_ = n->overlay_changed.connect( boost::bind( &image_viewer_strategy_t::context_overlay_changed, this));
+        context_connection_ = n->changed.connect( std::bind( &image_viewer_strategy_t::context_node_changed, this));
+        context_overlay_connection_ = n->overlay_changed.connect( std::bind( &image_viewer_strategy_t::context_overlay_changed, this));
     }
 
     if( toolbar_.get())
@@ -114,8 +114,8 @@ void image_viewer_strategy_t::set_active_node( node_t *n, bool process)
 
     if( n)
     {
-        active_connection_ = n->changed.connect( boost::bind( &image_viewer_strategy_t::active_node_changed, this));
-        active_overlay_connection_ = n->overlay_changed.connect( boost::bind( &image_viewer_strategy_t::active_overlay_changed, this));
+        active_connection_ = n->changed.connect( std::bind( &image_viewer_strategy_t::active_node_changed, this));
+        active_overlay_connection_ = n->overlay_changed.connect( std::bind( &image_viewer_strategy_t::active_overlay_changed, this));
 
         if( process)
             active_node_changed();
@@ -160,8 +160,8 @@ void image_viewer_strategy_t::set_context_node( node_t *n, bool process)
 
     if( n)
     {
-        context_connection_ = n->changed.connect( boost::bind( &image_viewer_strategy_t::context_node_changed, this));
-        context_overlay_connection_ = n->overlay_changed.connect( boost::bind( &image_viewer_strategy_t::context_overlay_changed, this));
+        context_connection_ = n->changed.connect( std::bind( &image_viewer_strategy_t::context_node_changed, this));
+        context_overlay_connection_ = n->overlay_changed.connect( std::bind( &image_viewer_strategy_t::context_overlay_changed, this));
 
         if( process)
             context_node_changed();
@@ -226,11 +226,23 @@ void image_viewer_strategy_t::render_visible_node()
         context.motion_blur_shutter_factor = 0;
 
     render::image_node_renderer_t renderer;
-    boost::unique_future<bool>& future( app().ui()->render_image( context, renderer));
+    std::future<bool>& future( app().ui()->render_image( context, renderer));
 
-    if( future.has_value())
+    bool render_ok = false;
+    bool exception_thrown = false;
+
+    try
     {
-        if( future.get())
+        render_ok = future.get();
+    }
+    catch( ...)
+    {
+        exception_thrown = true;
+    }
+
+    if( !exception_thrown)
+    {
+        if( render_ok)
         {
             image_node_t *inode = dynamic_cast<image_node_t*>( context.result_node);
             load_texture( inode);
@@ -727,10 +739,10 @@ void image_viewer_strategy_t::mouse_move_event( QMouseEvent *event)
                       pw.y / subsample());
 
         Imath::Color4f col( 0, 0, 0, 0);
-        boost::optional<Imath::Color4f> ocol( image_.color_at( p));
+        std::optional<Imath::Color4f> ocol( image_.color_at( p));
 
         if( ocol)
-            col = ocol.get();
+            col = ocol.value();
 
         std::stringstream s;
         s << "X = " << (int) pw.x << " Y = " << (int) pw.y;
@@ -866,15 +878,15 @@ Imath::Color4f image_viewer_strategy_t::color_at( int x, int y) const
     Imath::V2f wpos = screen_to_world( pos);
     Imath::V2i p( wpos.x / aspect_ratio() / subsample(), wpos.y / subsample());
 
-    boost::optional<Imath::Color4f> c( image_.color_at( p));
+    std::optional<Imath::Color4f> c( image_.color_at( p));
 
     if( c)
-        return c.get();
+        return c.value();
 
     return Imath::Color4f( 0, 0, 0, 0);
 }
 
-void image_viewer_strategy_t::pick_colors_in_box( const Imath::Box2i& b, boost::function<void ( const Imath::Color4f&)> f) const
+void image_viewer_strategy_t::pick_colors_in_box( const Imath::Box2i& b, std::function<void ( const Imath::Color4f&)> f) const
 {
     Imath::Box2i xbox;
     Imath::V2f wpos = screen_to_world( b.min);
@@ -889,10 +901,10 @@ void image_viewer_strategy_t::pick_colors_in_box( const Imath::Box2i& b, boost::
     {
         for( p.x = b.min.x; p.x <= b.max.x; ++p.x)
         {
-            boost::optional<Imath::Color4f> c = image_.color_at( p);
+            std::optional<Imath::Color4f> c = image_.color_at( p);
 
             if( c)
-                f( c.get());
+                f( c.value());
         }
     }
 }

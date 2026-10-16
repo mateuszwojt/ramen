@@ -11,7 +11,6 @@
 #include<QDialogButtonBox>
 #include<QLabel>
 #include<QDoubleSpinBox>
-#include<QLabel>
 
 #include<ramen/ui/widgets/saturation_value_picker.hpp>
 #include<ramen/ui/widgets/hue_picker.hpp>

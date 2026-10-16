@@ -6,7 +6,7 @@
 
 #include<cstdlib>
 
-#include<boost/filesystem/operations.hpp>
+#include<filesystem>
 
 #include<ramen/assert.hpp>
 
@@ -45,7 +45,7 @@ void manager_t::init()
 	}
 
 	// try more paths here...
-    boost::filesystem::path ocio_path = app().system().application_path() / "ocio/config.ocio";
+    std::filesystem::path ocio_path = app().system().application_path() / "ocio/config.ocio";
 	if( init_from_file( ocio_path))
 		return;
 
@@ -60,9 +60,9 @@ OCIO::ConstConfigRcPtr manager_t::config() const
 	return config;
 }
 
-bool manager_t::init_from_file( const boost::filesystem::path& p)
+bool manager_t::init_from_file( const std::filesystem::path& p)
 {
-	if( !boost::filesystem::exists( p))
+	if( !std::filesystem::exists( p))
 		return false;
 
 	try

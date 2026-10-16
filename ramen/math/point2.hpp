@@ -7,6 +7,8 @@
 
 #include<ramen/config.hpp>
 
+#include<ramen/core/operators.hpp>
+
 #include<ramen/math/vector2.hpp>
 
 namespace ramen
@@ -19,10 +21,8 @@ namespace math
 \brief Two dimensional point.
 */
 template<class T>
-class point2_t  : boost::addable2<point2_t<T>, vector2_t<T>
-                , boost::subtractable2<point2_t<T>, vector2_t<T>
-                , boost::equality_comparable<point2_t<T>
-                > > >
+class RAMEN_EMPTY_BASES point2_t : public core::addable2<point2_t<T>, vector2_t<T>>
+               , public core::subtractable2<point2_t<T>, vector2_t<T>>
 {
 public:
 

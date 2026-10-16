@@ -12,10 +12,12 @@
 #include<iostream>
 #include<fstream>
 
-#include<boost/thread.hpp>
-#include<boost/filesystem/operations.hpp>
-#include<boost/filesystem/operations.hpp>
-#include<boost/lexical_cast.hpp>
+#include<thread>
+#include<future>
+#include<mutex>
+#include<condition_variable>
+#include<filesystem>
+#include<ramen/util/lexical_cast.hpp>
 
 #include<OpenEXR/ImfThreading.h>
 
@@ -70,12 +72,12 @@ application_t::application_t( int argc, char **argv) : system_(), preferences_()
     // Create QApplication
     QApplication *q_app = new QApplication( cmd_parser_->argc, cmd_parser_->argv);
     //TODO: re-eanble this...
-    //boost::filesystem::path bundle_path( system().app_bundle_path());
+    //std::filesystem::path bundle_path( system().app_bundle_path());
     //bundle_path /= "lib/Qt_plugins";
     //qApp->setLibraryPaths( QStringList( QString( ramen::filesystem::file_cstring( bundle_path))));
 
     // create the application user path, if needed
-    boost::filesystem::create_directories( system().application_user_path());
+    std::filesystem::create_directories( system().application_user_path());
 
     parse_command_line( cmd_parser_->argc, cmd_parser_->argv);
 
@@ -83,7 +85,7 @@ application_t::application_t( int argc, char **argv) : system_(), preferences_()
     preferences_.reset( new preferences_t());
 
     if( max_threads_ == 0)
-        max_threads_ = boost::thread::hardware_concurrency();
+        max_threads_ = std::thread::hardware_concurrency();
 
     task_scheduler_.reset( new tbb::global_control( tbb::global_control::max_allowed_parallelism, max_threads_));
     Imf::setGlobalThreadCount( max_threads_);
@@ -98,9 +100,9 @@ application_t::application_t( int argc, char **argv) : system_(), preferences_()
     // init memory manager
     if( img_cache_size_ == 0)
     {
-        boost::uint64_t percent  = preferences().max_image_memory();
-        boost::uint64_t ram_size = system().ram_size();
-        img_cache_size_ = ram_size / (boost::uint64_t) 100 * percent;
+        std::uint64_t percent  = preferences().max_image_memory();
+        std::uint64_t ram_size = system().ram_size();
+        img_cache_size_ = ram_size / (std::uint64_t) 100 * percent;
     }
 
     mem_manager_.reset( new memory::manager_t( img_cache_size_));
@@ -176,8 +178,8 @@ int application_t::run()
             if( !mb_shutter_factor_)
                 mb_shutter_factor_ = 1.0f;
 
-            render::render_sequence( document().composition(), start_frame_.get(), end_frame_.get(),
-                                     proxy_level_.get(), subsample_.get(), mb_extra_samples_.get(), mb_shutter_factor_.get());
+            render::render_sequence( document().composition(), start_frame_.value(), end_frame_.value(),
+                                     proxy_level_.value(), subsample_.value(), mb_extra_samples_.value(), mb_shutter_factor_.value());
         }
     }
 
@@ -193,18 +195,18 @@ bool application_t::matches_option( char *arg, const char *opt) const
     return false;
 }
 
-boost::optional<int> application_t::parse_int( int num, int argc, char **argv) const
+std::optional<int> application_t::parse_int( int num, int argc, char **argv) const
 {
     RAMEN_ASSERT( num > 0);
     RAMEN_ASSERT( argc > 0);
 
-    boost::optional<int> result;
+    std::optional<int> result;
 
     if( num < argc)
     {
         try
         {
-            result = boost::lexical_cast<int>( argv[num]);
+            result = util::lexical_cast<int>( argv[num]);
         }
         catch( std::exception& e) {}
     }
@@ -212,18 +214,18 @@ boost::optional<int> application_t::parse_int( int num, int argc, char **argv) c
     return result;
 }
 
-boost::optional<float> application_t::parse_float( int num, int argc, char **argv) const
+std::optional<float> application_t::parse_float( int num, int argc, char **argv) const
 {
     RAMEN_ASSERT( num > 0);
     RAMEN_ASSERT( argc > 0);
 
-    boost::optional<float> result;
+    std::optional<float> result;
 
     if( num < argc)
     {
         try
         {
-            result = boost::lexical_cast<float>( argv[num]);
+            result = util::lexical_cast<float>( argv[num]);
         }
         catch( std::exception& e) {}
     }
@@ -234,22 +236,22 @@ boost::optional<float> application_t::parse_float( int num, int argc, char **arg
 void application_t::parse_input_file( char *arg)
 {
     // input file name
-    infile_ = boost::filesystem::path( arg);
+    infile_ = std::filesystem::path( arg);
 
     if( infile_.is_relative())
-        infile_ = boost::filesystem::absolute( infile_);
+        infile_ = std::filesystem::absolute( infile_);
 }
 
 bool application_t::parse_common_option( int argc, char **argv, int& num)
 {
     if( matches_option( argv[num], "-threads"))
     {
-        boost::optional<int> op( parse_int( num + 1, argc, argv));
+        std::optional<int> op( parse_int( num + 1, argc, argv));
 
         if( op)
         {
-            if( op.get() > 0)
-                max_threads_ = op.get();
+            if( op.value() > 0)
+                max_threads_ = op.value();
             else
                 error( "threads should be equal or greater than 1. Ignoring", true);
         }
@@ -384,10 +386,10 @@ void application_t::create_new_document()
     document_.reset( new document_t());
 }
 
-void application_t::open_document( const boost::filesystem::path& p)
+void application_t::open_document( const std::filesystem::path& p)
 {
     create_new_document();
-    boost::filesystem::ifstream ifs( p, serialization::yaml_iarchive_t::file_open_mode());
+    std::ifstream ifs( p, serialization::yaml_iarchive_t::file_open_mode());
 
     if( !ifs.is_open() || !ifs.good())
         throw std::runtime_error( std::string( "Couldn't open input file ") + filesystem::file_string( p));

@@ -42,8 +42,8 @@ param_spinbox_t::param_spinbox_t( param_t& param, int comp_index, QWidget *paren
 	
 	comp_index_ = comp_index;
 	setText( "0");
-	value_ = 0;
-	previous_value_ = 0;
+	value_ = 0.0;
+	previous_value_ = 0.0;
     connect( this, SIGNAL( editingFinished()), this, SLOT( textChanged()));
 	
 	set_key_ = new QAction( "Set key", this);
@@ -64,14 +64,14 @@ param_spinbox_t::param_spinbox_t( param_t& param, int comp_index, QWidget *paren
 
 double param_spinbox_t::value() const
 {
-	RAMEN_ASSERT( value_.which() == 0);
-	return boost::get<double>( value_);
+	RAMEN_ASSERT( value_.index() == 0);
+	return std::get<double>( value_);
 }
 
 std::string param_spinbox_t::stringValue() const
 {
-	RAMEN_ASSERT( value_.which() == 0);
-	return boost::get<std::string>( value_);
+	RAMEN_ASSERT( value_.index() == 0);
+	return std::get<std::string>( value_);
 }
 
 bool param_spinbox_t::setValue( double v)
@@ -79,9 +79,9 @@ bool param_spinbox_t::setValue( double v)
     double new_val = clamp( v, minimum(), maximum());
 	spinbox_t::setLineEditContents( new_val);
 	
-	if( value_.which() == 0)
+	if( value_.index() == 0)
 	{
-		if( new_val == boost::get<double>( value_))
+		if( new_val == std::get<double>( value_))
 			return false;
 	}
 	
@@ -99,15 +99,15 @@ void param_spinbox_t::setValue( const std::string& s)
 
 void param_spinbox_t::restorePreviousValue()
 {
-	if( previous_value_.which() == 0)
-		setValue( boost::get<double>( previous_value_));
+	if( previous_value_.index() == 0)
+		setValue( std::get<double>( previous_value_));
 	else
-		setValue( boost::get<std::string>( previous_value_));
+		setValue( std::get<std::string>( previous_value_));
 }
 
 void param_spinbox_t::keyPressEvent( QKeyEvent *event)
 {
-	if( value_.which() == 0)
+	if( value_.index() == 0)
 	{
 		if( event->key() == Qt::Key_Up || event->key() == Qt::Key_Down)
 		{
@@ -124,7 +124,7 @@ void param_spinbox_t::keyPressEvent( QKeyEvent *event)
 
 void param_spinbox_t::keyReleaseEvent( QKeyEvent *event)
 {
-    if( value_.which() == 0 && ( event->key() == Qt::Key_Up || event->key() == Qt::Key_Down))
+    if( value_.index() == 0 && ( event->key() == Qt::Key_Up || event->key() == Qt::Key_Down))
 		spinBoxReleased();
 	else
 		QLineEdit::keyReleaseEvent( event);
@@ -136,7 +136,7 @@ void param_spinbox_t::mousePressEvent( QMouseEvent *event)
 	dragged_ = false;
 	first_drag_ = true;
 	
-	if( value_.which() == 0)
+	if( value_.index() == 0)
 	{
 		if(( event->button() == Qt::LeftButton) && ( event->modifiers() & Qt::AltModifier))
 		{
@@ -253,11 +253,11 @@ void param_spinbox_t::textChanged()
 			
 		std::string s( text().toStdString());
 		
-		boost::optional<double> result = calc()( s);
+		std::optional<double> result = calc()( s);
 			
 		if( result)
 		{
-			if( setValue( result.get())) // it's a simple formula.
+			if( setValue( result.value())) // it's a simple formula.
 				valueChanged( value());
 		}
 		else

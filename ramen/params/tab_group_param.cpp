@@ -4,9 +4,9 @@
 
 #include<ramen/params/tab_group_param.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/foreach.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+#include<functional>
+
+#include<algorithm>
 
 #include<QTabWidget>
 
@@ -24,7 +24,7 @@ QWidget *tab_group_param_t::do_create_widgets()
 {
     tab_ = new QTabWidget();
 
-    BOOST_FOREACH( param_t& p, params())
+    for( param_t& p : params())
     {
 		QWidget *w = p.create_widgets();
 
@@ -44,7 +44,7 @@ void tab_group_param_t::do_enable_widgets( bool e)
 
 void tab_group_param_t::do_create_tracks( anim::track_t *parent)
 {
-    boost::range::for_each( params(), boost::bind( &param_t::create_tracks, _1, parent));
+    std::ranges::for_each( params(), std::bind( &param_t::create_tracks, std::placeholders::_1, parent));
 }
 
 } // namespace

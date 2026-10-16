@@ -12,7 +12,7 @@ namespace ramen
 namespace imageio
 {
 
-void import_multichannel_exr( const boost::filesystem::path& p, bool relative, bool sequence);
+void import_multichannel_exr( const std::filesystem::path& p, bool relative, bool sequence);
 
 } // namespace
 } // namespace

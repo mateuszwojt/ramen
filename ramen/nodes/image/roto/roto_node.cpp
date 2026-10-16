@@ -4,9 +4,9 @@
 
 #include<ramen/nodes/image/roto/roto_node.hpp>
 
-#include<boost/foreach.hpp>
-#include<boost/bind.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+
+#include<functional>
+#include<algorithm>
 
 #include<ramen/assert.hpp>
 
@@ -67,7 +67,7 @@ roto_node_t::roto_node_t() : image_node_t(), toolbar_( 0), scene_( this)
 	add_output_plug();
 	inspector_ = 0;
 	shape_param_ = 0;
-    param_set().param_changed.connect( boost::bind( &roto_node_t::param_changed, this, _1, _2));	
+    param_set().param_changed.connect( std::bind( &roto_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));	
 }
 
 roto_node_t::roto_node_t( const roto_node_t& other) : image_node_t( other), scene_( other.scene_)
@@ -76,7 +76,7 @@ roto_node_t::roto_node_t( const roto_node_t& other) : image_node_t( other), scen
 	scene_.update_all_xforms();
 	toolbar_ = 0;
 	inspector_ = 0;
-    param_set().param_changed.connect( boost::bind( &roto_node_t::param_changed, this, _1, _2));
+    param_set().param_changed.connect( std::bind( &roto_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 
 	shape_param_ = dynamic_cast<roto_shape_param_t*>( &param( "shape_panel"));
 	RAMEN_ASSERT( shape_param_);
@@ -89,18 +89,18 @@ void roto_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> pop( new popup_param_t( "Output"));
     pop->set_id( "output");
-    pop->menu_items() = boost::assign::list_of( "Premultiplied")( "Unpremultiplied");
+    pop->menu_items() = { "Premultiplied", "Unpremultiplied"};
     pop->set_default_value( 1);
     add_param( std::move( pop));
 
     pop.reset( new popup_param_t( "Input Alpha"));
     pop->set_id( "alpha");
-    pop->menu_items() = boost::assign::list_of( "Replace")( "Use");
+    pop->menu_items() = { "Replace", "Use"};
     add_param( std::move( pop));
 
     pop.reset( new popup_param_t( "Update"));
     pop->set_id( "update");
-    pop->menu_items() = boost::assign::list_of( "Mouse Drag")( "Mouse Up");
+    pop->menu_items() = { "Mouse Drag", "Mouse Up"};
 	pop->set_include_in_hash( false);
     add_param( std::move( pop));
 	
@@ -125,10 +125,10 @@ void roto_node_t::do_create_params()
 	selection_changed();
 }
 
-void roto_node_t::for_each_param( const boost::function<void ( param_t*)>& f)
+void roto_node_t::for_each_param( const std::function<void ( param_t*)>& f)
 {
 	parameterised_t::for_each_param( f);
-    boost::range::for_each( scene_, boost::bind( &parameterised_t::for_each_param, _1, f));
+    std::ranges::for_each( scene_, std::bind( &parameterised_t::for_each_param, std::placeholders::_1, f));
 }
 
 void roto_node_t::do_create_manipulators()
@@ -213,13 +213,13 @@ std::unique_ptr<roto::shape_t> roto_node_t::release_shape( roto::shape_t *s)
 
 void roto_node_t::deselect_all()
 {
-    boost::range::for_each( scene_, boost::bind( &roto::shape_t::select, _1, false));
-    boost::range::for_each( scene_, boost::bind( &roto::shape_t::deselect_all_points, _1));
+    std::ranges::for_each( scene_, std::bind( &roto::shape_t::select, std::placeholders::_1, false));
+    std::ranges::for_each( scene_, std::bind( &roto::shape_t::deselect_all_points, std::placeholders::_1));
 }
 
 roto::shape_t *roto_node_t::selected()
 {
-	BOOST_FOREACH( roto::shape_t& s, scene_)
+	for( roto::shape_t& s : scene_)
 	{
 		if( s.selected())
 			return &s;
@@ -247,13 +247,13 @@ void roto_node_t::do_set_frame( float f)
 
 void roto_node_t::do_create_tracks( anim::track_t *parent)
 {
-    BOOST_FOREACH( param_t& p, param_set())		{ p.create_tracks( parent);}
-	BOOST_FOREACH( roto::shape_t& s, scene())	{ s.create_tracks( parent);}
+    for( param_t& p : param_set())		{ p.create_tracks( parent);}
+	for( roto::shape_t& s : scene())	{ s.create_tracks( parent);}
 }
 
 void roto_node_t::do_update_widgets()
 {
-	BOOST_FOREACH( roto::shape_t& s, scene())	{ s.update_widgets();}
+	for( roto::shape_t& s : scene())	{ s.update_widgets();}
 }
 
 // areas & process
@@ -410,7 +410,7 @@ void roto_node_t::param_changed( param_t *p, param_t::change_reason reason)
 	{
 		bool b = track_mouse();
 
-		BOOST_FOREACH( roto::shape_t& s, scene())
+		for( roto::shape_t& s : scene())
 			s.set_track_mouse( b);
 	}
 }

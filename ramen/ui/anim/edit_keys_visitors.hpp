@@ -8,7 +8,7 @@
 #include<vector>
 #include<map>
 
-#include<boost/optional.hpp>
+#include<optional>
 
 #include<Imath/ImathVec.h>
 
@@ -27,7 +27,7 @@ namespace ramen
 namespace ui
 {
 
-struct delete_selected_keys_visitor : public boost::static_visitor<>
+struct delete_selected_keys_visitor
 {
     delete_selected_keys_visitor() {}
 	
@@ -40,7 +40,7 @@ struct delete_selected_keys_visitor : public boost::static_visitor<>
     void operator()( anim::float_curve_t *c);
 };
 
-struct can_drag_keys_visitor : public boost::static_visitor<>
+struct can_drag_keys_visitor
 {	
 	can_drag_keys_visitor( const Imath::V2f& offset);
 	void operator()( const anim::float_curve_t *c);
@@ -52,7 +52,7 @@ private:
 	Imath::V2f offset_;	
 };
 
-struct drag_keys_visitor : public boost::static_visitor<>
+struct drag_keys_visitor
 {
 	drag_keys_visitor( const Imath::V2f& offset, bool snap_frames);
 	void operator()( anim::float_curve_t *c);
@@ -66,7 +66,7 @@ private:
 	bool snap_frames_;
 };
 
-struct get_keyframe_time_visitor : public boost::static_visitor<>
+struct get_keyframe_time_visitor
 {
 	get_keyframe_time_visitor( int index) : index_( index) {}
 	
@@ -80,7 +80,7 @@ private:
 	int index_;
 };
 
-struct get_keyframe_value_visitor : public boost::static_visitor<>
+struct get_keyframe_value_visitor
 {
 	get_keyframe_value_visitor( int index);
 	void operator()( const anim::float_curve_t *c);
@@ -98,7 +98,7 @@ private:
 	int index_;
 };
 
-struct can_insert_keyframe_visitor : public boost::static_visitor<>
+struct can_insert_keyframe_visitor
 {
 	can_insert_keyframe_visitor( const anim_curves_view_t& view, const Imath::V2i& p, bool snap);
 	
@@ -117,7 +117,7 @@ private:
 	bool snap_;
 };
 
-struct insert_keyframe_visitor : public boost::static_visitor<>
+struct insert_keyframe_visitor
 {
 	insert_keyframe_visitor( const anim_curves_view_t& view, const Imath::V2i& p, bool snap);
 
@@ -136,7 +136,7 @@ private:
 	bool snap_;
 };
 
-struct reverse_selected_keys_visitor : public boost::static_visitor<>
+struct reverse_selected_keys_visitor
 {
     reverse_selected_keys_visitor() {}
 	
@@ -146,7 +146,7 @@ struct reverse_selected_keys_visitor : public boost::static_visitor<>
 	void operator()( anim::float_curve_t *c)	{ anim::reverse_float_keyframes( *c, true);}
 };
 
-struct negate_selected_keys_visitor : public boost::static_visitor<>
+struct negate_selected_keys_visitor
 {
     negate_selected_keys_visitor() {}
 	
@@ -156,7 +156,7 @@ struct negate_selected_keys_visitor : public boost::static_visitor<>
     void operator()( anim::float_curve_t *c);
 };
 
-struct sample_selected_keys_visitor : public boost::static_visitor<>
+struct sample_selected_keys_visitor
 {
     sample_selected_keys_visitor() {}
 	
@@ -166,7 +166,7 @@ struct sample_selected_keys_visitor : public boost::static_visitor<>
     void operator()( anim::float_curve_t *c);
 };
 
-struct smooth_selected_keys_visitor : public boost::static_visitor<>
+struct smooth_selected_keys_visitor
 {
     smooth_selected_keys_visitor( float filter_size, bool resample) : filter_size_( filter_size), resample_( resample) {}
 	
@@ -181,7 +181,7 @@ private:
 	bool resample_;
 };
 
-struct high_pass_selected_keys_visitor : public boost::static_visitor<>
+struct high_pass_selected_keys_visitor
 {
     high_pass_selected_keys_visitor( float filter_size, bool resample) : filter_size_( filter_size), resample_( resample) {}
 	

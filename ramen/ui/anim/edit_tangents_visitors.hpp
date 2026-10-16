@@ -18,7 +18,7 @@ namespace ramen
 namespace ui
 {
 
-struct drag_tangents_visitor : public boost::static_visitor<>
+struct drag_tangents_visitor
 {
 	drag_tangents_visitor( const anim_curves_view_t& view, int index, bool left, const Imath::V2i& p, bool break_tangent = false);
 	void operator()( anim::float_curve_t *c);
@@ -33,7 +33,7 @@ private:
 	bool break_tangent_;
 };
 
-struct can_set_autotangents_visitor : public boost::static_visitor<>
+struct can_set_autotangents_visitor
 {
 	can_set_autotangents_visitor( anim::keyframe_t::auto_tangent_method m) : m_( m) {}
 	void operator()( const anim::float_curve_t *c)	{ result = true;}
@@ -49,7 +49,7 @@ private:
 	anim::keyframe_t::auto_tangent_method m_;	
 };
 
-struct set_autotangents_visitor : public boost::static_visitor<>
+struct set_autotangents_visitor
 {
 	set_autotangents_visitor( anim::keyframe_t::auto_tangent_method m);
 	void operator()( anim::float_curve_t *c);
@@ -60,7 +60,7 @@ private:
 	anim::keyframe_t::auto_tangent_method m_;	
 };
 
-struct can_set_extrapolation_visitor : public boost::static_visitor<>
+struct can_set_extrapolation_visitor
 {
 	can_set_extrapolation_visitor( anim::extrapolation_method m) : m_( m) {}
 
@@ -76,7 +76,7 @@ private:
 	anim::extrapolation_method m_;
 };
 
-struct set_extrapolation_visitor : public boost::static_visitor<>
+struct set_extrapolation_visitor
 {
 	set_extrapolation_visitor( anim::extrapolation_method m) : m_( m) {}
 	

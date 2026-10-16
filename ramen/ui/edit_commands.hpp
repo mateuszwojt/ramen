@@ -7,7 +7,7 @@
 
 #include<set>
 
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<ramen/container/ptr_vector.hpp>
 
 #include<ramen/app/document.hpp>
 
@@ -56,7 +56,7 @@ struct delete_command_t : public extract_command_t
 private:
 
     std::vector<node_t*> nodes_;
-    boost::ptr_vector<node_t> node_storage_;
+    container::ptr_vector<node_t> node_storage_;
 };
 
 struct duplicate_command_t : public command_t
@@ -73,7 +73,7 @@ private:
 
     std::vector<node_t*> nodes_;
     std::vector<edge_t> edges_;
-    boost::ptr_vector<node_t> node_storage_;
+    container::ptr_vector<node_t> node_storage_;
 };
 
 struct ignore_nodes_command_t : public command_t

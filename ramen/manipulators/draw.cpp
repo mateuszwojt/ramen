@@ -4,7 +4,7 @@
 
 #include<ramen/manipulators/draw.hpp>
 
-#include<boost/scoped_array.hpp>
+#include<memory>
 
 #include<Imath/ImathMath.h>
 

@@ -8,7 +8,7 @@ namespace ramen
 namespace noise
 {
 	
-boost::uint8_t permutation_array_t::perm_[256] = 
+std::uint8_t permutation_array_t::perm_[256] = 
 {
 	225, 155, 210, 108, 175, 199, 221, 144, 203, 116,
 	5, 82, 173, 133, 222, 139, 174,

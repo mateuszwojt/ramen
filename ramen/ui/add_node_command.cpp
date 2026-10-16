@@ -26,7 +26,7 @@ void add_node_command_t::undo()
     if( src_)
         app().document().composition().disconnect( src_, node_, 0);
 	
-    breadth_first_outputs_search( *node_, boost::bind( &node_t::notify, _1));
+    breadth_first_outputs_search( *node_, std::bind( &node_t::notify, std::placeholders::_1));
     storage_ = app().document().composition().release_node( node_);
     command_t::undo();
 }
@@ -38,7 +38,7 @@ void add_node_command_t::redo()
     if( src_)
 	{
         app().document().composition().connect( src_, node_, 0);
-		breadth_first_outputs_search( *node_, boost::bind( &node_t::notify, _1));
+		breadth_first_outputs_search( *node_, std::bind( &node_t::notify, std::placeholders::_1));
 	}
 
     command_t::redo();

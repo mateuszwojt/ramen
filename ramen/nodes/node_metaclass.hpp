@@ -11,7 +11,7 @@
 
 #include<string>
 
-#include<boost/function.hpp>
+#include<functional>
 
 namespace ramen
 {

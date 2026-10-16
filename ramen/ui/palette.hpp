@@ -7,7 +7,7 @@
 
 #include<map>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<Imath/ImathColor.h>
 

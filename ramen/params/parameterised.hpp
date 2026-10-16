@@ -9,8 +9,8 @@
 
 #include<utility>
 
-#include<boost/noncopyable.hpp>
-#include<boost/signals2/signal.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<ramen/core/signal.hpp>
 
 #include<Imath/ImathBox.h>
 
@@ -46,7 +46,7 @@ public:
     virtual ~parameterised_t();
 
     /// Emitted when this object is deleted.
-    boost::signals2::signal<void ( parameterised_t*)> deleted;
+    core::signal_t<void ( parameterised_t*)> deleted;
 
     /// Returns the parameterised name.
     const std::string& name() const			{ return name_;}
@@ -104,7 +104,7 @@ public:
     virtual void param_edit_finished() = 0;
 
     /// Calls a function f for each param.
-    virtual void for_each_param( const boost::function<void ( param_t*)>& f);
+    virtual void for_each_param( const std::function<void ( param_t*)>& f);
 
     /// Creates anim tracks for this parameterised and adds them to root.
     void create_tracks( anim::track_t *root);

@@ -4,7 +4,6 @@
 #ifndef RAMEN_NOISE_BASE_HPP
 #define RAMEN_NOISE_BASE_HPP
 
-#include<boost/config.hpp>
 
 #include<Imath/ImathVec.h>
 #include<Imath/ImathRandom.h>
@@ -26,8 +25,8 @@ public:
 	
 	noise_base_t();
 	
-	BOOST_STATIC_CONSTANT( int, tabsize = 256);
-	BOOST_STATIC_CONSTANT( int, tabmask = 256 - 1);
+	static constexpr int tabsize = 256;
+	static constexpr int tabmask = 256 - 1;
 	
 protected:
 

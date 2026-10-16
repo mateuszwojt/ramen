@@ -7,7 +7,7 @@
 
 #include<ramen/ui/inspector/panel_fwd.hpp>
 
-#include<boost/signals2/connection.hpp>
+#include<ramen/core/signal.hpp>
 
 #include<QObject>
 
@@ -29,7 +29,7 @@ public:
     panel_t( parameterised_t *p);
     ~panel_t();
 
-	void set_connection( const boost::signals2::connection c);
+	void set_connection( const core::connection_t c);
 
     QWidget *widget() { return panel_;}
 
@@ -39,7 +39,7 @@ private:
 
     parameterised_t *p_;
     QWidget *panel_;
-	boost::signals2::connection connection_;
+	core::connection_t connection_;
 };
 
 } // namespace

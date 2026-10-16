@@ -29,14 +29,14 @@ public:
 	
 	std::string format_string() const { return sequence_.format_string();}
 	
-    core::auto_ptr_t<movieio::reader_t> reader( const boost::filesystem::path& cwd) const;
+    core::auto_ptr_t<movieio::reader_t> reader( const std::filesystem::path& cwd) const;
 	
 	// paths
-    void convert_relative_paths( const boost::filesystem::path& old_base,
-                                 const boost::filesystem::path& new_base);
+    void convert_relative_paths( const std::filesystem::path& old_base,
+                                 const std::filesystem::path& new_base);
 
-	void make_paths_absolute( const::boost::filesystem::path& from_dir);
-	void make_paths_relative( const::boost::filesystem::path& from_dir);
+	void make_paths_absolute( const::std::filesystem::path& from_dir);
+	void make_paths_relative( const::std::filesystem::path& from_dir);
 
 private:
 

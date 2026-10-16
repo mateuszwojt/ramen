@@ -4,8 +4,7 @@
 
 #include<ramen/imageio/oiio/oiio_reader.hpp>
 
-#include<boost/scoped_array.hpp>
-#include<boost/range.hpp>
+#include<memory>
 
 #include<ramen/imageio/algorithm.hpp>
 
@@ -14,7 +13,7 @@ namespace ramen
 namespace imageio
 {
 
-oiio_reader_t::oiio_reader_t( const boost::filesystem::path& p) : reader_t( p), is_tiled_( false)
+oiio_reader_t::oiio_reader_t( const std::filesystem::path& p) : reader_t( p), is_tiled_( false)
 {
     std::unique_ptr<OIIO::ImageInput> in( OIIO::ImageInput::create( filesystem::file_string( p)));
 
@@ -65,7 +64,7 @@ void oiio_reader_t::do_read_image( const image::image_view_t& view,
 
 		if( in->open( filesystem::file_string( path_), spec, config))
 		{
-		    boost::scoped_array<float> buffer( new float[ spec.width * spec.nchannels]);
+		    std::unique_ptr<float[]> buffer( new float[ spec.width * spec.nchannels]);
 
             int yy = 0;
 		    for( int y = crop.min.y; y <= crop.max.y; y += subsample)
@@ -149,7 +148,7 @@ void oiio_reader_t::do_read_tiled_image( const image::image_view_t& view,
 			if( ( spec.tile_width & 1) || ( spec.tile_height & 1))
 				throw std::runtime_error( "Odd tile sizes not supported");
 			
-		    boost::scoped_array<float> buffer( new float[ spec.tile_height * spec.tile_width * spec.nchannels]);
+		    std::unique_ptr<float[]> buffer( new float[ spec.tile_height * spec.tile_width * spec.nchannels]);
 
 			for( int y = spec.y; y < spec.y + spec.height; y += spec.tile_height)
 			{

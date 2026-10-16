@@ -9,7 +9,7 @@
 
 #include<memory>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/core/memory.hpp>
 
@@ -26,7 +26,7 @@ namespace ramen
 \ingroup app
 \brief Document class.
 */
-class document_t : boost::noncopyable
+class document_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -41,8 +41,8 @@ public:
 
     bool has_file() const { return !file_.empty();}
 
-    boost::filesystem::path file() const { return file_;}
-    void set_file( const boost::filesystem::path& p);
+    std::filesystem::path file() const { return file_;}
+    void set_file( const std::filesystem::path& p);
 
 	void load( serialization::yaml_iarchive_t& in);
 	void save( serialization::yaml_oarchive_t& out) const;
@@ -56,7 +56,7 @@ private:
     composition_t comp_;
     mutable bool dirty_;
     core::auto_ptr_t<undo::stack_t> undo_;
-    boost::filesystem::path file_;
+    std::filesystem::path file_;
 };
 
 } // ramen

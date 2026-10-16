@@ -4,8 +4,8 @@
 
 #include<ramen/ui/anim/anim_editor.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/foreach.hpp>
+#include<functional>
+
 
 #include<QHBoxLayout>
 #include<QSplitter>
@@ -133,7 +133,7 @@ anim_editor_t::anim_editor_t() : window_( 0)
 
 void anim_editor_t::set_active_node( node_t *n)
 {
-    boost::shared_ptr<track_model_t> old = current_;
+    std::shared_ptr<track_model_t> old = current_;
     QItemSelectionModel *sel_model = tree_->selectionModel();
 
     active_tracks_.clear();
@@ -203,7 +203,7 @@ void anim_editor_t::update_selection( const QItemSelection& selected, const QIte
 		anim::track_t *track = static_cast<anim::track_t*>( indexes[i].internalPointer());
 
 		if( track)
-			anim::for_each_leaf_track( track, boost::bind( &anim_editor_t::insert_in_active_tracks, this, _1));
+			anim::for_each_leaf_track( track, std::bind( &anim_editor_t::insert_in_active_tracks, this, std::placeholders::_1));
 	}
 	
 	toolbar().selection_changed();
@@ -263,9 +263,9 @@ void anim_editor_t::insert_in_active_tracks( anim::track_t *t)
 bool anim_editor_t::any_keyframe_selected() const
 {
     any_selected_visitor v;
-    BOOST_FOREACH( const anim::track_t *t, active_tracks())
+    for( const anim::track_t *t : active_tracks())
     {
-        boost::apply_visitor( v, t->curve().get());
+        std::visit( v, t->curve().value());
 		if( v.any_selected)
 			return true;
     }
@@ -276,13 +276,13 @@ bool anim_editor_t::any_keyframe_selected() const
 bool anim_editor_t::any_float_keyframe_selected() const
 {
     any_selected_visitor v;
-    BOOST_FOREACH( const anim::track_t *t, active_tracks())
+    for( const anim::track_t *t : active_tracks())
     {
-		const anim::any_curve_ptr_t& c( t->curve().get());
+		const anim::any_curve_ptr_t& c( t->curve().value());
 		
-		if( c.which() == 0)
+		if( c.index() == 0)
 		{
-	        boost::apply_visitor( v, c);
+	        std::visit( v, c);
 			if( v.any_selected)
 				return true;
 		}
@@ -294,15 +294,15 @@ bool anim_editor_t::any_float_keyframe_selected() const
 bool anim_editor_t::any_keyframe_selected( const anim::any_curve_ptr_t& c) const
 {
     any_selected_visitor v;
-	boost::apply_visitor( v, c);
+	std::visit( v, c);
 	return v.any_selected;
 }
 
 void anim_editor_t::deselect_all()
 {
     deselect_all_visitor v;
-    BOOST_FOREACH( const anim::track_t *t, active_tracks())
-        boost::apply_visitor( v, t->curve().get());
+    for( const anim::track_t *t : active_tracks())
+        std::visit( v, t->curve().value());
 }
 
 void anim_editor_t::get_selected_keyframe( anim::track_t*& track, int& key_index)
@@ -310,10 +310,10 @@ void anim_editor_t::get_selected_keyframe( anim::track_t*& track, int& key_index
 	track = 0;
 	key_index = -1;
 	
-    BOOST_FOREACH( anim::track_t *t, active_tracks())
+    for( anim::track_t *t : active_tracks())
 	{
 		count_selected_visitor v;
-		boost::apply_visitor( v, t->curve().get());
+		std::visit( v, t->curve().value());
 		
 		if( v.count == 1)
 		{
@@ -330,7 +330,7 @@ void anim_editor_t::get_selected_keyframe( anim::track_t*& track, int& key_index
 	if( track != 0)
 	{
 		get_selected_keyframe_visitor v;
-		boost::apply_visitor( v, track->curve().get());
+		std::visit( v, track->curve().value());
 		
 		if( v.index != -1)
 			key_index = v.index;
@@ -379,14 +379,14 @@ void anim_editor_t::delete_selected_keyframes()
 		create_command();
 		
 		delete_selected_keys_visitor v;
-		BOOST_FOREACH( anim::track_t *t, active_tracks())
+		for( anim::track_t *t : active_tracks())
 		{
-			anim::any_curve_ptr_t& c( t->curve().get());
+			anim::any_curve_ptr_t& c( t->curve().value());
 
 			if( any_keyframe_selected( c))
 			{
 				command()->add_track( t);
-				boost::apply_visitor( v, c);
+				std::visit( v, c);
 			}
 		}
 
@@ -409,19 +409,19 @@ void anim_editor_t::set_autotangents( anim::keyframe_t::auto_tangent_method m, b
 	can_set_autotangents_visitor v0( m);
 	set_autotangents_visitor v1( m);
 		
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::any_curve_ptr_t& c( t->curve().get());
+		anim::any_curve_ptr_t& c( t->curve().value());
 
 		if( selected_only && !any_keyframe_selected( c))
 			continue;
 
-		boost::apply_visitor( v0, c);
+		std::visit( v0, c);
 			
 		if( v0.result)
 		{
 			command()->add_track( t);
-			boost::apply_visitor( v1, c);
+			std::visit( v1, c);
 		}
 	}
 
@@ -439,16 +439,16 @@ void anim_editor_t::set_extrapolation( anim::extrapolation_method m)
 	can_set_extrapolation_visitor v0( m);
 	set_extrapolation_visitor v1( m);
 
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::any_curve_ptr_t& c( t->curve().get());
+		anim::any_curve_ptr_t& c( t->curve().value());
 
-		boost::apply_visitor( v0, c);
+		std::visit( v0, c);
 			
 		if( v0.result)
 		{
 			command()->add_track( t);
-			boost::apply_visitor( v1, c);
+			std::visit( v1, c);
 		}
 	}
 
@@ -463,15 +463,15 @@ void anim_editor_t::reverse_keyframes()
 {
 	create_command();
 
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::any_curve_ptr_t& c( t->curve().get());
+		anim::any_curve_ptr_t& c( t->curve().value());
 		
 		if( any_keyframe_selected( c))
 		{
 			reverse_selected_keys_visitor v;
 			command()->add_track( t);
-			boost::apply_visitor( v, c);
+			std::visit( v, c);
 		}
 	}
 
@@ -486,15 +486,15 @@ void anim_editor_t::negate_keyframes()
 {
 	create_command();
 
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::any_curve_ptr_t& c( t->curve().get());
+		anim::any_curve_ptr_t& c( t->curve().value());
 		
-		if( c.which() == 0 && any_keyframe_selected( c))
+		if( c.index() == 0 && any_keyframe_selected( c))
 		{
 			negate_selected_keys_visitor v;
 			command()->add_track( t);
-			boost::apply_visitor( v, c);
+			std::visit( v, c);
 		}
 	}
 
@@ -509,15 +509,15 @@ void anim_editor_t::sample_keyframes()
 {
 	create_command();
 
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::any_curve_ptr_t& c( t->curve().get());
+		anim::any_curve_ptr_t& c( t->curve().value());
 		
-		if( c.which() == 0 && any_keyframe_selected( c))
+		if( c.index() == 0 && any_keyframe_selected( c))
 		{
 			sample_selected_keys_visitor v;
 			command()->add_track( t);
-			boost::apply_visitor( v, c);
+			std::visit( v, c);
 		}
 	}
 
@@ -532,15 +532,15 @@ void anim_editor_t::smooth_keyframes( float filter_size, bool resample)
 {
 	create_command();
 
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::any_curve_ptr_t& c( t->curve().get());
+		anim::any_curve_ptr_t& c( t->curve().value());
 		
-		if( c.which() == 0 && any_keyframe_selected( c))
+		if( c.index() == 0 && any_keyframe_selected( c))
 		{
 			smooth_selected_keys_visitor v( filter_size, resample);
 			command()->add_track( t);
-			boost::apply_visitor( v, c);
+			std::visit( v, c);
 		}
 	}
 
@@ -555,15 +555,15 @@ void anim_editor_t::high_pass_keyframes( float filter_size, bool resample)
 {
 	create_command();
 
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::any_curve_ptr_t& c( t->curve().get());
+		anim::any_curve_ptr_t& c( t->curve().value());
 		
-		if( c.which() == 0 && any_keyframe_selected( c))
+		if( c.index() == 0 && any_keyframe_selected( c))
 		{
 			high_pass_selected_keys_visitor v( filter_size, resample);
 			command()->add_track( t);
-			boost::apply_visitor( v, c);
+			std::visit( v, c);
 		}
 	}
 
@@ -603,9 +603,9 @@ void anim_editor_t::copy_curves()
 	
 	anim::clipboard_t::instance().begin_copy();
 	
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::clipboard_t::instance().copy_curve( t->curve_name(), t->curve().get());
+		anim::clipboard_t::instance().copy_curve( t->curve_name(), t->curve().value());
 	}
 
 	anim::clipboard_t::instance().end_copy();
@@ -618,9 +618,9 @@ void anim_editor_t::copy_keyframes()
 
 	anim::clipboard_t::instance().begin_copy();
 	
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::clipboard_t::instance().copy_keys( t->curve_name(), t->curve().get());
+		anim::clipboard_t::instance().copy_keys( t->curve_name(), t->curve().value());
 	}
 
 	anim::clipboard_t::instance().end_copy();
@@ -635,9 +635,9 @@ void anim_editor_t::paste()
 
 	float frame = app().document().composition().frame();
 	
-	BOOST_FOREACH( anim::track_t *t, active_tracks())
+	for( anim::track_t *t : active_tracks())
 	{
-		anim::any_curve_ptr_t& c( t->curve().get());
+		anim::any_curve_ptr_t& c( t->curve().value());
 			
 		if( anim::clipboard_t::instance().can_paste( t->curve_name(), c))
 		{
@@ -656,8 +656,8 @@ void anim_editor_t::paste()
 void anim_editor_t::select_all()
 {
     select_all_visitor v;
-    BOOST_FOREACH( const anim::track_t *t, active_tracks())
-        boost::apply_visitor( v, t->curve().get());
+    for( const anim::track_t *t : active_tracks())
+        std::visit( v, t->curve().value());
 
 	toolbar().selection_changed();
 	update();	

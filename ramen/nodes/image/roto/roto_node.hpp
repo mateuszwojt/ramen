@@ -52,7 +52,7 @@ public:
 	void selection_changed();
 	
 	// params
-	virtual void for_each_param( const boost::function<void ( param_t*)>& f);
+	virtual void for_each_param( const std::function<void ( param_t*)>& f);
 	
 protected:
 

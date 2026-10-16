@@ -11,13 +11,12 @@
 #include<algorithm>
 #include<sstream>
 
-#include<boost/bind.hpp>
-#include<boost/foreach.hpp>
+#include<functional>
 
-#include<boost/ptr_container/ptr_vector.hpp>
-#include<boost/ptr_container/ptr_map.hpp>
 
-#include<boost/range/algorithm/for_each.hpp>
+#include<ramen/container/ptr_vector.hpp>
+#include<map>
+
 
 #include<ramen/app/application.hpp>
 #include<ramen/app/document.hpp>
@@ -51,7 +50,7 @@ public:
         if( !commands_.empty())
             return false;
 
-        for( boost::ptr_vector<undo::command_t>::const_iterator it( more_commands_.begin()); it != more_commands_.end(); ++it)
+        for( container::ptr_vector<undo::command_t>::const_iterator it( more_commands_.begin()); it != more_commands_.end(); ++it)
         {
             if( !it->empty())
                 return false;
@@ -62,17 +61,17 @@ public:
 
     bool has_command_for_param( param_t *p) { return commands_.find( p) != commands_.end();}
 
-    void add_command( param_t *p, std::unique_ptr<undo::command_t> c) { commands_.insert( p, std::move( c));}
+    void add_command( param_t *p, std::unique_ptr<undo::command_t> c) { commands_.emplace( p, std::move( c));}
     void add_command( std::unique_ptr<undo::command_t> c) { more_commands_.push_back( std::move( c));}
 
     virtual void undo()
     {
         param_set_t *pset = commands_.begin()->first->param_set();
 
-        for( boost::ptr_map<param_t*, undo::command_t>::iterator it( commands_.begin()); it != commands_.end(); ++it)
+        for( std::map<param_t*, std::unique_ptr<undo::command_t> >::iterator it( commands_.begin()); it != commands_.end(); ++it)
             it->second->undo();
 
-        for( boost::ptr_vector<undo::command_t>::iterator it( more_commands_.begin()); it != more_commands_.end(); ++it)
+        for( container::ptr_vector<undo::command_t>::iterator it( more_commands_.begin()); it != more_commands_.end(); ++it)
             it->undo();
 
         pset->notify_parent();
@@ -83,10 +82,10 @@ public:
     {
         param_set_t *pset = commands_.begin()->first->param_set();
 
-        for( boost::ptr_map<param_t*, undo::command_t>::iterator it( commands_.begin()); it != commands_.end(); ++it)
+        for( std::map<param_t*, std::unique_ptr<undo::command_t> >::iterator it( commands_.begin()); it != commands_.end(); ++it)
             it->second->redo();
 
-        for( boost::ptr_vector<undo::command_t>::iterator it( more_commands_.begin()); it != more_commands_.end(); ++it)
+        for( container::ptr_vector<undo::command_t>::iterator it( more_commands_.begin()); it != more_commands_.end(); ++it)
             it->redo();
 
         pset->notify_parent();
@@ -95,8 +94,8 @@ public:
 
 private:
 
-    boost::ptr_map<param_t*, undo::command_t> commands_;
-    boost::ptr_vector<undo::command_t> more_commands_;
+    std::map<param_t*, std::unique_ptr<undo::command_t> > commands_;
+    container::ptr_vector<undo::command_t> more_commands_;
 };
 
 param_set_t::param_set_t( parameterised_t *p) : parent_( p) {}
@@ -104,7 +103,7 @@ param_set_t::param_set_t( parameterised_t *p) : parent_( p) {}
 param_set_t::param_set_t( const param_set_t& other) : params_( other.params_)
 {
     parent_ = 0;
-    boost::range::for_each( params_, boost::bind( &param_t::set_param_set, _1, this));
+    std::ranges::for_each( params_, std::bind( &param_t::set_param_set, std::placeholders::_1, this));
 }
 
 param_set_t::~param_set_t()
@@ -135,7 +134,7 @@ param_t& param_set_t::find( const std::string& id)
 {
     RAMEN_ASSERT( !id.empty());
 
-    BOOST_FOREACH( param_t& p, params())
+    for( param_t& p : params())
     {
         if( p.id() == id)
             return p;
@@ -215,16 +214,16 @@ bool param_set_t::autokey() const
 
 void param_set_t::add_to_hash( hash::generator_t& hash_gen) const
 {
-    BOOST_FOREACH( const param_t& p, params())
+    for( const param_t& p : params())
     {
         if( p.include_in_hash())
             p.add_to_hash( hash_gen);
     }
 }
 
-void param_set_t::for_each_param( const boost::function<void ( param_t*)>& f)
+void param_set_t::for_each_param( const std::function<void ( param_t*)>& f)
 {
-    boost::range::for_each( params_, boost::bind( &param_t::apply_function, _1, f));
+    std::ranges::for_each( params_, std::bind( &param_t::apply_function, std::placeholders::_1, f));
 }
 
 // serialization
@@ -259,7 +258,7 @@ void param_set_t::write( serialization::yaml_oarchive_t& out) const
 {
     out << YAML::Key << "params" << YAML::Value;
         out.begin_seq();
-            BOOST_FOREACH( const param_t& p, params()) { p.write( out);}
+            for( const param_t& p : params()) { p.write( out);}
         out.end_seq();
 }
 

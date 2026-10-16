@@ -13,7 +13,7 @@ namespace ramen
 namespace ui
 {
 
-struct deselect_all_visitor : public boost::static_visitor<>
+struct deselect_all_visitor
 {
 	deselect_all_visitor() {}
 	
@@ -24,7 +24,7 @@ struct deselect_all_visitor : public boost::static_visitor<>
 	}
 };
 
-struct select_all_visitor : public boost::static_visitor<>
+struct select_all_visitor
 {
 	select_all_visitor() {}
 	
@@ -35,7 +35,7 @@ struct select_all_visitor : public boost::static_visitor<>
 	}
 };
 
-struct any_selected_visitor : public boost::static_visitor<>
+struct any_selected_visitor
 {
 	any_selected_visitor() : any_selected( false) {}
 	
@@ -51,7 +51,7 @@ struct any_selected_visitor : public boost::static_visitor<>
 	bool any_selected;
 };
 
-struct count_selected_visitor : public boost::static_visitor<>
+struct count_selected_visitor
 {
 	count_selected_visitor() {}
 	
@@ -70,7 +70,7 @@ struct count_selected_visitor : public boost::static_visitor<>
 	int count;
 };
 
-struct select_keyframe_visitor : public boost::static_visitor<>
+struct select_keyframe_visitor
 {
 public:
 
@@ -87,7 +87,7 @@ private:
 	int index_;
 };
 
-struct toggle_select_keyframe_visitor : public boost::static_visitor<>
+struct toggle_select_keyframe_visitor
 {
 public:
 
@@ -105,7 +105,7 @@ private:
 	int index_;
 };
 
-struct keyframe_is_selected_visitor : public boost::static_visitor<>
+struct keyframe_is_selected_visitor
 {
 public:
 
@@ -124,7 +124,7 @@ private:
 	int index_;
 };
 
-struct get_selected_keyframe_visitor : public boost::static_visitor<>
+struct get_selected_keyframe_visitor
 {
 public:
 	

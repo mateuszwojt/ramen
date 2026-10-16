@@ -162,7 +162,7 @@ void color_replace_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> cs( new popup_param_t( "Colorspace"));
     cs->set_id( "colorspace");
-    cs->menu_items() = boost::assign::list_of( "HSV")( "RGB");
+    cs->menu_items() = { "HSV", "RGB"};
 	add_param( std::move( cs));
 	
     std::unique_ptr<color_param_t> source( new color_param_t( "Source Color"));

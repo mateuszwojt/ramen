@@ -27,9 +27,9 @@ bool empty_image_strategy_t::update_pixels( const image::buffer_t& pixels,
 
 void empty_image_strategy_t::draw() const {}
 
-boost::optional<Imath::Color4f> empty_image_strategy_t::color_at( const Imath::V2i& p) const
+std::optional<Imath::Color4f> empty_image_strategy_t::color_at( const Imath::V2i& p) const
 {
-	return boost::optional<Imath::Color4f>();
+	return std::optional<Imath::Color4f>();
 }
 
 } // viewer

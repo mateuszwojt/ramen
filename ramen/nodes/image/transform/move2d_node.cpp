@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/transform/move2d_node.hpp>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<ramen/assert.hpp>
 
@@ -209,12 +209,12 @@ private:
 move2d_node_t::move2d_node_t() : xform2d_node_t()
 { 
 	set_name("move2d");
-    param_set().param_changed.connect( boost::bind( &move2d_node_t::param_changed, this, _1, _2));
+    param_set().param_changed.connect( std::bind( &move2d_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 move2d_node_t::move2d_node_t( const move2d_node_t& other) : xform2d_node_t( other)
 {
-    param_set().param_changed.connect( boost::bind( &move2d_node_t::param_changed, this, _1, _2));
+    param_set().param_changed.connect( std::bind( &move2d_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void move2d_node_t::do_create_params()

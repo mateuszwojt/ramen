@@ -8,8 +8,8 @@
 #include<algorithm>
 #include<iomanip>
 
-#include<boost/bind.hpp>
-#include<boost/filesystem/fstream.hpp>
+#include<functional>
+#include<fstream>
 
 #include<ramen/params/float_param.hpp>
 #include<ramen/params/float3_param.hpp>
@@ -126,7 +126,7 @@ OCIO::CDLTransformRcPtr cdl_node_t::cdl_transform() const
 	return transform;
 }
 
-void cdl_node_t::read_from_file( const boost::filesystem::path& p)
+void cdl_node_t::read_from_file( const std::filesystem::path& p)
 {
 	OCIO::CDLTransformRcPtr transform = OCIO::CDLTransform::CreateFromFile( filesystem::file_cstring( p), "");
 
@@ -165,11 +165,11 @@ void cdl_node_t::read_from_file( const boost::filesystem::path& p)
 	s->set_value( id);
 }
 
-void cdl_node_t::write_to_file( const boost::filesystem::path& p) const
+void cdl_node_t::write_to_file( const std::filesystem::path& p) const
 {
 	OCIO::CDLTransformRcPtr transform = cdl_transform();
 	
-	boost::filesystem::ofstream ofs( p);
+	std::ofstream ofs( p);
 
 	if( !ofs.is_open() || !ofs.good())
         throw core::runtime_error( "Can't write to file");

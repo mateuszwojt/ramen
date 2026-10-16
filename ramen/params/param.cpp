@@ -197,12 +197,12 @@ std::unique_ptr<undo::command_t> param_t::do_create_command()
 }
 
 // paths
-void param_t::convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base)
+void param_t::convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base)
 {
     do_convert_relative_paths( old_base, new_base);
 }
 
-void param_t::do_convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base) {}
+void param_t::do_convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base) {}
 
 void param_t::make_paths_absolute()     { do_make_paths_absolute();}
 void param_t::do_make_paths_absolute()  {}
@@ -211,13 +211,13 @@ void param_t::make_paths_relative()     { do_make_paths_relative();}
 void param_t::do_make_paths_relative()  {}
 
 // util
-void param_t::apply_function( const boost::function<void ( param_t*)>& f)
+void param_t::apply_function( const std::function<void ( param_t*)>& f)
 {
     f( this);
     do_apply_function( f);
 }
 
-void param_t::do_apply_function( const boost::function<void ( param_t*)>& f) {}
+void param_t::do_apply_function( const std::function<void ( param_t*)>& f) {}
 
 // serialization
 void param_t::read(const serialization::yaml_node_t& in) { do_read( in);}

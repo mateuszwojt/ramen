@@ -9,6 +9,7 @@
 #define RAMEN_POLY_REGULAR_HPP
 
 #include<ramen/Concepts/RegularConcept.hpp>
+#include<utility>
 
 #include<ramen/core/poly.hpp>
 #include<ramen/core/empty.hpp>
@@ -26,7 +27,7 @@ struct poly_regular_interface : poly_copyable_interface
 template <typename T>
 class poly_regular_instance : public optimized_storage_type<T, poly_regular_interface>::type
 {
-    BOOST_CONCEPT_ASSERT(( RegularConcept<T>));
+    static_assert( RegularConcept<T>);
 
 public:
 
@@ -34,7 +35,7 @@ public:
 
     explicit poly_regular_instance( const T& x) : base_type( x) {}
 
-    explicit poly_regular_instance( BOOST_RV_REF( T) x) : base_type( boost::move( x)) {}
+    explicit poly_regular_instance( T&& x) : base_type( std::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( poly_regular_instance, base_type)
 
@@ -56,7 +57,7 @@ public:
     explicit regular( const T& x) : base_type( x) {}
 
     template<typename T>
-    explicit regular( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : base_type( boost::move( x)) {}
+    explicit regular( T&& x, std::enable_if_t<!std::is_lvalue_reference_v<T> >* = nullptr) : base_type( std::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( regular, base_type)
 

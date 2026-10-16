@@ -30,8 +30,7 @@ void colorspace_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> p( new popup_param_t( "Convert"));
     p->set_id( "convert");
-    p->menu_items() = boost::assign::list_of( "RGB to YUV")( "RGB to HSV")( "RGB to Lab")
-											( "YUV to RGB")( "HSV to RGB")( "Lab to RGB");
+    p->menu_items() = { "RGB to YUV", "RGB to HSV", "RGB to Lab", "YUV to RGB", "HSV to RGB", "Lab to RGB"};
     add_param( std::move( p));
 }
 

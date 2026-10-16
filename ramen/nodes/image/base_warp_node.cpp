@@ -27,7 +27,7 @@ void base_warp_node_t::create_default_filter_param()
 {
     std::unique_ptr<popup_param_t> r( new popup_param_t( "Filter"));
     r->set_id( "filter");
-    r->menu_items() = boost::assign::list_of( "Point")( "Bilinear")( "Catrom")( "Mipmap");
+    r->menu_items() = { "Point", "Bilinear", "Catrom", "Mipmap"};
     r->set_default_value( 2);
     r->set_include_in_hash( false);
     add_param( std::move( r));
@@ -137,7 +137,7 @@ void base_warp_node_t::make_mipmap( image_node_t *src, mipmap_type& mipmap, std:
         gen << src_hash_str << "mipmap" << i;
 
         /*
-        boost::optional<image::buffer_t> cached( app().memory_manager().find_in_cache( gen.digest(), area));
+        std::optional<image::buffer_t> cached( app().memory_manager().find_in_cache( gen.digest(), area));
 
         if( cached)
         {

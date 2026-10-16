@@ -13,7 +13,7 @@ namespace ramen
 namespace imageio
 {
 
-void oiio_writer_t::do_write( const boost::filesystem::path& p,
+void oiio_writer_t::do_write( const std::filesystem::path& p,
                               const OIIO::ImageSpec& spec,
                               const image::const_image_view_t& view)
 {

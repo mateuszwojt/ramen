@@ -9,20 +9,11 @@
 #define RAMEN_CORE_POLY_HPP
 
 #include<ramen/config.hpp>
+#include<type_traits>
 
 #include<ramen/core/poly_fwd.hpp>
 
-#include<boost/type_traits/is_base_of.hpp>
-#include<boost/type_traits/remove_reference.hpp>
-#include<boost/type_traits/remove_pointer.hpp>
-#include<boost/utility/enable_if.hpp>
-#include<boost/mpl/or.hpp>
-#include<boost/mpl/if.hpp>
-#include<boost/mpl/bool.hpp>
-#include<boost/type_traits/has_nothrow_constructor.hpp>
-#include<boost/move/move.hpp>
-#include<boost/type_traits/is_lvalue_reference.hpp>
-#include<boost/swap.hpp>
+#include<utility>
 
 #include<ramen/core/exceptions.hpp>
 
@@ -32,9 +23,7 @@ namespace core
 {
 
 template<typename T, typename U>
-struct is_base_derived_or_same : boost::mpl::or_<boost::is_base_of<T, U>,
-                                                 boost::is_base_of<U, T>,
-                                                 boost::is_same<T, U> > {};
+struct is_base_derived_or_same : std::disjunction<std::is_base_of<T, U>, std::is_base_of<U, T>, std::is_same<T, U> > {};
 
 struct poly_copyable_interface
 {
@@ -58,10 +47,11 @@ class poly_state_remote : public Interface
 {
 private:
 
-    BOOST_MOVABLE_BUT_NOT_COPYABLE( poly_state_remote)
+    poly_state_remote( const poly_state_remote&) = delete;
+    poly_state_remote& operator=( const poly_state_remote&) = delete;
 
     // unimplemented
-    poly_state_remote& operator=( BOOST_RV_REF( poly_state_remote) x);
+    poly_state_remote& operator=( poly_state_remote&& x);
 
 public:
 
@@ -72,11 +62,11 @@ public:
     {
     }
 
-    explicit poly_state_remote( BOOST_RV_REF( value_type) x) : value_ptr_m( new value_type( boost::move( x)))
+    explicit poly_state_remote( value_type&& x) : value_ptr_m( new value_type( std::move( x)))
     {
     }
 
-    explicit poly_state_remote( BOOST_RV_REF( poly_state_remote) x) : value_ptr_m( x.value_ptr_m)
+    explicit poly_state_remote( poly_state_remote&& x) : value_ptr_m( x.value_ptr_m)
     {
         assert( value_ptr_m);
         x.value_ptr_m = 0;
@@ -113,7 +103,7 @@ public:
     // Precondition : this->type_info() == x.type_info()
     void exchange( poly_copyable_interface& x)
     {
-        return boost::swap( value_ptr_m, static_cast<poly_state_remote&>( x).value_ptr_m);
+        std::swap( value_ptr_m, static_cast<poly_state_remote&>( x).value_ptr_m);
     }
 
     // Precondition : this->type_info() == x.type_info()
@@ -130,10 +120,11 @@ class poly_state_local : public Interface
 {
 private:
 
-    BOOST_MOVABLE_BUT_NOT_COPYABLE( poly_state_local)
+    poly_state_local( const poly_state_local&) = delete;
+    poly_state_local& operator=( const poly_state_local&) = delete;
 
     // unimplemented
-    poly_state_local& operator=( BOOST_RV_REF( poly_state_local) x);
+    poly_state_local& operator=( poly_state_local&& x);
 
 public:
 
@@ -142,9 +133,9 @@ public:
 
     explicit poly_state_local( const value_type& x) : value_m( x) {}
 
-    explicit poly_state_local( BOOST_RV_REF( value_type) x) : value_m( boost::move( x)) {}
+    explicit poly_state_local( value_type&& x) : value_m( std::move( x)) {}
 
-    poly_state_local( BOOST_RV_REF( poly_state_local) x) : value_m( boost::move( x.value_m)) {}
+    poly_state_local( poly_state_local&& x) : value_m( std::move( x.value_m)) {}
 
     const value_type& get() const	{ return value_m; }
     value_type& get()				{ return value_m; }
@@ -163,7 +154,8 @@ public:
     // Precondition : this->type_info() == x.type_info()
     void exchange(poly_copyable_interface& x)
     {
-        return boost::swap(value_m, static_cast<poly_state_local&>( x).value_m);
+        using std::swap;
+        swap( value_m, static_cast<poly_state_local&>( x).value_m);
     }
 
     // Precondition : this->type_info() == x.type_info()
@@ -181,8 +173,8 @@ template<typename T, int N=sizeof(storage_t)>
 struct is_small
 {
     enum { value = sizeof(T) <= N &&
-           ( boost::has_nothrow_constructor<typename T::value_type>::value ||
-           boost::is_same<std::string, typename T::value_type>::value)};
+           ( std::is_nothrow_default_constructible<typename T::value_type>::value ||
+           std::is_same<std::string, typename T::value_type>::value)};
 
 };
 
@@ -191,10 +183,11 @@ class poly_instance : public F
 {
 private:
 
-    BOOST_MOVABLE_BUT_NOT_COPYABLE( poly_instance)
+    poly_instance( const poly_instance&) = delete;
+    poly_instance& operator=( const poly_instance&) = delete;
 
     // unimplemented
-    poly_instance& operator=( BOOST_RV_REF( poly_instance) x);
+    poly_instance& operator=( poly_instance&& x);
 
 public:
 
@@ -202,9 +195,9 @@ public:
     typedef typename F::interface_type interface_type;
 
     explicit poly_instance( const value_type& x): F( x) {}
-    explicit poly_instance( BOOST_RV_REF( value_type) x) : F( boost::move( x)) {}
+    explicit poly_instance( value_type&& x) : F( std::move( x)) {}
 
-    explicit poly_instance( BOOST_RV_REF( poly_instance) x) : F( boost::move( static_cast<F&>( x))) {}
+    explicit poly_instance( poly_instance&& x) : F( std::move( static_cast<F&>( x))) {}
 
     poly_copyable_interface* clone( void *storage) const
     {
@@ -213,7 +206,7 @@ public:
 
     poly_copyable_interface* move_clone( void *storage)
     {
-        return ::new ( storage) poly_instance( boost::move( *this));
+        return ::new ( storage) poly_instance( std::move( *this));
     }
 };
 
@@ -237,7 +230,7 @@ public:
 } // implementation
 
 template <typename ConcreteType, typename Interface>
-struct optimized_storage_type : public boost::mpl::if_<implementation::is_small<implementation::poly_state_local<ConcreteType, Interface> >,
+struct optimized_storage_type : public std::conditional<implementation::is_small<implementation::poly_state_local<ConcreteType, Interface> >::value,
                                                        implementation::poly_state_local<ConcreteType, Interface>,
                                                        implementation::poly_state_remote<ConcreteType, Interface> >
 {
@@ -248,7 +241,6 @@ class poly_base
 {
 private:
 
-    BOOST_COPYABLE_AND_MOVABLE( poly_base)
 
 public:
 
@@ -260,22 +252,22 @@ public:
     // Construct from value type
 
     template <typename T>
-    explicit poly_base( const T& x, typename boost::disable_if<boost::is_base_of<poly_base, T> >::type* = 0)
+    explicit poly_base( const T& x, std::enable_if_t<!std::is_base_of_v<poly_base, T> >* = nullptr)
     {
         ::new ( storage()) implementation::poly_instance<Instance<T> >( x);
     }
 
     template <typename T>
-    explicit poly_base( BOOST_RV_REF( T) x, typename boost::disable_if<boost::mpl::or_<boost::is_lvalue_reference<T>, boost::is_base_of<poly_base, T> > >::type* = 0)
+    explicit poly_base( T&& x, std::enable_if_t<!std::is_lvalue_reference_v<T> && !std::is_base_of_v<poly_base, std::remove_cvref_t<T> > >* = nullptr)
     {
-        ::new ( storage()) implementation::poly_instance<Instance<T> >( boost::move( x));
+        ::new ( storage()) implementation::poly_instance<Instance<T> >( std::move( x));
     }
 
     // Construct from related interface (might throw on downcast)
     template <typename J, template <typename> class K>
-    explicit poly_base( const poly_base<J, K>& x, typename boost::enable_if<is_base_derived_or_same<I, J> >::type* dummy = 0)
+    explicit poly_base( const poly_base<J, K>& x, std::enable_if_t<is_base_derived_or_same<I, J>::value>* = nullptr)
     {
-        if(boost::is_base_of<J, I>::value)
+        if(std::is_base_of<J, I>::value)
             dynamic_cast<const I&>(static_cast<const poly_copyable_interface&>(x.interface_ref()));
 
         x.interface_ref().clone( storage());
@@ -283,7 +275,7 @@ public:
 
     poly_base( const poly_base& x) { x.interface_ref().clone( storage());}
 
-    poly_base( BOOST_RV_REF( poly_base) x)
+    poly_base( poly_base&& x)
     {
         x.interface_ref().move_clone( storage());
     }
@@ -293,14 +285,14 @@ public:
         interface_ref().~interface_type();
     }
 
-    poly_base& operator=( BOOST_COPY_ASSIGN_REF( poly_base) x)
+    poly_base& operator=( const poly_base& x)
     {
         interface_ref().~interface_type();
         x.interface_ref().clone( storage());
         return *this;
     }
 
-    poly_base& operator=( BOOST_RV_REF( poly_base) x)
+    poly_base& operator=( poly_base&& x)
     {
         interface_ref().~interface_type();
         x.interface_ref().move_clone( storage());
@@ -319,7 +311,7 @@ public:
         }
 
         // x->tmp
-        poly_base tmp( boost::move( x));
+        poly_base tmp( std::move( x));
         a.~interface_type();
 
         // y->x
@@ -388,10 +380,10 @@ public:
 
     // Assign from related (may throw if downcastisng)
     template <typename J, template <typename> class K>
-    typename boost::enable_if<is_base_derived_or_same<I, J> >::type
+    std::enable_if_t<is_base_derived_or_same<I, J>::value>
     assign( const poly_base<J, K>& x)
     {
-        if( boost::is_base_of<J, I>::value)
+        if( std::is_base_of<J, I>::value)
             dynamic_cast<I&>( static_cast<J&>( *x.interface_ptr())); //make sure type safe
 
         interface_ref().~interface_type();
@@ -425,7 +417,7 @@ public:
 };
 
 template <class J, template <typename> class K>
-inline typename boost::enable_if<implementation::has_equals<J>, bool>::type
+inline std::enable_if_t<implementation::has_equals<J>::value, bool>
 operator==( const poly_base<J, K>& x, const poly_base<J, K>& y)
 {
     return x.interface_ref().equals( y.interface_ref());
@@ -436,7 +428,6 @@ class poly : public F
 {
 private:
 
-    BOOST_COPYABLE_AND_MOVABLE( poly)
 
 public:
 
@@ -447,21 +438,21 @@ public:
     explicit poly( const T& x) : F( x) {}
 
     template <typename T>
-    explicit poly( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : F( boost::move( x)) {}
+    explicit poly( T&& x, std::enable_if_t<!std::is_lvalue_reference_v<T> >* = nullptr) : F( std::move( x)) {}
 
     poly( const poly& x) : F( x) {}
 
-    poly( BOOST_RV_REF( poly) x) : F( boost::move( static_cast<F&>( x))) {}
+    poly( poly&& x) : F( std::move( static_cast<F&>( x))) {}
 
-    poly& operator=( BOOST_COPY_ASSIGN_REF( poly) x)
+    poly& operator=( const poly& x)
     {
         F::operator=( static_cast<const F&>( x));
         return *this;
     }
 
-    poly& operator=( BOOST_RV_REF( poly) x)
+    poly& operator=( poly&& x)
     {
-        F::operator=( boost::move( static_cast<F&>( x)));
+        F::operator=( std::move( static_cast<F&>( x)));
         return *this;
     }
 };
@@ -469,7 +460,7 @@ public:
 template <typename T, typename U>
 T poly_cast( poly<U>& x)
 {
-    typedef typename boost::remove_reference<T>::type target_type;
+    typedef typename std::remove_reference<T>::type target_type;
     typedef typename target_type::interface_type target_interface_type;
 
     if( !x.template is_dynamic_convertible_to<target_interface_type>())
@@ -481,7 +472,7 @@ T poly_cast( poly<U>& x)
 template <typename T, typename U>
 T poly_cast( const poly<U>& x)
 {
-    typedef typename boost::remove_reference<T>::type target_type;
+    typedef typename std::remove_reference<T>::type target_type;
     typedef typename target_type::interface_type target_interface_type;
 
     if( !x.template is_dynamic_convertible_to<target_interface_type>())
@@ -493,7 +484,7 @@ T poly_cast( const poly<U>& x)
 template <typename T, typename U>
 T poly_cast( poly<U> *x)
 {
-    typedef typename boost::remove_pointer<T>::type target_type;
+    typedef typename std::remove_pointer<T>::type target_type;
     typedef typename target_type::interface_type target_interface_type;
 
     return x->template is_dynamic_convertible_to<target_interface_type>() ? reinterpret_cast<T>( x) : NULL;
@@ -502,7 +493,7 @@ T poly_cast( poly<U> *x)
 template <typename T, typename U>
 T poly_cast( const poly<U> *x)
 {
-    typedef typename boost::remove_pointer<T>::type target_type;
+    typedef typename std::remove_pointer<T>::type target_type;
     typedef typename target_type::interface_type target_interface_type;
 
     return x->template is_dynamic_convertible_to<target_interface_type>() ? reinterpret_cast<T>( x) : NULL;
@@ -519,41 +510,41 @@ inline bool operator!=( const poly<T>& x, const poly<T>& y)
 
 #define RAMEN_POLY_DECLARE_COPY_AND_ASSIGN( TYPENAME, BASETYPENAME) \
 private:\
-    BOOST_COPYABLE_AND_MOVABLE( TYPENAME)\
+\
 public:\
     TYPENAME( const TYPENAME& x);\
-    TYPENAME( BOOST_RV_REF( TYPENAME) x);{}\
-    TYPENAME& operator=( BOOST_COPY_ASSIGN_REF( TYPENAME) x);\
-    TYPENAME& operator=( BOOST_RV_REF( TYPENAME) x);\
+    TYPENAME( TYPENAME&& x);{}\
+    TYPENAME& operator=( const TYPENAME& x);\
+    TYPENAME& operator=( TYPENAME&& x);\
 
 #define RAMEN_POLY_IMPLEMENT_COPY_AND_ASSIGN( TYPENAME, BASETYPENAME) \
     TYPENAME::TYPENAME( const TYPENAME& x) : BASETYPENAME( x) {}\
-    TYPENAME::TYPENAME( BOOST_RV_REF( TYPENAME) x) : BASETYPENAME( boost::move( static_cast<BASETYPENAME&>( x))) {}\
-    TYPENAME& TYPENAME::operator=( BOOST_COPY_ASSIGN_REF( TYPENAME) x)\
+    TYPENAME::TYPENAME( TYPENAME&& x) : BASETYPENAME( std::move( static_cast<BASETYPENAME&>( x))) {}\
+    TYPENAME& TYPENAME::operator=( const TYPENAME& x)\
     {\
         BASETYPENAME::operator=(static_cast<const BASETYPENAME&>( x));\
         return *this;\
     }\
-    TYPENAME& TYPENAME::operator=( BOOST_RV_REF( TYPENAME) x)\
+    TYPENAME& TYPENAME::operator=( TYPENAME&& x)\
     {\
-        BASETYPENAME::operator=( boost::move( static_cast<BASETYPENAME&>( x)));\
+        BASETYPENAME::operator=( std::move( static_cast<BASETYPENAME&>( x)));\
         return *this;\
     }
 
 #define RAMEN_POLY_INLINE_COPY_AND_ASSIGN( TYPENAME, BASETYPENAME) \
 private:\
-    BOOST_COPYABLE_AND_MOVABLE( TYPENAME)\
+\
 public:\
     TYPENAME( const TYPENAME& x) : BASETYPENAME( x) {}\
-    TYPENAME( BOOST_RV_REF( TYPENAME) x) : BASETYPENAME( boost::move( static_cast<BASETYPENAME&>( x))) {}\
-    TYPENAME& operator=( BOOST_COPY_ASSIGN_REF( TYPENAME) x)\
+    TYPENAME( TYPENAME&& x) : BASETYPENAME( std::move( static_cast<BASETYPENAME&>( x))) {}\
+    TYPENAME& operator=( const TYPENAME& x)\
     {\
         BASETYPENAME::operator=(static_cast<const BASETYPENAME&>( x));\
         return *this;\
     }\
-    TYPENAME& operator=( BOOST_RV_REF( TYPENAME) x)\
+    TYPENAME& operator=( TYPENAME&& x)\
     {\
-        BASETYPENAME::operator=( boost::move( static_cast<BASETYPENAME&>( x)));\
+        BASETYPENAME::operator=( std::move( static_cast<BASETYPENAME&>( x)));\
         return *this;\
     }
 

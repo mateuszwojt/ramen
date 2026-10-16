@@ -3,12 +3,13 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<gtest/gtest.h>
+#include<utility>
 
 #include<map>
 
 #include<ramen/core/dictionary.hpp>
 
-#include<boost/foreach.hpp>
+
 
 using namespace ramen::core;
 using namespace ramen::math;
@@ -43,7 +44,7 @@ TEST( Dictionary, MoveAssign)
                  ( "key2", dictionary_t::value_type( string_t( "xxxyyy")))
                  ( "key3", dictionary_t::value_type( string_t( "another_string")));
 
-    dictionary_t x( boost::move( dict));
+    dictionary_t x( std::move( dict));
     EXPECT_FALSE( x.empty());
 }
 
@@ -98,7 +99,7 @@ TEST( Dictionary, GetValue)
         const string_t *x = get<string_t>( &dict, dictionary_t::key_type( "key2"));
         EXPECT_TRUE( x);
 
-        const int *y = get<boost::int32_t>( &dict, dictionary_t::key_type( "key7"));
+        const int *y = get<std::int32_t>( &dict, dictionary_t::key_type( "key7"));
         EXPECT_FALSE( y);
     }
 }
@@ -114,7 +115,7 @@ TEST( Dictionary, Iterators)
     dictionary_t dict;
 
     typedef std::pair<dictionary_t::key_type, variant_t> value_type;
-    BOOST_FOREACH( const value_type& v, vals)
+    for( const value_type& v : vals)
     {
         dict[v.first] = v.second;
     }

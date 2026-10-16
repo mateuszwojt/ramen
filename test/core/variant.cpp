@@ -16,12 +16,12 @@ TEST( Variant, Construct)
 
     variant_t y( 11);
     ASSERT_EQ( y.type(), int32_k);
-    ASSERT_EQ( get<boost::int32_t>( y), 11);
+    ASSERT_EQ( get<std::int32_t>( y), 11);
 
-    boost::uint32_t zval( 33);
+    std::uint32_t zval( 33);
     variant_t z( zval);
     ASSERT_EQ( z.type(), uint32_k);
-    ASSERT_EQ( get<boost::uint32_t>( z), zval);
+    ASSERT_EQ( get<std::uint32_t>( z), zval);
 
     // All lines bellow should generate a compiler error.
     // Uncomment to check...

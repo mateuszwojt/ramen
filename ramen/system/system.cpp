@@ -6,7 +6,7 @@
 
 #include<stdexcept>
 
-#include<boost/filesystem/operations.hpp>
+#include<filesystem>
 
 #include<ramen/config/os.hpp>
 
@@ -51,7 +51,7 @@ system_t::system_t() : ram_size_( 0)
     if( application_user_path_.empty())
         throw std::runtime_error( "Error creating system class");
 
-    application_path_ = boost::filesystem::canonical( executable_path_.parent_path() / "..");
+    application_path_ = std::filesystem::canonical( executable_path_.parent_path() / "..");
 }
 
 system_t::~system_t()

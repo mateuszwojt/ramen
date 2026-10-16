@@ -9,9 +9,8 @@
 
 #include<stdint.h>
 
-#include<boost/move/move.hpp>
-#include<boost/static_assert.hpp>
-#include<boost/swap.hpp>
+
+#include<utility>
 
 #include<ramen/assert.hpp>
 
@@ -52,7 +51,8 @@ struct pointer_traits<T(*)[]>
 template<class T>
 class auto_ptr_t
 {
-    BOOST_MOVABLE_BUT_NOT_COPYABLE( auto_ptr_t)
+    auto_ptr_t( const auto_ptr_t&) = delete;
+    auto_ptr_t& operator=( const auto_ptr_t&) = delete;
 
     // for safe bool
     operator int() const;
@@ -74,13 +74,13 @@ public:
         delete_contents();
     }
 
-    auto_ptr_t( BOOST_RV_REF( auto_ptr_t) other) : ptr_( 0)
+    auto_ptr_t( auto_ptr_t&& other) : ptr_( 0)
     {
         reset();
         swap( other);
     }
 
-    auto_ptr_t& operator=( BOOST_RV_REF( auto_ptr_t) other)
+    auto_ptr_t& operator=( auto_ptr_t&& other)
     {
         swap( other);
         return *this;
@@ -120,7 +120,7 @@ public:
 
     void swap( auto_ptr_t& other)
     {
-        boost::swap( ptr_, other.ptr_);
+        std::swap( ptr_, other.ptr_);
     }
 
     // safe bool conversion ( private int conversion prevents unsafe use)

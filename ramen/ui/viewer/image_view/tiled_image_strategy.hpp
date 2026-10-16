@@ -7,8 +7,8 @@
 
 #include<ramen/ui/viewer/image_view/image_strategy.hpp>
 
-#include<boost/noncopyable.hpp>
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<ramen/container/ptr_vector.hpp>
 
 namespace ramen
 {
@@ -32,7 +32,7 @@ public:
 
 	virtual void draw() const;
 
-	virtual boost::optional<Imath::Color4f> color_at( const Imath::V2i& p) const;
+	virtual std::optional<Imath::Color4f> color_at( const Imath::V2i& p) const;
 
 private:
 
@@ -40,7 +40,7 @@ private:
 
 	Imath::Box2i area_for_tile( int x, int y) const;
 
-	struct tile_t : boost::noncopyable
+	struct tile_t : ramen::core::noncopyable_t
 	{
 	public:
 
@@ -63,7 +63,7 @@ private:
 	};
 
 	image::buffer_t pixels_;
-	boost::ptr_vector<tile_t> tiles_;
+	container::ptr_vector<tile_t> tiles_;
 };
 
 } // viewer

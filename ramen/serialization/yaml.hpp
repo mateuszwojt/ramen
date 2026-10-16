@@ -10,7 +10,7 @@
 #include<string>
 #include<exception>
 
-#include<boost/filesystem/fstream.hpp>
+#include<fstream>
 
 #include<yaml-cpp/yaml.h>
 
@@ -72,8 +72,8 @@ YAML::Node get_node( const YAML::Node& node, const std::string& key);
 void operator>>( const YAML::Node& in, core::empty_t& x);
 YAML::Emitter& operator<<( YAML::Emitter& out, const core::empty_t& x);
 
-void operator>>( const YAML::Node& in, boost::filesystem::path& p);
-YAML::Emitter& operator<<( YAML::Emitter& out, const boost::filesystem::path& p);
+void operator>>( const YAML::Node& in, std::filesystem::path& p);
+YAML::Emitter& operator<<( YAML::Emitter& out, const std::filesystem::path& p);
 
 template<class T>
 void operator>>( const YAML::Node& in, Imath::Vec2<T>& v)

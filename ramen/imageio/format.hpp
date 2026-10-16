@@ -38,7 +38,7 @@ struct RAMEN_API format_t
 
     virtual bool is_multichannel() const;
 
-    virtual core::auto_ptr_t<reader_t> reader( const boost::filesystem::path& p) const;
+    virtual core::auto_ptr_t<reader_t> reader( const std::filesystem::path& p) const;
     virtual core::auto_ptr_t<writer_t> writer() const;
 
 private:

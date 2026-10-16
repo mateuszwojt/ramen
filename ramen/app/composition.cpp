@@ -6,12 +6,10 @@
 
 #include<ramen/app/composition.hpp>
 
-#include<boost/foreach.hpp>
-#include<boost/bind.hpp>
-#include<boost/filesystem/operations.hpp>
-#include<boost/range/algorithm/for_each.hpp>
-#include<boost/range/algorithm/count_if.hpp>
-#include<boost/range/algorithm/find_if.hpp>
+
+#include<functional>
+#include<filesystem>
+#include<algorithm>
 
 #include<ramen/app/application.hpp>
 
@@ -102,7 +100,7 @@ void composition_t::remove_edge( const edge_t& e, bool notify)
 void composition_t::merge_composition( composition_t& other)
 {
 	// convert all relative paths
-	boost::filesystem::path doc_dir( composition_dir());
+	std::filesystem::path doc_dir( composition_dir());
 
 	if( doc_dir.empty())
 		other.make_all_paths_absolute();
@@ -112,7 +110,7 @@ void composition_t::merge_composition( composition_t& other)
 	// rename all nodes from other composition
 	unique_name_map_t<node_t*> nmap( node_map());
 
-	BOOST_FOREACH( node_t& n, other.nodes())
+	for( node_t& n : other.nodes())
 	{
 		std::string new_name( nmap.make_name_unique( n.name()));
 
@@ -136,7 +134,7 @@ void composition_t::merge_composition( composition_t& other)
 		add_node( std::move( nn));
     }
 
-    BOOST_FOREACH( edge_t& e, other_edges)
+    for( edge_t& e : other_edges)
 		add_edge( e);
 }
 
@@ -158,24 +156,24 @@ void composition_t::notify_all_dirty()
 	for( node_iterator it( nodes().begin()), ie = nodes().end(); it != ie; ++it)
 	{
 		if( it->notify_dirty())
-			detail::breadth_first_outputs_recursive_search( *it, boost::bind( &node_t::do_notify, _1));
+			detail::breadth_first_outputs_recursive_search( *it, std::bind( &node_t::do_notify, std::placeholders::_1));
 	}
 }
 
 void composition_t::clear_all_notify_dirty_flags()
 {
-    boost::range::for_each( nodes(), boost::bind( &node_t::set_notify_dirty, _1, false));
+    std::ranges::for_each( nodes(), std::bind( &node_t::set_notify_dirty, std::placeholders::_1, false));
 }
 
 void composition_t::begin_interaction()
 {
-    boost::range::for_each( nodes(), boost::bind( &node_t::begin_interaction, _1));
+    std::ranges::for_each( nodes(), std::bind( &node_t::begin_interaction, std::placeholders::_1));
 }
 
 void composition_t::end_interaction()
 {
 	clear_all_notify_dirty_flags();
-    boost::range::for_each( nodes(), boost::bind( &node_t::end_interaction, _1));
+    std::ranges::for_each( nodes(), std::bind( &node_t::end_interaction, std::placeholders::_1));
 	notify_all_dirty();
 }
 
@@ -210,7 +208,7 @@ void composition_t::set_frame( float f)
     if( frame_ != f)
     {
         frame_ = f;
-        boost::range::for_each( nodes(), boost::bind( &node_t::set_frame, _1, f));
+        std::ranges::for_each( nodes(), std::bind( &node_t::set_frame, std::placeholders::_1, f));
     }
 }
 
@@ -228,22 +226,22 @@ render::context_t composition_t::current_context( render::render_mode mode) cons
 // selections
 void composition_t::select_all()
 {
-    boost::range::for_each( nodes(), boost::bind( &node_t::select, _1, true));
+    std::ranges::for_each( nodes(), std::bind( &node_t::select, std::placeholders::_1, true));
 }
 
 void composition_t::deselect_all()
 {
-    boost::range::for_each( nodes(), boost::bind( &node_t::select, _1, false));
+    std::ranges::for_each( nodes(), std::bind( &node_t::select, std::placeholders::_1, false));
 }
 
 bool composition_t::any_selected() const
 {
-    return boost::range::find_if( nodes(), boost::bind( &node_t::selected, _1)) != nodes().end();
+    return std::ranges::find_if( nodes(), std::bind( &node_t::selected, std::placeholders::_1)) != nodes().end();
 }
 
 node_t *composition_t::selected_node()
 {
-    if( boost::range::count_if( nodes(), boost::bind( &node_t::selected, _1)) == 1)
+    if( std::ranges::count_if( nodes(), std::bind( &node_t::selected, std::placeholders::_1)) == 1)
     {
         node_iterator it( nodes().begin());
 
@@ -257,9 +255,9 @@ node_t *composition_t::selected_node()
     return 0;
 }
 
-const boost::filesystem::path& composition_t::composition_dir() const { return composition_dir_;}
+const std::filesystem::path& composition_t::composition_dir() const { return composition_dir_;}
 
-void composition_t::set_composition_dir( const boost::filesystem::path& dir)
+void composition_t::set_composition_dir( const std::filesystem::path& dir)
 {
     RAMEN_ASSERT( !dir.empty() && dir.is_absolute());
 
@@ -272,39 +270,39 @@ void composition_t::set_composition_dir( const boost::filesystem::path& dir)
 	composition_dir_ = dir;
 }
 
-void composition_t::convert_all_relative_paths( const boost::filesystem::path& new_base)
+void composition_t::convert_all_relative_paths( const std::filesystem::path& new_base)
 {
-    boost::range::for_each( nodes(), boost::bind( &node_t::convert_relative_paths, _1, composition_dir_, new_base));
+    std::ranges::for_each( nodes(), std::bind( &node_t::convert_relative_paths, std::placeholders::_1, composition_dir_, new_base));
 }
 
 void composition_t::make_all_paths_absolute()
 {
-    boost::range::for_each( nodes(), boost::bind( &node_t::make_paths_absolute, _1));
+    std::ranges::for_each( nodes(), std::bind( &node_t::make_paths_absolute, std::placeholders::_1));
 }
 
 void composition_t::make_all_paths_relative()
 {
-    boost::range::for_each( nodes(), boost::bind( &node_t::make_paths_relative, _1));
+    std::ranges::for_each( nodes(), std::bind( &node_t::make_paths_relative, std::placeholders::_1));
 }
 
-boost::filesystem::path composition_t::relative_to_absolute( const boost::filesystem::path& p) const
+std::filesystem::path composition_t::relative_to_absolute( const std::filesystem::path& p) const
 {
     RAMEN_ASSERT( !composition_dir_.empty());
     return filesystem::make_absolute_path( p, composition_dir());
 }
 
-boost::filesystem::path composition_t::absolute_to_relative( const boost::filesystem::path& p) const
+std::filesystem::path composition_t::absolute_to_relative( const std::filesystem::path& p) const
 {
     RAMEN_ASSERT( !composition_dir_.empty());
     return filesystem::make_relative_path( p, composition_dir());
 }
 
 // serialization
-void composition_t::load_from_file( const boost::filesystem::path& p)
+void composition_t::load_from_file( const std::filesystem::path& p)
 {
 	RAMEN_ASSERT( p.is_absolute());
 	
-    boost::filesystem::ifstream ifs( p, serialization::yaml_iarchive_t::file_open_mode());
+    std::ifstream ifs( p, serialization::yaml_iarchive_t::file_open_mode());
 
     if( !ifs.is_open() || !ifs.good())
 		throw std::runtime_error( std::string( "Couldn't open input file ") + filesystem::file_string( p));
@@ -330,11 +328,11 @@ void composition_t::read( serialization::yaml_iarchive_t& in)
 	read_nodes( in);
 	read_edges( in);
 	
-	BOOST_FOREACH( node_t& n, nodes())
+	for( node_t& n : nodes())
 		added_( &n);
 
-	BOOST_FOREACH( node_t& n, nodes())
-		n.for_each_param( boost::bind( &param_t::emit_param_changed, _1, param_t::node_loaded));
+	for( node_t& n : nodes())
+		n.for_each_param( std::bind( &param_t::emit_param_changed, std::placeholders::_1, param_t::node_loaded));
 }
 
 void composition_t::read_nodes( serialization::yaml_iarchive_t& in)
@@ -487,12 +485,12 @@ void composition_t::write( serialization::yaml_oarchive_t& out) const
 	
     out << YAML::Key << "nodes" << YAML::Value;
 		out.begin_seq();
-            boost::range::for_each( nodes(), boost::bind( &node_t::write, _1, boost::ref( out)));
+            std::ranges::for_each( nodes(), std::bind( &node_t::write, std::placeholders::_1, std::ref( out)));
         out.end_seq();
 
 	out << YAML::Key << "edges" << YAML::Value;
         out.begin_seq();
-            boost::range::for_each( edges(), boost::bind( &composition_t::write_edge, this, boost::ref( out), _1));
+            std::ranges::for_each( edges(), std::bind( &composition_t::write_edge, this, std::ref( out), std::placeholders::_1));
 		out.end_seq();
 }
 

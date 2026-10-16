@@ -9,7 +9,7 @@
 
 #include<ramen/ui/graph_layout_fwd.hpp>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<Imath/ImathBox.h>
 
@@ -21,7 +21,7 @@ namespace ramen
 namespace ui
 {
 
-class RAMEN_API graph_layout_t : boost::noncopyable
+class RAMEN_API graph_layout_t : ramen::core::noncopyable_t
 {
 public:
 

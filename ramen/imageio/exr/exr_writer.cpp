@@ -27,7 +27,7 @@ Imath::Box2i convert_box( const math::box2i_t& box)
 
 } // unnamed
 
-void exr_writer_t::do_write_image( const boost::filesystem::path& p,
+void exr_writer_t::do_write_image( const std::filesystem::path& p,
 				const image::const_image_view_t& view,
                 const core::dictionary_t& params) const
 {
@@ -116,7 +116,7 @@ void exr_writer_t::do_write_image( const boost::filesystem::path& p,
 	}
 }
 
-void exr_writer_t::write_half( const boost::filesystem::path& p,
+void exr_writer_t::write_half( const std::filesystem::path& p,
                                Imf::Header& header,
                                const image::const_image_view_t& view,
                                bool save_alpha) const
@@ -150,7 +150,7 @@ void exr_writer_t::write_half( const boost::filesystem::path& p,
     out_file.writePixels( img.height());
 }
 
-void exr_writer_t::write_half_alpha( const boost::filesystem::path& p,
+void exr_writer_t::write_half_alpha( const std::filesystem::path& p,
                                      Imf::Header& header,
                                      const image::const_image_view_t& view) const
 {
@@ -172,7 +172,7 @@ void exr_writer_t::write_half_alpha( const boost::filesystem::path& p,
     out_file.writePixels( img.height());
 }
 
-void exr_writer_t::write_float( const boost::filesystem::path& p,
+void exr_writer_t::write_float( const std::filesystem::path& p,
                                 Imf::Header& header,
                                 const image::const_image_view_t& view,
                                 bool save_alpha) const
@@ -203,7 +203,7 @@ void exr_writer_t::write_float( const boost::filesystem::path& p,
     out_file.writePixels( view.height());
 }
 
-void exr_writer_t::write_float_alpha( const boost::filesystem::path& p,
+void exr_writer_t::write_float_alpha( const std::filesystem::path& p,
                                       Imf::Header& header,
                                       const image::const_image_view_t& view) const
 {

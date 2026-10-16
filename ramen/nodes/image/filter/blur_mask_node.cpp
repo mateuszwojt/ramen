@@ -27,7 +27,7 @@ void blur_mask_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> r( new popup_param_t( "Channels"));
     r->set_id( "channels");
-    r->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
+    r->menu_items() = { "RGBA", "RGB", "Alpha"};
     add_param( std::move( r));
 
     std::unique_ptr<float2_param_t> q( new float2_param_t( "Min Radius"));
@@ -56,7 +56,7 @@ void blur_mask_node_t::do_create_params()
 
     std::unique_ptr<popup_param_t> b( new popup_param_t( "Border Mode"));
     b->set_id( "border");
-    b->menu_items() = boost::assign::list_of( "Black")( "Repeat")( "Reflect");
+    b->menu_items() = { "Black", "Repeat", "Reflect"};
     add_param( std::move( b));
 }
 

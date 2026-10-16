@@ -6,7 +6,7 @@
 
 #include<limits>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<QLabel>
 
@@ -138,7 +138,7 @@ void float_param_t::do_read( const serialization::yaml_node_t& node)
 
     if( n)
     {
-        curve().read( n.get());
+        curve().read( n.value());
         return;
     }
 

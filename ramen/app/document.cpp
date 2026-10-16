@@ -4,8 +4,8 @@
 
 #include<ramen/app/document.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/filesystem/fstream.hpp>
+#include<functional>
+#include<fstream>
 
 #include<ramen/app/application.hpp>
 
@@ -23,7 +23,7 @@ document_t::document_t() : dirty_( false)
 
 document_t::~document_t() {}
 
-void document_t::set_file( const boost::filesystem::path& p)
+void document_t::set_file( const std::filesystem::path& p)
 {
 	RAMEN_ASSERT( p.empty() || p.is_absolute());
 

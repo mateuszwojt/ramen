@@ -7,7 +7,7 @@
 
 #include<ramen/manipulators/manipulator.hpp>
 
-#include<boost/array.hpp>
+#include<array>
 
 namespace ramen
 {
@@ -29,7 +29,7 @@ private:
     virtual void do_mouse_drag_event( const ui::mouse_drag_event_t& event);
     virtual void do_mouse_release_event( const ui::mouse_release_event_t& event);
 	
-	void get_corners( boost::array<Imath::V2f,4>& pts, float aspect, int scale = 1) const;
+	void get_corners( std::array<Imath::V2f,4>& pts, float aspect, int scale = 1) const;
 	
 	float2_param_t *topleft_, *topright_, *botleft_, *botright_;
 	int picked_corner_;

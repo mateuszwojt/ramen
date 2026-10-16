@@ -7,7 +7,7 @@
 
 #include<vector>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<Imath/ImathBox.h>
 
@@ -27,7 +27,7 @@ namespace ramen
 namespace roto
 {
 
-class scene_renderer_t : boost::noncopyable
+class scene_renderer_t : ramen::core::noncopyable_t
 {
 public:
 

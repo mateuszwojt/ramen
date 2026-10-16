@@ -2,7 +2,7 @@
 	Ramen Install
 	-------------
 
-	Requirements: CMake 3.24+, Ninja, a C++20 compiler and Qt 6, Boost, oneTBB,
+	Requirements: CMake 3.24+, Ninja, a C++20 compiler and Qt 6, Boost.GIL ( header only), oneTBB,
 	yaml-cpp 0.8+, Imath 3, OpenEXR 3, OpenImageIO, OpenColorIO 2, AGG, GLEW,
 	libjpeg, libpng, libtiff, zlib and GoogleTest. On arm64, also sse2neon.
 

@@ -6,7 +6,7 @@
 
 #include<ramen/ui/inspector/inspector.hpp>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<QApplication>
 #include<QFontMetrics>

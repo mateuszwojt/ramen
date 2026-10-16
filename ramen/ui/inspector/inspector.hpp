@@ -7,7 +7,7 @@
 
 #include<ramen/ui/inspector/inspector_fwd.hpp>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/nodes/node_fwd.hpp>
 

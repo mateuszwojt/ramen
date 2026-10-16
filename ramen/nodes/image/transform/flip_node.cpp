@@ -28,7 +28,7 @@ void flip_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> p( new popup_param_t( "Mode"));
     p->set_id( "mode");
-    p->menu_items() = boost::assign::list_of( "Horizontal")( "Vertical")( "Both");
+    p->menu_items() = { "Horizontal", "Vertical", "Both"};
     add_param( std::move( p));
 }
 

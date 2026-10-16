@@ -5,7 +5,7 @@
 
 #include<map>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<Imath/ImathBox.h>
 
@@ -18,7 +18,7 @@ namespace ramen
 namespace render
 {
 
-class RAMEN_API context_guard_t : boost::noncopyable
+class RAMEN_API context_guard_t : ramen::core::noncopyable_t
 {
 public:
 

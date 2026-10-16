@@ -8,7 +8,7 @@
 #include<string>
 #include<sstream>
 
-#include<boost/filesystem/fstream.hpp>
+#include<fstream>
 
 namespace ramen
 {
@@ -66,7 +66,7 @@ yaml_node_t yaml_iarchive_t::get_node( const std::string& key) const
 	return root().get_node( key);
 }
 
-boost::optional<yaml_node_t> yaml_iarchive_t::get_optional_node( const std::string& key) const
+std::optional<yaml_node_t> yaml_iarchive_t::get_optional_node( const std::string& key) const
 { 
 	return root().get_optional_node( key);
 }

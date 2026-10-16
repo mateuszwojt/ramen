@@ -7,7 +7,7 @@
 
 #include<map>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/params/parameterised_fwd.hpp>
 #include<ramen/ui/inspector/panel_fwd.hpp>
@@ -17,7 +17,7 @@ namespace ramen
 namespace ui
 {
 
-class panel_factory_t : boost::noncopyable
+class panel_factory_t : ramen::core::noncopyable_t
 {
 public:
 

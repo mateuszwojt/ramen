@@ -45,7 +45,7 @@ gl_display_manager_t::gl_display_manager_t( int lut_size, GLenum texture_num)
 	init();
 }
 
-gl_display_manager_t::gl_display_manager_t( boost::shared_ptr<gl_lut3d_t> lut) : lut_( lut)
+gl_display_manager_t::gl_display_manager_t( std::shared_ptr<gl_lut3d_t> lut) : lut_( lut)
 {
 	init();
 }

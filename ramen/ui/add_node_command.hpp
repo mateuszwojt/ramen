@@ -47,7 +47,7 @@ public:
 private:
 
     std::vector<node_t*> nodes_;
-    boost::ptr_vector<node_t> node_storage_;
+    container::ptr_vector<node_t> node_storage_;
 };
 
 } // namespace

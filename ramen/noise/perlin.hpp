@@ -4,7 +4,7 @@
 #ifndef RAMEN_NOISE_PERLIN_HPP
 #define RAMEN_NOISE_PERLIN_HPP
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/noise/noise_base.hpp>
 
@@ -13,7 +13,7 @@ namespace ramen
 namespace noise
 {
 
-class perlin_t : public noise_base_t, boost::noncopyable
+class perlin_t : public noise_base_t, ramen::core::noncopyable_t
 {
 public:
 
@@ -38,11 +38,11 @@ private:
 	void normalize2(float v[2]) const;
 	void normalize3(float v[3]) const;
 
-	BOOST_STATIC_CONSTANT( int, B = 0x100);
-	BOOST_STATIC_CONSTANT( int, BM = 0xff);
-	BOOST_STATIC_CONSTANT( int, N = 0x1000);
-	BOOST_STATIC_CONSTANT( int, NP = 12);
-	BOOST_STATIC_CONSTANT( int, NM = 0xfff);
+	static constexpr int B = 0x100;
+	static constexpr int BM = 0xff;
+	static constexpr int N = 0x1000;
+	static constexpr int NP = 12;
+	static constexpr int NM = 0xfff;
 
 	int p[B + B + 2];
 	float g3[B + B + 2][3];

@@ -4,7 +4,7 @@
 
 #include<sstream>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<ramen/nodes/graph_algorithm.hpp>
 #include<ramen/nodes/image_node.hpp>
@@ -87,9 +87,9 @@ void image_node_renderer_t::set_context( const context_t& context)
 	n_->release_image();
 	
     n_->composition()->set_frame( new_context_.frame);
-    depth_first_inputs_search( *n_, boost::bind( &image_node_t::calc_format_fun, _1, new_context_));
-    depth_first_inputs_search( *n_, boost::bind( &image_node_t::calc_bounds_fun, _1, new_context_));
-    depth_first_inputs_search( *n_, boost::bind( &image_node_t::clear_interest_fun, _1));
+    depth_first_inputs_search( *n_, std::bind( &image_node_t::calc_format_fun, std::placeholders::_1, new_context_));
+    depth_first_inputs_search( *n_, std::bind( &image_node_t::calc_bounds_fun, std::placeholders::_1, new_context_));
+    depth_first_inputs_search( *n_, std::bind( &image_node_t::clear_interest_fun, std::placeholders::_1));
 }
 
 const Imath::Box2i& image_node_renderer_t::format() const
@@ -112,15 +112,15 @@ void image_node_renderer_t::render( const Imath::Box2i& roi)
 	RAMEN_ASSERT( !roi.isEmpty());
 
     n_->set_interest( roi);
-    breadth_first_inputs_apply( *n_, boost::bind( &image_node_t::calc_inputs_interest_fun, _1, new_context_));
-    depth_first_inputs_search(  *n_, boost::bind( &image_node_t::calc_defined_fun, _1, new_context_));
-    depth_first_inputs_search(  *n_, boost::bind( &image_node_t::subsample_areas_fun, _1, new_context_));
+    breadth_first_inputs_apply( *n_, std::bind( &image_node_t::calc_inputs_interest_fun, std::placeholders::_1, new_context_));
+    depth_first_inputs_search(  *n_, std::bind( &image_node_t::calc_defined_fun, std::placeholders::_1, new_context_));
+    depth_first_inputs_search(  *n_, std::bind( &image_node_t::subsample_areas_fun, std::placeholders::_1, new_context_));
 
     if( do_log)
         depth_first_inputs_search( *n_, test_empty_images());
 
-    depth_first_inputs_search( *n_, boost::bind( &node_t::clear_hash, _1));
-    depth_first_inputs_search( *n_, boost::bind( &node_t::calc_hash_str, _1, new_context_));
+    depth_first_inputs_search( *n_, std::bind( &node_t::clear_hash, std::placeholders::_1));
+    depth_first_inputs_search( *n_, std::bind( &node_t::calc_hash_str, std::placeholders::_1, new_context_));
 
     if( do_log)
         depth_first_inputs_search( *n_, print_areas());
@@ -132,7 +132,7 @@ void image_node_renderer_t::render( const Imath::Box2i& roi)
 	}
 	catch( std::bad_alloc&)
 	{
-		throw boost::enable_error_info( std::bad_alloc());
+		throw std::bad_alloc();
 	}
 }
 

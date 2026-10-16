@@ -11,7 +11,7 @@
 
 #include<ramen/app/application_fwd.hpp>
 
-#include<boost/filesystem/path.hpp>
+#include<filesystem>
 
 namespace ramen
 {
@@ -36,28 +36,28 @@ public:
         return user_name_;
     }
 
-    const boost::filesystem::path& home_path() const
+    const std::filesystem::path& home_path() const
     {
         return home_path_;
     }
 
-    const boost::filesystem::path& executable_path() const
+    const std::filesystem::path& executable_path() const
     {
         return executable_path_;
     }
 
-    const boost::filesystem::path& application_path() const
+    const std::filesystem::path& application_path() const
     {
         return application_path_;
     }
 
-    const boost::filesystem::path& application_user_path() const
+    const std::filesystem::path& application_user_path() const
     {
         return application_user_path_;
     }
 
     // ram
-    boost::uint64_t ram_size() const
+    std::uint64_t ram_size() const
     {
         return ram_size_;
     }
@@ -76,13 +76,13 @@ private:
     std::string system_name_;
     std::string user_name_;
 
-    boost::uint64_t ram_size_;
+    std::uint64_t ram_size_;
 
     // paths
-    boost::filesystem::path home_path_;
-    boost::filesystem::path executable_path_;
-    boost::filesystem::path application_path_;
-    boost::filesystem::path application_user_path_;
+    std::filesystem::path home_path_;
+    std::filesystem::path executable_path_;
+    std::filesystem::path application_path_;
+    std::filesystem::path application_user_path_;
 
     struct impl;
     impl *pimpl_;

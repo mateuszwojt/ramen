@@ -8,7 +8,7 @@
 #include<vector>
 #include<string>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<OpenEXR/ImfChromaticities.h>
 
@@ -27,7 +27,7 @@ namespace ramen
 \ingroup app
 \brief contains the user preferences
 */
-class preferences_t : boost::noncopyable
+class preferences_t : ramen::core::noncopyable_t
 {
 public:
 

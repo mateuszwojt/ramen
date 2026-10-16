@@ -7,18 +7,15 @@
 
 #include<ramen/ui/viewer/viewer_strategy.hpp>
 
-// avoid a moc error, when including boost
-#ifndef QT_MOC_RUN
-    #include<memory>
+#include<memory>
 
-    #include<ramen/nodes/image_node.hpp>
+#include<ramen/nodes/image_node.hpp>
 
-    #include<ramen/ocio/gl_display_manager.hpp>
+#include<ramen/ocio/gl_display_manager.hpp>
 
-    #include<ramen/ui/viewer/image_view/image.hpp>
-    #include<ramen/ui/viewport.hpp>
-    #include<ramen/ui/events.hpp>
-#endif
+#include<ramen/ui/viewer/image_view/image.hpp>
+#include<ramen/ui/viewport.hpp>
+#include<ramen/ui/events.hpp>
 
 class QWidget;
 
@@ -102,7 +99,7 @@ public:
 
 	virtual Imath::Color4f color_at( int x, int y) const;
     virtual void pick_colors_in_box( const Imath::Box2i& b,
-                                     boost::function<void ( const Imath::Color4f&)> f) const;
+                                     std::function<void ( const Imath::Color4f&)> f) const;
 
 	virtual void center_image();
 	virtual void frame_image();
@@ -143,10 +140,10 @@ private:
 	bool first_image_loaded_;
 	ui::viewport_t viewport_;
 	
-	boost::signals2::connection active_connection_;
-    boost::signals2::connection active_overlay_connection_;
-    boost::signals2::connection context_connection_;
-    boost::signals2::connection context_overlay_connection_;
+	core::connection_t active_connection_;
+    core::connection_t active_overlay_connection_;
+    core::connection_t context_connection_;
+    core::connection_t context_overlay_connection_;
 
 	std::unique_ptr<ocio::gl_display_manager_t> display_;
 	image_t image_;

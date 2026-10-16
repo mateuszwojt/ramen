@@ -37,7 +37,7 @@ const generator_t::digest_type& generator_t::digest() const
                              reinterpret_cast<void*>( const_cast<digest_type::iterator>( digest().begin())));
     }
 
-    return digest_.get();
+    return digest_.value();
 }
 
 std::string generator_t::digest_as_string() const

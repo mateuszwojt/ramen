@@ -10,8 +10,8 @@
 #include<vector>
 #include<stack>
 
-#include<boost/noncopyable.hpp>
-#include<boost/ptr_container/ptr_deque.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<ramen/container/ptr_vector.hpp>
 
 #include<ramen/assert.hpp>
 
@@ -26,7 +26,7 @@ namespace undo
 \ingroup undo
 \brief An undo stack.
 */
-class stack_t : boost::noncopyable
+class stack_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -76,8 +76,8 @@ public:
 	
 private:
 
-    boost::ptr_deque<command_t> undo_stack_;
-    boost::ptr_deque<command_t> redo_stack_;
+    container::ptr_deque<command_t> undo_stack_;
+    container::ptr_deque<command_t> redo_stack_;
 };
 
 } // namespace

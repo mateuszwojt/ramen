@@ -20,7 +20,7 @@ class drag_keys_command_t : public anim_editor_command_t
 {
 public:
 
-    drag_keys_command_t( node_t *node, const boost::shared_ptr<ui::track_model_t>& model);
+    drag_keys_command_t( node_t *node, const std::shared_ptr<ui::track_model_t>& model);
 
 	void start_drag( const Imath::V2f& offset, bool snap_frames);
 	void drag_curve( anim::track_t *t);

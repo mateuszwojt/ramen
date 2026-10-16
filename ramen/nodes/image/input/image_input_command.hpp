@@ -7,7 +7,7 @@
 
 #include<ramen/undo/command.hpp>
 
-#include<boost/tuple/tuple.hpp>
+#include<tuple>
 
 #include<ramen/nodes/image/input/input_node.hpp>
 
@@ -34,7 +34,7 @@ private:
 	
 	image::input_clip_t old_clip_;
 	
-	boost::tuple<int,int,int,int> channels_;
+	std::tuple<int,int,int,int> channels_;
 	float aspect_;
 };
 	

@@ -7,6 +7,8 @@
 
 #include<ramen/config.hpp>
 
+#include<ramen/core/operators.hpp>
+
 #include<ramen/math/vector3.hpp>
 
 namespace ramen
@@ -19,11 +21,9 @@ namespace math
 \brief Normal vector.
 */
 template<class T>
-class normal_t      : boost::addable<normal_t<T>
-                    , boost::multipliable2<normal_t<T>, T
-                    , boost::dividable2<normal_t<T>, T
-                    , boost::equality_comparable<normal_t<T>
-                    > > > >
+class RAMEN_EMPTY_BASES normal_t : public core::addable<normal_t<T>>
+               , public core::multipliable2<normal_t<T>, T>
+               , public core::dividable2<normal_t<T>, T>
 {
 public:
 

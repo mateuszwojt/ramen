@@ -4,9 +4,9 @@
 
 #include<ramen/nodes/image_node.hpp>
 
-#include<boost/foreach.hpp>
-#include<boost/bind.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+
+#include<functional>
+#include<algorithm>
 
 #include<ramen/memory/manager.hpp>
 
@@ -61,8 +61,8 @@ bool image_node_t::accept_connection( node_t *src, int port) const
 
 void image_node_t::format_changed()
 {
-    boost::range::for_each( param_set(),
-                            boost::bind( &param_t::format_changed, _1, format(),
+    std::ranges::for_each( param_set(),
+                            std::bind( &param_t::format_changed, std::placeholders::_1, format(),
                                          aspect_ratio(), proxy_scale()));
 }
 
@@ -162,7 +162,7 @@ void image_node_t::calc_inputs_interest( const render::context_t& context)
 void image_node_t::do_calc_inputs_interest( const render::context_t& context)
 {
     // by default, pass the interest area to the inputs
-    BOOST_FOREACH( node_input_plug_t& i, input_plugs())
+    for( node_input_plug_t& i : input_plugs())
     {
         if( i.connected())
         {
@@ -220,7 +220,7 @@ void image_node_t::subsample_areas( const render::context_t& context)
 
 void image_node_t::recursive_calc_format( const render::context_t& context)
 {
-    depth_first_inputs_search( *this, boost::bind( &image_node_t::calc_format_fun, _1, context));
+    depth_first_inputs_search( *this, std::bind( &image_node_t::calc_format_fun, std::placeholders::_1, context));
 }
 
 bool image_node_t::use_cache( const render::context_t& context) const { return true;}
@@ -236,11 +236,11 @@ bool image_node_t::read_image_from_cache( const render::context_t& context)
 		return false;
 	}
 
-    boost::optional<image::buffer_t> cached( app().memory_manager().find_in_cache( digest(), defined()));
+    std::optional<image::buffer_t> cached( app().memory_manager().find_in_cache( digest(), defined()));
 
     if( cached)
     {
-        image_ = cached.get();
+        image_ = cached.value();
         return true;
     }
 
@@ -331,7 +331,7 @@ void image_node_t::recursive_process( const render::context_t& context)
 	if( !context.render_cancelled())
 	    write_image_to_cache( context);
 
-    BOOST_FOREACH( node_input_plug_t& i, input_plugs())
+    for( node_input_plug_t& i : input_plugs())
     {
         if( i.connected())
         {
@@ -361,7 +361,7 @@ void image_node_t::do_recursive_process( const render::context_t& context)
     // as long as we keep a copy, the pixels won't be deleted
     std::vector<image::buffer_t> buffers;
 
-    BOOST_FOREACH( node_input_plug_t& i, input_plugs())
+    for( node_input_plug_t& i : input_plugs())
     {
 		if( context.render_cancelled())
 			return;
@@ -379,7 +379,7 @@ void image_node_t::do_recursive_process( const render::context_t& context)
     }
 
 	int j = 0;
-	BOOST_FOREACH( node_input_plug_t& i, input_plugs())
+	for( node_input_plug_t& i : input_plugs())
 	{
 		if( i.connected())
 		{

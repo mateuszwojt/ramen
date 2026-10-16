@@ -78,7 +78,7 @@ void import_layer( node_t *n, Imf::ChannelList::ConstIterator first, Imf::Channe
         import_layer( n, channels, channel_set);
 }
 
-void import_multichannel_exr( const boost::filesystem::path& p, bool relative, bool sequence)
+void import_multichannel_exr( const std::filesystem::path& p, bool relative, bool sequence)
 {
     bool tiled;
 

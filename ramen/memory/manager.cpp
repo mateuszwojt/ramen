@@ -11,7 +11,7 @@ namespace ramen
 namespace memory
 {
 
-manager_t::manager_t( boost::uint64_t size)
+manager_t::manager_t( std::uint64_t size)
 {
     img_cache_.reset( new image_cache_t());
     img_alloc_.reset( new image_allocator_type( size));
@@ -42,10 +42,10 @@ void manager_t::insert_in_cache( node_t *n,
 	image_cache().insert( n, key, img);
 }
 
-boost::optional<image::buffer_t> manager_t::find_in_cache( const digest_type& key,
+std::optional<image::buffer_t> manager_t::find_in_cache( const digest_type& key,
                                                            const Imath::Box2i& area)
 {
-	boost::optional<image::buffer_t> result = image_cache().find( key, area);
+	std::optional<image::buffer_t> result = image_cache().find( key, area);
 	return result;
 }
 

@@ -11,8 +11,8 @@
 #include<string>
 #include<iostream>
 
-#include<boost/move/move.hpp>
-#include<boost/functional/hash.hpp>
+#include<functional>
+#include<string_view>
 
 #include<ramen/assert.hpp>
 
@@ -27,7 +27,6 @@ namespace core
 */
 class RAMEN_API string_t
 {
-    BOOST_COPYABLE_AND_MOVABLE( string_t)
 
 public:
 
@@ -64,7 +63,7 @@ public:
     string_t( const string_t& other);
 
     // Copy assignment
-    string_t& operator=( BOOST_COPY_ASSIGN_REF( string_t) other)
+    string_t& operator=( const string_t& other)
     {
         string_t tmp( other);
         swap( tmp);
@@ -72,7 +71,7 @@ public:
     }
 
     // Move constructor
-    string_t( BOOST_RV_REF( string_t) other) : pimpl_( 0)
+    string_t( string_t&& other) : pimpl_( 0)
     {
         RAMEN_ASSERT( other.pimpl_);
 
@@ -80,7 +79,7 @@ public:
     }
 
     // Move assignment
-    string_t& operator=( BOOST_RV_REF( string_t) other)
+    string_t& operator=( string_t&& other)
     {
         RAMEN_ASSERT( other.pimpl_);
 
@@ -92,7 +91,6 @@ public:
     void assign( Iter first, Iter last)
     {
         clear();
-        // TODO: check if this works ok with boost tokenizer.
         //std::size_t n = std::distance( first, last);
         //reserve( size() + n);
 
@@ -188,7 +186,7 @@ inline std::istream& operator>>( std::istream& is, string_t& str)
 
 inline std::size_t hash_value( const string_t& str)
 {
-    return boost::hash_range( str.begin(), str.end());
+    return std::hash<std::string_view>()( std::string_view( str.begin(), str.end() - str.begin()));
 }
 
 } // core

@@ -7,7 +7,7 @@
 
 #include<ramen/movieio/reader.hpp>
 
-#include<boost/shared_ptr.hpp>
+#include<memory>
 
 #include<ramen/filesystem/path_sequence.hpp>
 
@@ -22,7 +22,7 @@ class RAMEN_API image_seq_reader_t : public reader_t
 {
 public:
 
-	image_seq_reader_t( const boost::filesystem::path& p, bool sequence);
+	image_seq_reader_t( const std::filesystem::path& p, bool sequence);
     explicit image_seq_reader_t( const filesystem::path_sequence_t& seq);
 	
 	virtual bool is_sequence() const;
@@ -48,14 +48,14 @@ private:
     virtual void do_read_frame( const image::image_view_t& view,
                                 const math::box2i_t& crop,
                                 int subsample,
-                                const boost::tuple<int, int, int, int>& channels) const;
+                                const std::tuple<int, int, int, int>& channels) const;
 	
 	void get_sequence_info();
 	
 	void create_reader();
 	
 	filesystem::path_sequence_t seq_;
-	boost::shared_ptr<imageio::reader_t> reader_;
+	std::shared_ptr<imageio::reader_t> reader_;
     core::dictionary_t frame_info_;
 	bool has_extra_channels_;
 };

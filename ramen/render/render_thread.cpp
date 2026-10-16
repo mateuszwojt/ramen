@@ -2,7 +2,11 @@
 
 #include<ramen/render/render_thread.hpp>
 
-#include<boost/bind.hpp>
+#include<condition_variable>
+#include<functional>
+#include<future>
+#include<mutex>
+#include<thread>
 
 #include<ramen/assert.hpp>
 
@@ -19,12 +23,12 @@ struct render_thread_t::implementation
         finish = false;
         ready = false;
         do_work = false;
-        thread = boost::thread( &implementation::thread_loop, this);
+        thread = std::thread( &implementation::thread_loop, this);
     }
 
     ~implementation()
     {
-        boost::unique_lock<boost::mutex> lock( mutex);
+        std::unique_lock<std::mutex> lock( mutex);
         finish = true;
         ready = true;
         do_work = false;
@@ -35,14 +39,14 @@ struct render_thread_t::implementation
         thread.join();
     }
 
-    boost::unique_future<bool>& run_function( const boost::function<void()>& f)
+    std::future<bool>& run_function( const std::function<void()>& f)
     {
         RAMEN_ASSERT( !do_work && "render_thread_t is not reentrant");
-        boost::unique_lock<boost::mutex> lock( mutex);
+        std::unique_lock<std::mutex> lock( mutex);
         cancel = false;
         ready = true;
         do_work = true;
-        task = boost::packaged_task<bool>( boost::bind( &implementation::call_fun, this, f));
+        task = std::packaged_task<bool()>( std::bind( &implementation::call_fun, this, f));
         future = task.get_future();
         lock.unlock();
         cond.notify_one();
@@ -55,7 +59,7 @@ private:
     {
         while( 1)
         {
-            boost::unique_lock<boost::mutex> lock( mutex);
+            std::unique_lock<std::mutex> lock( mutex);
 
             while( !ready)
                 cond.wait( lock);
@@ -72,7 +76,7 @@ private:
         }
     }
 
-    bool call_fun( const boost::function<void()>& f)
+    bool call_fun( const std::function<void()>& f)
     {
         f();
         return !cancel;
@@ -80,17 +84,17 @@ private:
 
 public:
 
-    boost::thread thread;
+    std::thread thread;
     bool finish;
     bool ready;
     bool do_work;
     bool cancel;
 
-    boost::mutex mutex;
-    boost::condition_variable cond;
+    std::mutex mutex;
+    std::condition_variable cond;
 
-    boost::packaged_task<bool> task;
-    boost::unique_future<bool> future;    
+    std::packaged_task<bool()> task;
+    std::future<bool> future;    
 };
 
 render_thread_t::render_thread_t() : pimpl_( 0) {}
@@ -102,14 +106,14 @@ void render_thread_t::init()
     pimpl_ = new implementation();
 }
 
-boost::unique_future<bool>& render_thread_t::render_image( image_node_renderer_t& renderer)
+std::future<bool>& render_thread_t::render_image( image_node_renderer_t& renderer)
 {
     return render_image( renderer, renderer.format());
 }
 
-boost::unique_future<bool>& render_thread_t::render_image( image_node_renderer_t& renderer, const Imath::Box2i& roi)
+std::future<bool>& render_thread_t::render_image( image_node_renderer_t& renderer, const Imath::Box2i& roi)
 {
-    return pimpl_->run_function( boost::bind( &image_node_renderer_t::render, boost::ref( renderer), roi));
+    return pimpl_->run_function( [&renderer, roi]() { renderer.render( roi);});
 }
 
 bool render_thread_t::cancelled() const { return pimpl_->cancel;}

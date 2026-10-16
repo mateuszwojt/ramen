@@ -8,7 +8,7 @@
 #include<Imath/ImathBox.h>
 #include<Imath/ImathFun.h>
 
-#include<boost/range/algorithm/copy.hpp>
+#include<algorithm>
 
 #include<ramen/anim/shape_key.hpp>
 
@@ -133,12 +133,12 @@ public:
 	// Repeat for each keyframe.
 	void erase_points( int index, int num)
 	{
-        boost::range::for_each( this->keys(), boost::bind( &key_type::erase_points, _1, index, num));
+        std::ranges::for_each( this->keys(), std::bind( &key_type::erase_points, std::placeholders::_1, index, num));
 	}
 
 	void insert_points( int before, int num)
 	{
-        boost::range::for_each( this->keys(), boost::bind( &key_type::insert_points, _1, before, num));
+        std::ranges::for_each( this->keys(), std::bind( &key_type::insert_points, std::placeholders::_1, before, num));
 	}
 	
 	// serialization
@@ -161,7 +161,7 @@ public:
 		out.begin_map();
 			out << YAML::Key << "keys" << YAML::Value;
 			out.begin_seq();
-                boost::range::for_each( this->keys(), boost::bind( &key_type::write, _1, boost::ref( out)));
+                std::ranges::for_each( this->keys(), std::bind( &key_type::write, std::placeholders::_1, std::ref( out)));
 			out.end_seq();
 		out.end_map();
 	}
@@ -169,7 +169,7 @@ public:
 private:
 
 	template<class OutIter>
-    void copy_keyframe( const key_type& k, OutIter out) const { boost::range::copy( k.value(), out);}
+    void copy_keyframe( const key_type& k, OutIter out) const { std::copy( k.value().begin(), k.value().end(), out);}
 };
 
 typedef shape_curve_t<Imath::V2f> shape_curve2f_t;

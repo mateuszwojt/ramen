@@ -7,7 +7,6 @@
 
 #include<ramen/core/dictionary_fwd.hpp>
 
-#include<boost/move/move.hpp>
 
 #include<ramen/core/name.hpp>
 #include<ramen/core/variant.hpp>
@@ -23,7 +22,6 @@ namespace core
 */
 class RAMEN_API dictionary_t
 {
-    BOOST_COPYABLE_AND_MOVABLE( dictionary_t)
 
 public:
 
@@ -43,7 +41,7 @@ public:
     dictionary_t( const dictionary_t& other);
 
     // Copy assignment
-    dictionary_t& operator=( BOOST_COPY_ASSIGN_REF( dictionary_t) other)
+    dictionary_t& operator=( const dictionary_t& other)
     {
         dictionary_t tmp( other);
         swap( tmp);
@@ -51,13 +49,13 @@ public:
     }
 
     // Move constructor
-    dictionary_t( BOOST_RV_REF( dictionary_t) other) : pimpl_( 0)
+    dictionary_t( dictionary_t&& other) : pimpl_( 0)
     {
         swap( other);
     }
 
     // Move assignment
-    dictionary_t& operator=( BOOST_RV_REF( dictionary_t) other)
+    dictionary_t& operator=( dictionary_t&& other)
     {
         swap( other);
         return *this;

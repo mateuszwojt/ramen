@@ -6,7 +6,6 @@
 
 #include<algorithm>
 
-#include<boost/range/algorithm/find.hpp>
 
 #include<QPushButton>
 #include<QVBoxLayout>
@@ -66,10 +65,10 @@ void image_channels_param_t::set_channel_list( const std::vector<std::string>& c
 	
 	if( red_combo_)
 	{
-		update_popup( red_combo_   , boost::get<0>( ch));
-		update_popup( green_combo_ , boost::get<1>( ch));
-		update_popup( blue_combo_  , boost::get<2>( ch));
-		update_popup( alpha_combo_ , boost::get<3>( ch));
+		update_popup( red_combo_   , std::get<0>( ch));
+		update_popup( green_combo_ , std::get<1>( ch));
+		update_popup( blue_combo_  , std::get<2>( ch));
+		update_popup( alpha_combo_ , std::get<3>( ch));
 	}
 }
 
@@ -78,23 +77,23 @@ void image_channels_param_t::get_channel_names( std::string& red, std::string& g
 {
 	tuple4i_t ch( get_value<tuple4i_t>( *this));
 	
-	if( boost::get<0>( ch) < channel_list_.size())
-		red = channel_list_[ boost::get<0>( ch)];
+	if( std::get<0>( ch) < channel_list_.size())
+		red = channel_list_[ std::get<0>( ch)];
 	else
 		red = "R";
 	
-	if( boost::get<1>( ch) < channel_list_.size())
-		green = channel_list_[ boost::get<1>( ch)];
+	if( std::get<1>( ch) < channel_list_.size())
+		green = channel_list_[ std::get<1>( ch)];
 	else
 		green = "G";
 
-	if( boost::get<2>( ch) < channel_list_.size())
-		blue = channel_list_[ boost::get<2>( ch)];
+	if( std::get<2>( ch) < channel_list_.size())
+		blue = channel_list_[ std::get<2>( ch)];
 	else
 		blue = "B";
 
-	if( boost::get<3>( ch) < channel_list_.size())
-		alpha = channel_list_[ boost::get<3>( ch)];
+	if( std::get<3>( ch) < channel_list_.size())
+		alpha = channel_list_[ std::get<3>( ch)];
 	else
 		alpha = "A";
 }
@@ -113,7 +112,7 @@ void image_channels_param_t::set_channels( const std::string& red, const std::st
     std::vector<std::string>::const_iterator it;
 
     // red
-    it = boost::range::find( channel_list_, red);
+    it = std::ranges::find( channel_list_, red);
 
     if( it != channel_list_.end())
 		c0 = it - channel_list_.begin();
@@ -121,7 +120,7 @@ void image_channels_param_t::set_channels( const std::string& red, const std::st
 		c0 = channel_list_.size();
 
     // green
-    it = boost::range::find( channel_list_, green);
+    it = std::ranges::find( channel_list_, green);
 
     if( it != channel_list_.end())
 		c1 = it - channel_list_.begin();
@@ -129,7 +128,7 @@ void image_channels_param_t::set_channels( const std::string& red, const std::st
 		c1 = channel_list_.size();
 
     // blue
-    it = boost::range::find( channel_list_, blue);
+    it = std::ranges::find( channel_list_, blue);
 
     if( it != channel_list_.end())
 		c2 = it - channel_list_.begin();
@@ -137,7 +136,7 @@ void image_channels_param_t::set_channels( const std::string& red, const std::st
 		c2 = channel_list_.size();
 
     // alpha
-    it = boost::range::find( channel_list_, alpha);
+    it = std::ranges::find( channel_list_, alpha);
 
     if( it != channel_list_.end())
 		c3 = it - channel_list_.begin();
@@ -231,10 +230,10 @@ QWidget *image_channels_param_t::do_create_widgets()
     top->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 	tuple4i_t ch( get_value<tuple4i_t>( *this));
-	update_popup( red_combo_   , boost::get<0>( ch));
-	update_popup( green_combo_ , boost::get<1>( ch));
-	update_popup( blue_combo_  , boost::get<2>( ch));
-	update_popup( alpha_combo_ , boost::get<3>( ch));
+	update_popup( red_combo_   , std::get<0>( ch));
+	update_popup( green_combo_ , std::get<1>( ch));
+	update_popup( blue_combo_  , std::get<2>( ch));
+	update_popup( alpha_combo_ , std::get<3>( ch));
     return top;
 }
 
@@ -249,10 +248,10 @@ void image_channels_param_t::do_update_widgets()
 		blue_combo_->blockSignals( true);
 		alpha_combo_->blockSignals( true);
 
-		red_combo_->setCurrentIndex( boost::get<0>( ch));
-		green_combo_->setCurrentIndex( boost::get<1>( ch));
-		blue_combo_->setCurrentIndex( boost::get<2>( ch));
-		alpha_combo_->setCurrentIndex( boost::get<3>( ch));
+		red_combo_->setCurrentIndex( std::get<0>( ch));
+		green_combo_->setCurrentIndex( std::get<1>( ch));
+		blue_combo_->setCurrentIndex( std::get<2>( ch));
+		alpha_combo_->setCurrentIndex( std::get<3>( ch));
 		
 		red_combo_->blockSignals( false);
 		green_combo_->blockSignals( false);
@@ -303,16 +302,16 @@ void image_channels_param_t::channel_picked( int index)
 	tuple4i_t ch( get_value<tuple4i_t>( *this));
 
     if( QObject::sender() == red_combo_)
-		boost::get<0>( ch) = index;
+		std::get<0>( ch) = index;
 
     if( QObject::sender() == green_combo_)
-		boost::get<1>( ch) = index;
+		std::get<1>( ch) = index;
 
     if( QObject::sender() == blue_combo_)
-		boost::get<2>( ch) = index;
+		std::get<2>( ch) = index;
 
     if( QObject::sender() == alpha_combo_)
-		boost::get<3>( ch) = index;
+		std::get<3>( ch) = index;
 
     param_set()->begin_edit();
     param_set()->add_command( this);

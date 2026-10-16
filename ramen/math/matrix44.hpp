@@ -9,8 +9,8 @@
 
 #include<algorithm>
 
-#include<boost/operators.hpp>
-#include<boost/optional.hpp>
+#include<ramen/core/operators.hpp>
+#include<optional>
 
 #include<ramen/math/cmath.hpp>
 #include<ramen/math/constants.hpp>
@@ -26,8 +26,7 @@ namespace math
 \brief A 4x4 matrix.
 */
 template<class T>
-class matrix44_t :  boost::multipliable<matrix44_t<T>,
-                    boost::equality_comparable<matrix44_t<T> > >
+class RAMEN_EMPTY_BASES matrix44_t : public core::multipliable<matrix44_t<T>>
 {
 public:
 
@@ -269,7 +268,7 @@ matrix44_t<T> transpose( const matrix44_t<T>& m)
 
 // Adapted from ILM's Imath library.
 template<class T>
-boost::optional<matrix44_t<T> > invert_gauss_jordan( const matrix44_t<T>& m)
+std::optional<matrix44_t<T> > invert_gauss_jordan( const matrix44_t<T>& m)
 {
     int i, j, k;
     matrix44_t<T> s;
@@ -299,7 +298,7 @@ boost::optional<matrix44_t<T> > invert_gauss_jordan( const matrix44_t<T>& m)
         }
 
         if( pivotsize == 0)
-            return boost::optional<matrix44_t<T> >();
+            return std::optional<matrix44_t<T> >();
 
         if( pivot != i)
         {
@@ -335,7 +334,7 @@ boost::optional<matrix44_t<T> > invert_gauss_jordan( const matrix44_t<T>& m)
         T f;
 
         if( (f = t( i, i)) == 0)
-            return boost::optional<matrix44_t<T> >();
+            return std::optional<matrix44_t<T> >();
 
         for(j = 0; j < 4; j++)
         {
@@ -360,7 +359,7 @@ boost::optional<matrix44_t<T> > invert_gauss_jordan( const matrix44_t<T>& m)
 
 // Adapted from ILM's Imath library.
 template<class T>
-boost::optional<matrix44_t<T> > invert( const matrix44_t<T>& m)
+std::optional<matrix44_t<T> > invert( const matrix44_t<T>& m)
 {
     if( m( 0,3) != 0 || m( 1,3) != 0 || m( 2,3) != 0 || m( 3,3) != 1)
         return invert_gauss_jordan( m);
@@ -406,7 +405,7 @@ boost::optional<matrix44_t<T> > invert( const matrix44_t<T>& m)
                 if( mr > cmath<T>::fabs( s( i, j)))
                     s( i, j) /= r;
                 else
-                    return boost::optional<matrix44_t<T> >();
+                    return std::optional<matrix44_t<T> >();
             }
         }
     }

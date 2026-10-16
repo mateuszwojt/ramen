@@ -5,7 +5,7 @@
 #ifndef RAMEN_BEZIER_BERNSTEIN_HPP
 #define	RAMEN_BEZIER_BERNSTEIN_HPP
 
-#include<boost/array.hpp>
+#include<array>
 
 namespace ramen
 {
@@ -33,7 +33,7 @@ T bernstein( int i, T u)
 }
 
 template<class T, int Degree>
-void all_bernstein( T u, boost::array<T, Degree+1>& B)
+void all_bernstein( T u, std::array<T, Degree+1>& B)
 {
     B[0] = T(1);
     T u1 = T(1) - u;

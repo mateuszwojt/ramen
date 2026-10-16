@@ -7,7 +7,7 @@
 #include<vector>
 #include<cmath>
 
-#include<boost/foreach.hpp>
+
 
 #include<Imath/ImathFun.h>
 
@@ -185,7 +185,7 @@ void do_reverse_selected_float_keyframes( float_curve_t& c)
 
 void move_selected_keyframes_value( float_curve_t& c, float d)
 {
-    BOOST_FOREACH( float_key_t& k, c.keys())
+    for( float_key_t& k : c.keys())
     {
         if( k.selected())
             k.set_value( Imath::clamp( k.value() + d, c.get_min(), c.get_max()));
@@ -194,7 +194,7 @@ void move_selected_keyframes_value( float_curve_t& c, float d)
 
 void negate_keyframes( float_curve_t& c, bool selected_only)
 {
-    BOOST_FOREACH( float_key_t& k, c.keys())
+    for( float_key_t& k : c.keys())
     {
 		if( selected_only && !k.selected())
 			continue;

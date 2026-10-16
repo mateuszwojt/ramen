@@ -19,7 +19,7 @@ bool format_t::detect( const char *p) const   { return false;}
 
 bool format_t::is_multichannel() const { return false;}
 
-core::auto_ptr_t<reader_t> format_t::reader( const boost::filesystem::path& p) const
+core::auto_ptr_t<reader_t> format_t::reader( const std::filesystem::path& p) const
 {
     return core::auto_ptr_t<reader_t>();
 }

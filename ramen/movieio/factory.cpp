@@ -6,8 +6,8 @@
 
 #include<algorithm>
 
-#include<boost/foreach.hpp>
-#include<boost/filesystem/fstream.hpp>
+
+#include<fstream>
 
 #include<ramen/imageio/factory.hpp>
 
@@ -44,7 +44,7 @@ const std::vector<std::string>& factory_t::extensions() const
 {
 	if( !imageio_extensions_added_)
 	{
-	    BOOST_FOREACH( const std::string& ext, imageio::factory_t::instance().extensions())
+	    for( const std::string& ext : imageio::factory_t::instance().extensions())
 			extensions_.push_back( ext);
 		
 		imageio_extensions_added_ = true;
@@ -53,7 +53,7 @@ const std::vector<std::string>& factory_t::extensions() const
 	return extensions_;
 }
 
-core::auto_ptr_t<reader_t> factory_t::create_reader( const boost::filesystem::path& p,
+core::auto_ptr_t<reader_t> factory_t::create_reader( const std::filesystem::path& p,
                                                      bool sequence) const
 {
 	RAMEN_ASSERT( p.is_absolute());
@@ -99,7 +99,7 @@ core::auto_ptr_t<writer_t> factory_t::writer_for_tag( const std::string& tag) co
     return core::auto_ptr_t<writer_t>();
 }
 
-factory_t::const_iterator factory_t::format_for_extension( const boost::filesystem::path& p) const
+factory_t::const_iterator factory_t::format_for_extension( const std::filesystem::path& p) const
 {
     std::string ext( p.extension().string());
 
@@ -115,12 +115,12 @@ factory_t::const_iterator factory_t::format_for_extension( const boost::filesyst
     return formats_.end();
 }
 
-factory_t::const_iterator factory_t::format_for_file_contents( const boost::filesystem::path& p) const
+factory_t::const_iterator factory_t::format_for_file_contents( const std::filesystem::path& p) const
 {
 	if( detect_size_ == 0)
 		return formats_.end();
 	
-    boost::filesystem::ifstream ifile( p, std::ios::in | std::ios::binary);
+    std::ifstream ifile( p, std::ios::in | std::ios::binary);
 
     if( ifile.is_open() && ifile.good())
 	{

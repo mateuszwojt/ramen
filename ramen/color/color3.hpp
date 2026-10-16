@@ -10,7 +10,7 @@
 #include<algorithm>
 #include<iostream>
 
-#include<boost/operators.hpp>
+#include<ramen/core/operators.hpp>
 
 #include<Imath/half.h>
 
@@ -26,12 +26,10 @@ namespace color
 \brief A 3 component color.
 */
 template<class T>
-class color3_t    : boost::addable<color3_t<T>
-                  , boost::subtractable<color3_t<T>
-                  , boost::dividable2<color3_t<T>, T
-                  , boost::multipliable2<color3_t<T>, T
-                  , boost::equality_comparable<color3_t<T>
-                  > > > > >
+class RAMEN_EMPTY_BASES color3_t : public core::addable<color3_t<T>>
+               , public core::subtractable<color3_t<T>>
+               , public core::dividable2<color3_t<T>, T>
+               , public core::multipliable2<color3_t<T>, T>
 {
 public:
 

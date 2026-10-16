@@ -11,7 +11,6 @@
 #include<QToolButton>
 #include<QFrame>
 #include<QLabel>
-#include<QPushButton>
 #include<QMenu>
 #include<QAction>
 
@@ -230,11 +229,11 @@ void anim_editor_toolbar_t::selection_changed()
 		
 		time_->setEnabled( true);
 		get_keyframe_time_visitor vt( selected_key_index_);
-		boost::apply_visitor( vt, selected_track_->curve().get());
+		std::visit( vt, selected_track_->curve().value());
 		time_->setValue( vt.time);
 		
 		get_keyframe_value_visitor vv( selected_key_index_);
-		boost::apply_visitor( vv, selected_track_->curve().get());
+		std::visit( vv, selected_track_->curve().value());
 		val_->setValue( vv.value);
 		val_->setEnabled( vv.can_edit);
 	}
@@ -289,13 +288,13 @@ void anim_editor_toolbar_t::spinbox_dragged( double value)
 	if( sender() == time_)
 	{
 		get_keyframe_time_visitor v( selected_key_index_);
-		boost::apply_visitor( v, selected_track_->curve().get());
+		std::visit( v, selected_track_->curve().value());
 		offset.x = value - v.time;
 	}
 	else
 	{
 		get_keyframe_value_visitor v( selected_key_index_);
-		boost::apply_visitor( v, selected_track_->curve().get());
+		std::visit( v, selected_track_->curve().value());
 		offset.y = value - v.value;
 	}
 

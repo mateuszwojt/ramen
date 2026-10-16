@@ -6,7 +6,7 @@
 
 #include<stdio.h>
 
-#include<boost/shared_ptr.hpp>
+#include<memory>
 
 extern "C"
 {
@@ -31,14 +31,14 @@ struct FILE_deleter
 
 } // unamed
 
-void jpg_writer_t::do_write_image( const boost::filesystem::path& p,
+void jpg_writer_t::do_write_image( const std::filesystem::path& p,
                                     const image::const_image_view_t& view,
                                     const core::dictionary_t& params) const
 {
     struct jpeg_compress_struct cinfo;
     struct jpeg_error_mgr jerr;
 
-    boost::shared_ptr<FILE> fp( fopen( filesystem::file_cstring( p), "wb"),
+    std::shared_ptr<FILE> fp( fopen( filesystem::file_cstring( p), "wb"),
                                  FILE_deleter());
 
     if( !fp)
@@ -58,11 +58,11 @@ void jpg_writer_t::do_write_image( const boost::filesystem::path& p,
 
     jpeg_start_compress( &cinfo, TRUE);
 
-    std::vector<boost::uint8_t> buffer( view.width() * 3);
+    std::vector<std::uint8_t> buffer( view.width() * 3);
 
     for( int y = 0; y < view.height(); ++y)
     {
-		boost::uint8_t *ptr = &buffer.front();
+		std::uint8_t *ptr = &buffer.front();
 		image::const_image_view_t::x_iterator src_it( view.row_begin( y));
 
 		for( int x = 0; x < view.width(); ++x)

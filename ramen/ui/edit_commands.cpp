@@ -4,9 +4,9 @@
 
 #include<ramen/ui/edit_commands.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/foreach.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+#include<functional>
+
+#include<algorithm>
 
 #include<ramen/app/application.hpp>
 #include<ramen/app/document.hpp>
@@ -52,18 +52,18 @@ void extract_command_t::add_candidate_edge( const edge_t& e, node_t *src, std::v
 void extract_command_t::undo()
 {
     composition_t *comp = &app().document().composition();
-    boost::range::for_each( edges_to_add_, boost::bind( &composition_t::remove_edge, comp, _1, true));
-    boost::range::for_each( edges_to_remove_, boost::bind( &composition_t::add_edge, comp, _1, true));
-    breadth_first_multiple_outputs_search( dependents_, boost::bind( &node_t::notify, _1));
+    std::ranges::for_each( edges_to_add_, std::bind( &composition_t::remove_edge, comp, std::placeholders::_1, true));
+    std::ranges::for_each( edges_to_remove_, std::bind( &composition_t::add_edge, comp, std::placeholders::_1, true));
+    breadth_first_multiple_outputs_search( dependents_, std::bind( &node_t::notify, std::placeholders::_1));
     command_t::undo();
 }
 
 void extract_command_t::redo()
 {
     composition_t *comp = &app().document().composition();
-    boost::range::for_each( edges_to_remove_, boost::bind( &composition_t::remove_edge, comp, _1, true));
-    boost::range::for_each( edges_to_add_, boost::bind( &composition_t::add_edge, comp, _1, true));
-    breadth_first_multiple_outputs_search( dependents_, boost::bind( &node_t::notify, _1));
+    std::ranges::for_each( edges_to_remove_, std::bind( &composition_t::remove_edge, comp, std::placeholders::_1, true));
+    std::ranges::for_each( edges_to_add_, std::bind( &composition_t::add_edge, comp, std::placeholders::_1, true));
+    breadth_first_multiple_outputs_search( dependents_, std::bind( &node_t::notify, std::placeholders::_1));
     command_t::redo();
 }
 
@@ -78,7 +78,7 @@ void delete_command_t::undo()
 {
     composition_t *comp = &app().document().composition();
 
-    boost::range::for_each( edges_to_add_, boost::bind( &composition_t::remove_edge, comp, _1, true));
+    std::ranges::for_each( edges_to_add_, std::bind( &composition_t::remove_edge, comp, std::placeholders::_1, true));
 
     while( !node_storage_.empty())
     {
@@ -86,8 +86,8 @@ void delete_command_t::undo()
         app().document().composition().add_node( std::move( ptr));
     }
 
-    boost::range::for_each( edges_to_remove_, boost::bind( &composition_t::add_edge, comp, _1, true));
-    breadth_first_multiple_outputs_search( dependents_, boost::bind( &node_t::notify, _1));
+    std::ranges::for_each( edges_to_remove_, std::bind( &composition_t::add_edge, comp, std::placeholders::_1, true));
+    breadth_first_multiple_outputs_search( dependents_, std::bind( &node_t::notify, std::placeholders::_1));
     command_t::undo();
 }
 
@@ -100,10 +100,10 @@ void delete_command_t::redo()
     }
 
     composition_t *comp = &app().document().composition();
-    boost::range::for_each( edges_to_remove_, boost::bind( &composition_t::remove_edge, comp, _1, true));
-    boost::range::for_each( edges_to_add_, boost::bind( &composition_t::add_edge, comp, _1, true));
+    std::ranges::for_each( edges_to_remove_, std::bind( &composition_t::remove_edge, comp, std::placeholders::_1, true));
+    std::ranges::for_each( edges_to_add_, std::bind( &composition_t::add_edge, comp, std::placeholders::_1, true));
 
-    breadth_first_multiple_outputs_search( dependents_, boost::bind( &node_t::notify, _1));
+    breadth_first_multiple_outputs_search( dependents_, std::bind( &node_t::notify, std::placeholders::_1));
     command_t::redo();
 }
 
@@ -126,7 +126,7 @@ void duplicate_command_t::undo()
     }
 
     composition_t *comp = &app().document().composition();
-    boost::range::for_each( edges_, boost::bind( &composition_t::remove_edge, comp, _1, true));
+    std::ranges::for_each( edges_, std::bind( &composition_t::remove_edge, comp, std::placeholders::_1, true));
     command_t::undo();
 }
 
@@ -139,7 +139,7 @@ void duplicate_command_t::redo()
     }
 
     composition_t *comp = &app().document().composition();
-    boost::range::for_each( edges_, boost::bind( &composition_t::add_edge, comp, _1, true));
+    std::ranges::for_each( edges_, std::bind( &composition_t::add_edge, comp, std::placeholders::_1, true));
     command_t::redo();
 }
 
@@ -152,7 +152,7 @@ void ignore_nodes_command_t::undo()
     for( std::vector<node_t*>::const_iterator it( nodes_.begin()); it != nodes_.end(); ++it)
         (*it)->set_ignored( !(*it)->ignored());
 
-    breadth_first_multiple_outputs_search( nodes_, boost::bind( &node_t::notify, _1));
+    breadth_first_multiple_outputs_search( nodes_, std::bind( &node_t::notify, std::placeholders::_1));
     command_t::undo();
 }
 
@@ -161,7 +161,7 @@ void ignore_nodes_command_t::redo()
     for( std::vector<node_t*>::const_iterator it( nodes_.begin()); it != nodes_.end(); ++it)
         (*it)->set_ignored( !(*it)->ignored());
 
-    breadth_first_multiple_outputs_search( nodes_, boost::bind( &node_t::notify, _1));
+    breadth_first_multiple_outputs_search( nodes_, std::bind( &node_t::notify, std::placeholders::_1));
     command_t::redo();
 }
 

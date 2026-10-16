@@ -7,8 +7,7 @@
 #include<algorithm>
 #include<iostream>
 
-#include<boost/bind.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+#include<functional>
 
 #include<ramen/assert.hpp>
 
@@ -157,16 +156,16 @@ void tiled_image_strategy_t::draw() const
 {
 	gl_active_texture( texture_unit_);
 	gl_tex_envf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    boost::range::for_each( tiles_, boost::bind( &tile_t::draw, _1));
+    std::ranges::for_each( tiles_, std::bind( &tile_t::draw, std::placeholders::_1));
 }
 
-boost::optional<Imath::Color4f> tiled_image_strategy_t::color_at( const Imath::V2i &p) const
+std::optional<Imath::Color4f> tiled_image_strategy_t::color_at( const Imath::V2i &p) const
 {
 	if( p.x < data_window().min.x || p.x > data_window().max.x)
-		return boost::optional<Imath::Color4f>();
+		return std::optional<Imath::Color4f>();
 
 	if( p.y < data_window().min.y || p.y > data_window().max.y)
-		return boost::optional<Imath::Color4f>();
+		return std::optional<Imath::Color4f>();
 
 	image::pixel_t px( pixels_.const_rgba_view()( p.x - data_window().min.x, p.y - data_window().min.y));
 	return Imath::Color4f( boost::gil::get_color( px, boost::gil::red_t()),

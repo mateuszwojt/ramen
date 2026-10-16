@@ -5,7 +5,7 @@
 #ifndef RAMEN_GL_PROGRAM_HPP
 #define	RAMEN_GL_PROGRAM_HPP
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/GL/gl.hpp>
 
@@ -14,7 +14,7 @@ namespace ramen
 namespace gl
 {
 
-class program_t : boost::noncopyable
+class program_t : ramen::core::noncopyable_t
 {
 public:
 

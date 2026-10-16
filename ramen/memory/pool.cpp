@@ -7,10 +7,9 @@
 #include<limits>
 #include<algorithm>
 
-#include<boost/scoped_array.hpp>
+#include<memory>
 
-#include<boost/intrusive/list.hpp>
-namespace bi = boost::intrusive;
+#include<iterator>
 
 #include<ramen/assert.hpp>
 
@@ -18,14 +17,114 @@ namespace ramen
 {
 namespace memory
 {
-	
+namespace
+{
+
+// Doubly linked list of nodes that store their own links.
+// The pool free blocks live inside the pool memory, so the list can't allocate.
+template<class T>
+class intrusive_list_t
+{
+public:
+
+    class iterator
+    {
+    public:
+
+        typedef std::bidirectional_iterator_tag iterator_category;
+        typedef T                               value_type;
+        typedef std::ptrdiff_t                  difference_type;
+        typedef T*                              pointer;
+        typedef T&                              reference;
+
+        iterator() : node_( 0), list_( 0) {}
+        iterator( T *node, const intrusive_list_t *list) : node_( node), list_( list) {}
+
+        T& operator*() const    { return *node_;}
+        T *operator->() const   { return node_;}
+
+        iterator& operator++() { node_ = node_->next_; return *this;}
+        iterator& operator--() { node_ = node_ ? node_->prev_ : list_->tail_; return *this;}
+
+        friend bool operator==( const iterator& a, const iterator& b) { return a.node_ == b.node_;}
+
+    private:
+
+        friend class intrusive_list_t;
+
+        T *node_;
+        const intrusive_list_t *list_;
+    };
+
+    intrusive_list_t() : head_( 0), tail_( 0) {}
+
+    iterator begin()    { return iterator( head_, this);}
+    iterator end()      { return iterator( 0, this);}
+
+    bool empty() const  { return head_ == 0;}
+
+    T& back() { return *tail_;}
+
+    void push_front( T& x) { insert( begin(), x);}
+    void push_back( T& x)  { insert( end(), x);}
+
+    // inserts x before pos.
+    void insert( iterator pos, T& x)
+    {
+        RAMEN_ASSERT( !x.linked_ && "intrusive list: node already linked");
+        x.linked_ = true;
+
+        T *next = pos.node_;
+        T *prev = next ? next->prev_ : tail_;
+
+        x.prev_ = prev;
+        x.next_ = next;
+
+        if( prev)
+            prev->next_ = &x;
+        else
+            head_ = &x;
+
+        if( next)
+            next->prev_ = &x;
+        else
+            tail_ = &x;
+    }
+
+    void erase( iterator pos)
+    {
+        T *x = pos.node_;
+        RAMEN_ASSERT( x && "intrusive list: erasing end()");
+
+        if( x->prev_)
+            x->prev_->next_ = x->next_;
+        else
+            head_ = x->next_;
+
+        if( x->next_)
+            x->next_->prev_ = x->prev_;
+        else
+            tail_ = x->prev_;
+
+        x->prev_ = x->next_ = 0;
+        x->linked_ = false;
+    }
+
+private:
+
+    T *head_;
+    T *tail_;
+};
+
+} // unnamed
+
 struct pool_t::implementation_t
 {
     const static std::size_t size_tolerance = 128 * 1024; // 128 Kb?
 
-    struct mem_block_t : public bi::list_base_hook<bi::link_mode<bi::safe_link> >
+    struct mem_block_t
     {
-        mem_block_t( std::size_t s) : size( s), free( true) {}
+        mem_block_t( std::size_t s) : size( s), free( true), prev_( 0), next_( 0), linked_( false) {}
 
         mem_block_t *split( std::size_t s)
         {
@@ -98,6 +197,17 @@ struct pool_t::implementation_t
         // non-copyable
         mem_block_t( const mem_block_t&);
         mem_block_t& operator=( const mem_block_t&);
+
+        // intrusive list links.
+        friend class intrusive_list_t<mem_block_t>;
+
+        mem_block_t *prev_;
+        mem_block_t *next_;
+        bool linked_;
+
+    public:
+
+        bool is_linked() const { return linked_;}
     };
 
     implementation_t( std::size_t size_in_bytes) : pool_size( size_in_bytes)
@@ -110,7 +220,7 @@ struct pool_t::implementation_t
     }
 
     // iterators
-    typedef bi::list<mem_block_t>::iterator iterator;
+    typedef intrusive_list_t<mem_block_t>::iterator iterator;
 
     iterator begin()    { return free_list_.begin();}
     iterator end()      { return free_list_.end();}
@@ -343,11 +453,11 @@ struct pool_t::implementation_t
         return true;
     }
 
-    boost::scoped_array<unsigned char> pool;
+    std::unique_ptr<unsigned char[]> pool;
     std::size_t pool_size;
 
     // our list of free blocks
-    bi::list<mem_block_t> free_list_;
+    intrusive_list_t<mem_block_t> free_list_;
 };
 
 pool_t::pool_t() {}

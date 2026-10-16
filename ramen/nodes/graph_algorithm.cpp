@@ -52,9 +52,7 @@ bool node_depends_on_node( node_t& node, node_t& other)
     // In other words, if there is a path from other to source.
     detail::search_node fun( node);
 
-    // it would be so nice if boost::ref defined operator()...
-    // at least we can wrap the ref inside boost bind.
-    breadth_first_outputs_search( other, boost::bind<void>( boost::ref( fun), _1));
+    breadth_first_outputs_search( other, std::ref( fun));
     return fun.found;
 }
 

@@ -4,15 +4,17 @@
 
 #include<ramen/ui/render_composition.hpp>
 
-#include<boost/foreach.hpp>
-#include<boost/thread.hpp>
-#include<boost/bind.hpp>
+
+#include<thread>
+#include<future>
+#include<mutex>
+#include<condition_variable>
+#include<functional>
 
 #include<QProgressDialog>
 
 #include<ramen/app/application.hpp>
 #include<ramen/app/composition.hpp>
-#include<ramen/app/application.hpp>
 
 #include<ramen/ui/user_interface.hpp>
 
@@ -91,7 +93,7 @@ void render_composition( composition_t& comp, int start, int end, int proxy_leve
 	render::context_guard_t guard( cur_context);
 	
 	// call begin output for each output
-	render::for_each_output( comp, selected_only, boost::bind( &node_output_interface::begin_output, _1, start, end));
+	render::for_each_output( comp, selected_only, std::bind( &node_output_interface::begin_output, std::placeholders::_1, start, end));
 		
     render::context_t new_context = cur_context;
     new_context.mode = render::process_render;
@@ -105,7 +107,7 @@ void render_composition( composition_t& comp, int start, int end, int proxy_leve
 	{
         new_context.frame = i;
 
-        BOOST_FOREACH( node_t& n, comp.nodes())
+        for( node_t& n : comp.nodes())
         {
             if( node_output_interface *out = dynamic_cast<node_output_interface*>( &n))
             {
@@ -136,7 +138,7 @@ void render_composition( composition_t& comp, int start, int end, int proxy_leve
 
 cleanup:
 	
-	render::for_each_output( comp, selected_only, boost::bind( &node_output_interface::end_output, _1, success));	
+	render::for_each_output( comp, selected_only, std::bind( &node_output_interface::end_output, std::placeholders::_1, success));	
 }
 
 } // namespace

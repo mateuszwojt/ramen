@@ -5,7 +5,7 @@
 #ifndef RAMEN_MEMORY_LRU_CACHE_INTERFACE_HPP
 #define	RAMEN_MEMORY_LRU_CACHE_INTERFACE_HPP
 
-#include<boost/date_time/posix_time/posix_time.hpp>
+#include<chrono>
 
 namespace ramen
 {
@@ -22,7 +22,7 @@ public:
     virtual void clear() = 0;
     virtual void erase_lru() = 0;
 
-	virtual boost::posix_time::ptime lru_time() const = 0;
+	virtual std::chrono::steady_clock::time_point lru_time() const = 0;
 };
 
 } // memory

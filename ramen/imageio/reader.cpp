@@ -6,14 +6,14 @@
 
 #include<algorithm>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 namespace ramen
 {
 namespace imageio
 {
 	
-reader_t::reader_t( const boost::filesystem::path& p) : path_(p) {}
+reader_t::reader_t( const std::filesystem::path& p) : path_(p) {}
 
 const core::dictionary_t& reader_t::image_info() const
 {

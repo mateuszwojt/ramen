@@ -179,11 +179,11 @@ void double_spinbox_t::textChanged()
 	{
 		setModified( false);
 		std::string s( text().toStdString());
-		boost::optional<double> result = calc()( s);
+		std::optional<double> result = calc()( s);
 		
 		if( result)
 		{
-			if( setValue( result.get())) // it's a simple formula.
+			if( setValue( result.value())) // it's a simple formula.
 				valueChanged( value());
 		}
 		else

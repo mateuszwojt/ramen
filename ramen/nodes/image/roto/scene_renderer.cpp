@@ -7,8 +7,8 @@
 #include<cmath>
 #include<algorithm>
 
-#include<boost/foreach.hpp>
-#include<boost/bind.hpp>
+
+#include<functional>
 
 #include<agg2/agg_conv_curve.h>
 #include<agg2/agg_bounding_rect.h>
@@ -70,7 +70,7 @@ scene_renderer_t::scene_renderer_t( const scene_t& scene, const Imath::Box2i& ar
 	int max_width = 0;
 	int max_height = 0;
 	
-	BOOST_FOREACH( const shape_t& s, scene_)
+	for( const shape_t& s : scene_)
 	{
 		if( s.is_null() || !s.active() || s.opacity() == 0.0f)
 			continue;
@@ -117,7 +117,7 @@ void scene_renderer_t::render()
 {
 	int bbox_index = 0;
 	
-	BOOST_FOREACH( const shape_t& s, scene_)
+	for( const shape_t& s : scene_)
 	{
 		if( !s.is_null() && s.active() && s.opacity() != 0.0f)
 		{

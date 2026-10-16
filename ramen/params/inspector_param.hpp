@@ -7,7 +7,7 @@
 
 #include<ramen/params/param.hpp>
 
-#include<boost/signals2/connection.hpp>
+#include<ramen/core/signal.hpp>
 
 #include<QPointer>
 
@@ -45,7 +45,7 @@ private:
 	
 	QPointer<ui::container_widget_t> widget_;
 	parameterised_t *contents_;
-	boost::signals2::connection connection_;
+	core::connection_t connection_;
 };
 
 } // namespace

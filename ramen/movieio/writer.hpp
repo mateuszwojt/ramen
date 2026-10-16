@@ -37,7 +37,7 @@ private:
     virtual void do_write_frame( const image::const_image_view_t& view,
                                 const core::dictionary_t& params) const = 0;
 	
-	boost::filesystem::path p_;
+	std::filesystem::path p_;
     core::dictionary_t metadata_;
 };
 

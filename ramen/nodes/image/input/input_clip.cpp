@@ -23,7 +23,7 @@ void input_clip_t::swap( input_clip_t& other)
 	sequence_.swap( other.sequence_);
 }
 
-core::auto_ptr_t<movieio::reader_t> input_clip_t::reader( const boost::filesystem::path& cwd) const
+core::auto_ptr_t<movieio::reader_t> input_clip_t::reader( const std::filesystem::path& cwd) const
 {
 	if( valid())
 	{
@@ -39,20 +39,20 @@ core::auto_ptr_t<movieio::reader_t> input_clip_t::reader( const boost::filesyste
 }
 
 // paths
-void input_clip_t::convert_relative_paths( const boost::filesystem::path& old_base,
-                                           const boost::filesystem::path& new_base)
+void input_clip_t::convert_relative_paths( const std::filesystem::path& old_base,
+                                           const std::filesystem::path& new_base)
 {
 	if( valid())
 		sequence_.convert_relative_paths( old_base, new_base);
 }
 
-void input_clip_t::make_paths_absolute( const::boost::filesystem::path& from_dir)
+void input_clip_t::make_paths_absolute( const::std::filesystem::path& from_dir)
 {
 	if( valid())
 		sequence_.make_paths_absolute( from_dir);
 }
 
-void input_clip_t::make_paths_relative( const::boost::filesystem::path& from_dir)
+void input_clip_t::make_paths_relative( const::std::filesystem::path& from_dir)
 {
 	if( valid())
 		sequence_.make_paths_relative( from_dir);

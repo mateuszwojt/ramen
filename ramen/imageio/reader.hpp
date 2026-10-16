@@ -10,7 +10,7 @@
 #include<vector>
 #include<string>
 
-#include<boost/cstdint.hpp>
+#include<cstdint>
 
 #include<ramen/assert.hpp>
 
@@ -32,7 +32,7 @@ class RAMEN_API reader_t
 {
 public:
 
-    reader_t( const boost::filesystem::path& p);
+    reader_t( const std::filesystem::path& p);
     virtual ~reader_t() {}
 
     const core::dictionary_t& image_info() const;
@@ -62,7 +62,7 @@ protected:
 
     void repeat_scanline_until_end( const image::image_view_t& view, int y) const;
 		
-    boost::filesystem::path path_;
+    std::filesystem::path path_;
     core::dictionary_t info_;
 };
 

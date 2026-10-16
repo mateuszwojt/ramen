@@ -9,7 +9,7 @@
 
 #include<vector>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/ui/viewport.hpp>
 
@@ -23,7 +23,7 @@ namespace ramen
 namespace ui
 {
 
-class anim_curves_view_t : public QWidget, boost::noncopyable
+class anim_curves_view_t : public QWidget, ramen::core::noncopyable_t
 {
     Q_OBJECT
 

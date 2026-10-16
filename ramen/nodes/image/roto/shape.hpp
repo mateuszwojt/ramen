@@ -14,8 +14,8 @@
 #include<vector>
 #include<iterator>
 
-#include<boost/intrusive/list.hpp>
-#include<boost/optional.hpp>
+#include<vector>
+#include<optional>
 
 #include<Imath/ImathBox.h>
 #include<Imath/ImathMatrix.h>
@@ -39,7 +39,7 @@ namespace ramen
 namespace roto
 {
 
-class RAMEN_API shape_t : public parameterised_t, public boost::intrusive::list_base_hook<>
+class RAMEN_API shape_t : public parameterised_t
 {
 public:
 
@@ -68,7 +68,8 @@ public:
     bool all_points_selected() const;
 
     // intrusive
-    typedef boost::intrusive::list<shape_t> list_type;
+    // children are owned by the scene.
+    typedef std::vector<shape_t*> list_type;
 
     // hierarchy
     const scene_t *scene() const	{ return scene_;}
@@ -92,8 +93,8 @@ public:
     // transforms
     const Imath::M33f& local_xform() const	{ return local_;}
     const Imath::M33f& global_xform() const	{ return global_;}
-    const boost::optional<Imath::M33f>& inv_local_xform() const	 { return inv_local_;}
-    const boost::optional<Imath::M33f>& inv_global_xform() const { return inv_global_;}
+    const std::optional<Imath::M33f>& inv_local_xform() const	 { return inv_local_;}
+    const std::optional<Imath::M33f>& inv_global_xform() const { return inv_global_;}
 
     Imath::V2f center() const;
     Imath::V2f translation() const;
@@ -265,7 +266,7 @@ private:
     list_type children_;
 
     Imath::M33f local_, global_;
-    boost::optional<Imath::M33f> inv_local_, inv_global_;
+    std::optional<Imath::M33f> inv_local_, inv_global_;
     Imath::V2f offset_;
 
     shape_transform_param_t *xform_param_;

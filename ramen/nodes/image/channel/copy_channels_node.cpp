@@ -62,26 +62,22 @@ void copy_channels_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> p( new popup_param_t( "Red"));
     p->set_id( "red");
-    p->menu_items() = boost::assign::list_of( "Source")( "Src2 Red")( "Src2 Green")( "Src2 Blue")
-											( "Src2 Luminance")( "Src2 Alpha")( "One")( "Zero");
+    p->menu_items() = { "Source", "Src2 Red", "Src2 Green", "Src2 Blue", "Src2 Luminance", "Src2 Alpha", "One", "Zero"};
     add_param( std::move( p));
 
     p.reset( new popup_param_t( "Green"));
     p->set_id( "green");
-    p->menu_items() = boost::assign::list_of( "Source")( "Src2 Red")( "Src2 Green")( "Src2 Blue")
-											( "Src2 Luminance")( "Src2 Alpha")( "One")( "Zero");
+    p->menu_items() = { "Source", "Src2 Red", "Src2 Green", "Src2 Blue", "Src2 Luminance", "Src2 Alpha", "One", "Zero"};
     add_param( std::move( p));
 
     p.reset( new popup_param_t( "Blue"));
     p->set_id( "blue");
-    p->menu_items() = boost::assign::list_of( "Source")( "Src2 Red")( "Src2 Green")( "Src2 Blue")
-											( "Src2 Luminance")( "Src2 Alpha")( "One")( "Zero");
+    p->menu_items() = { "Source", "Src2 Red", "Src2 Green", "Src2 Blue", "Src2 Luminance", "Src2 Alpha", "One", "Zero"};
     add_param( std::move( p));
 
     p.reset( new popup_param_t( "Alpha"));
     p->set_id( "alpha");
-    p->menu_items() = boost::assign::list_of( "Source")( "Src2 Red")( "Src2 Green")( "Src2 Blue")
-											( "Src2 Luminance")( "Src2 Alpha")( "One")( "Zero");
+    p->menu_items() = { "Source", "Src2 Red", "Src2 Green", "Src2 Blue", "Src2 Luminance", "Src2 Alpha", "One", "Zero"};
     add_param( std::move( p));
 }
 

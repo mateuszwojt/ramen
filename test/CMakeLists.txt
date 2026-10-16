@@ -11,6 +11,8 @@ function( add_ramen_test sourcefile)
 endfunction()
 
 add_subdirectory( color)
+add_subdirectory( container)
 add_subdirectory( core)
 add_subdirectory( math)
+add_subdirectory( util)
 add_subdirectory( render)

@@ -9,9 +9,9 @@
 
 #include<sstream>
 
-#include<boost/cstdint.hpp>
-#include<boost/array.hpp>
-#include<boost/optional.hpp>
+#include<cstdint>
+#include<array>
+#include<optional>
 
 #include<ramen/assert.hpp>
 
@@ -24,7 +24,7 @@ class RAMEN_API generator_t
 {
 public:
 
-    typedef boost::array<boost::uint64_t, 2> digest_type;
+    typedef std::array<std::uint64_t, 2> digest_type;
 
     generator_t();
 
@@ -39,7 +39,7 @@ public:
 
     bool finalized() const
     {
-        return digest_.is_initialized();
+        return digest_.has_value();
     }
 
     const digest_type& digest() const;
@@ -48,7 +48,7 @@ public:
 private:
 
     std::stringstream ss_;
-    mutable boost::optional<digest_type> digest_;
+    mutable std::optional<digest_type> digest_;
     bool empty_;
 };
 

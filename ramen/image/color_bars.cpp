@@ -22,7 +22,7 @@ struct color_bars_fn
 	typedef point_t							argument_type;
 	typedef reference						result_type;
 
-	BOOST_STATIC_CONSTANT(bool, is_mutable=false);
+	static constexpr bool is_mutable=false;
 	
 	color_bars_fn() {}
 	color_bars_fn( const point_t& sz) : width_( sz.x/7) {}

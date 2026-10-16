@@ -6,7 +6,7 @@
 
 #include<ramen/ui/compview/composition_view_commands.hpp>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<ramen/app/application.hpp>
 #include<ramen/app/document.hpp>

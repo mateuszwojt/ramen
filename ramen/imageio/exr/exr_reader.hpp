@@ -18,26 +18,26 @@ class exr_reader_t : public multichannel_reader_t
 {
 public:
 
-    exr_reader_t( const boost::filesystem::path& p);
+    exr_reader_t( const std::filesystem::path& p);
 
 private:
 
     virtual void do_read_image( const image::image_view_t& view,
                                 const math::box2i_t& crop,
                                 int subsample,
-                                const boost::tuple<int,int,int,int>& channels) const;
+                                const std::tuple<int,int,int,int>& channels) const;
 
 private:
 
     bool is_rgb() const;
     bool is_luma_chroma() const;
 
-    void read_exr_image( const boost::filesystem::path& p,
+    void read_exr_image( const std::filesystem::path& p,
                          const image::image_view_t& result_view,
                          const math::box2i_t& crop,
                          std::size_t subsample = 1) const;
 	
-    void read_exr_image( const boost::filesystem::path& p,
+    void read_exr_image( const std::filesystem::path& p,
                          const image::image_view_t& result_view,
                          const math::box2i_t& crop,
                          const char *rchannel,
@@ -46,7 +46,7 @@ private:
                          const char *achannel,
                          std::size_t subsample = 1) const;
 	
-    void read_exr_luma_chroma_image( const boost::filesystem::path& p,
+    void read_exr_luma_chroma_image( const std::filesystem::path& p,
                                      const image::image_view_t& result_view,
                                      const math::box2i_t& crop,
                                      std::size_t subsample = 1) const;

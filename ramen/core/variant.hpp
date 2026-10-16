@@ -7,21 +7,11 @@
 
 #include<ramen/config.hpp>
 
+#include<algorithm>
 #include<iostream>
 
-#include<boost/mpl/vector.hpp>
-#include<boost/mpl/max_element.hpp>
-#include<boost/mpl/transform_view.hpp>
-#include<boost/mpl/sizeof.hpp>
-#include<boost/mpl/deref.hpp>
-#include<boost/mpl/copy.hpp>
-#include<boost/mpl/back_inserter.hpp>
-#include<boost/mpl/assert.hpp>
-#include<boost/mpl/size.hpp>
-#include<boost/mpl/equal.hpp>
 
-#include<boost/static_assert.hpp>
-#include<boost/type_traits/is_pointer.hpp>
+
 
 #include<ramen/core/types.hpp>
 #include<ramen/core/exceptions.hpp>
@@ -43,8 +33,8 @@ public:
 
     explicit variant_t( bool x);
 
-    explicit variant_t( boost::int32_t x);
-    explicit variant_t( boost::uint32_t x);
+    explicit variant_t( std::int32_t x);
+    explicit variant_t( std::uint32_t x);
 
     explicit variant_t( float x);
 
@@ -63,10 +53,7 @@ public:
     // when variant is constructed with a pointer, generate a compile error
     // to avoid the implicit conversion to bool.
     template<class T>
-    explicit variant_t( T*)
-    {
-        BOOST_STATIC_ASSERT( boost::mpl::not_<boost::is_pointer<T*> >::value);
-    }
+    explicit variant_t( T*) = delete;
 
     variant_t( const variant_t& other);
 
@@ -128,8 +115,8 @@ private:
     union max_align
     {
         bool b;
-        boost::int32_t i32;
-        boost::int64_t i64;
+        std::int32_t i32;
+        std::int64_t i64;
         float f;
 
         make_struct<int[2]>   i2;
@@ -147,24 +134,19 @@ private:
         box3_struct<float> bfs3;
     };
 
-    typedef boost::mpl::vector< bool,
-                                boost::int32_t,
-                                boost::int64_t,
-                                float,
-                                math::point2i_t,
-                                math::point2f_t,
-                                math::point3f_t,
-                                math::hpoint3f_t,
-                                string_t,
-                                math::box2i_t> type_list_t;
-
-    // find the biggest element
-    typedef boost::mpl::max_element<boost::mpl::transform_view<type_list_t,
-                                                               boost::mpl::sizeof_<boost::mpl::_1> > >::type biggest_type_it;
-
+    // storage big enough for any of the types a variant can hold.
     union
     {
-        unsigned char storage_[sizeof( boost::mpl::deref<biggest_type_it::base>::type)];
+        unsigned char storage_[std::max( { sizeof( bool),
+                                           sizeof( std::int32_t),
+                                           sizeof( std::int64_t),
+                                           sizeof( float),
+                                           sizeof( math::point2i_t),
+                                           sizeof( math::point2f_t),
+                                           sizeof( math::point3f_t),
+                                           sizeof( math::hpoint3f_t),
+                                           sizeof( string_t),
+                                           sizeof( math::box2i_t)})];
         max_align unused;
     };
 

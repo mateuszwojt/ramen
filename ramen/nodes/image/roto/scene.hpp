@@ -7,7 +7,7 @@
 
 #include<vector>
 
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<ramen/container/ptr_vector.hpp>
 
 #include<ramen/assert.hpp>
 
@@ -44,14 +44,14 @@ public:
     void add_shape( std::unique_ptr<shape_t> s);
     std::unique_ptr<shape_t> release_shape( shape_t *s);
 
-    const boost::ptr_vector<shape_t>& shapes() const	{ return shapes_;}
-    boost::ptr_vector<shape_t>& shapes()				{ return shapes_;}
+    const container::ptr_vector<shape_t>& shapes() const	{ return shapes_;}
+    container::ptr_vector<shape_t>& shapes()				{ return shapes_;}
 
-    typedef	boost::ptr_vector<shape_t>::const_iterator const_iterator;
+    typedef	container::ptr_vector<shape_t>::const_iterator const_iterator;
     const_iterator begin() const { return shapes().begin();}
     const_iterator end() const { return shapes().end();}
 
-    typedef	boost::ptr_vector<shape_t>::iterator iterator;
+    typedef	container::ptr_vector<shape_t>::iterator iterator;
     iterator begin()	{ return shapes().begin();}
     iterator end()		{ return shapes().end();}
 
@@ -85,7 +85,7 @@ private:
 
     image::roto_node_t *parent_;
 
-    boost::ptr_vector<shape_t> shapes_;
+    container::ptr_vector<shape_t> shapes_;
     unique_name_map_t<shape_t*> names_;
 };
 

@@ -5,10 +5,10 @@
 #ifndef RAMEN_BEZIER_CURVE_HPP
 #define	RAMEN_BEZIER_CURVE_HPP
 
+#include<cassert>
 #include<cmath>
 
-#include<boost/config.hpp>
-#include<boost/static_assert.hpp>
+
 
 #include<Imath/ImathBox.h>
 #include<Imath/ImathMatrix.h>
@@ -24,12 +24,12 @@ namespace bezier
 template<class P = Imath::V2f, int Degree = 3>
 class curve_t
 {
-    BOOST_STATIC_ASSERT( Degree >= 1);
+    static_assert( Degree >= 1);
 
 public:
 
-    BOOST_STATIC_CONSTANT( int, degree = Degree);
-    BOOST_STATIC_CONSTANT( int, order  = Degree + 1);
+    static constexpr int degree = Degree;
+    static constexpr int order  = Degree + 1;
 
     typedef P                           point_type;
     typedef P                           vector_type;
@@ -42,14 +42,14 @@ public:
 
     curve_t( const point_type& q0, const point_type& q1)
     {
-        BOOST_STATIC_ASSERT( degree == 1);
+        static_assert( degree == 1);
         p[0] = q0;
         p[1] = q1;
     }
 
     curve_t( const point_type& q0, const point_type& q1, const point_type& q2)
     {
-        BOOST_STATIC_ASSERT( degree == 2);
+        static_assert( degree == 2);
         p[0] = q0;
         p[1] = q1;
         p[2] = q2;
@@ -57,7 +57,7 @@ public:
 
     curve_t( const point_type& q0, const point_type& q1, const point_type& q2, const point_type& q3)
     {
-        BOOST_STATIC_ASSERT( degree == 3);
+        static_assert( degree == 3);
         p[0] = q0;
         p[1] = q1;
         p[2] = q2;
@@ -78,7 +78,7 @@ public:
 
     point_type operator()( param_type t) const
     {
-        boost::array<param_type, order> B;
+        std::array<param_type, order> B;
         all_bernstein<param_type, degree>( t, B);
 
         point_type q;
@@ -118,7 +118,7 @@ public:
 	
     curve_t<P, Degree-1> derivative_curve() const
     {
-        BOOST_STATIC_ASSERT( degree > 1);
+        static_assert( degree > 1);
 
         curve_t<P, Degree-1> result;
 
@@ -137,7 +137,7 @@ public:
 
     vector_type start_derivative1() const
     {
-        BOOST_STATIC_ASSERT( degree >= 1);
+        static_assert( degree >= 1);
 
         vector_type result;
 
@@ -149,7 +149,7 @@ public:
 
     vector_type end_derivative1() const
     {
-        BOOST_STATIC_ASSERT( degree >= 1);
+        static_assert( degree >= 1);
 
         vector_type result;
 
@@ -161,7 +161,7 @@ public:
 
     vector_type start_derivative2() const
     {
-        BOOST_STATIC_ASSERT( degree >= 2);
+        static_assert( degree >= 2);
 
         vector_type result;
 
@@ -173,7 +173,7 @@ public:
 
     vector_type end_derivative2() const
     {
-        BOOST_STATIC_ASSERT( degree >= 2);
+        static_assert( degree >= 2);
 
         vector_type result;
 

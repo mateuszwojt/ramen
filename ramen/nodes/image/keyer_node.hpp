@@ -7,7 +7,7 @@
 
 #include<ramen/nodes/image_node.hpp>
 
-#include<boost/optional.hpp>
+#include<optional>
 
 namespace ramen
 {
@@ -20,7 +20,7 @@ public:
 
     keyer_node_t( bool add_mask_input = true);
 
-	boost::optional<Imath::Color3f> sample_input( const Imath::V2i& p) const;
+	std::optional<Imath::Color3f> sample_input( const Imath::V2i& p) const;
 	void sample_input( const Imath::Box2i& area, std::vector<Imath::Color3f>& colors) const;
 	
 protected:

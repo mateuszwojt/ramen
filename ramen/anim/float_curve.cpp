@@ -11,8 +11,7 @@
 #include<sstream>
 #include<cmath>
 
-#include<boost/foreach.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+
 
 #include<Imath/ImathFun.h>
 
@@ -41,7 +40,7 @@ void float_curve_t::copy( const float_curve_t& other, time_type offset)
 {
     clear();
 
-    BOOST_FOREACH( const float_key_t& k, other.keys())
+    for( const float_key_t& k : other.keys())
     {
         float_key_t new_k = k;
         new_k.set_time( k.time() + offset);
@@ -55,7 +54,7 @@ void float_curve_t::copy( const float_curve_t& other, time_type offset, time_typ
 {
     clear();
 
-    BOOST_FOREACH( const float_key_t& k, other.keys())
+    for( const float_key_t& k : other.keys())
     {
         if( k.time() >= start && k.time() <= end)
         {
@@ -239,16 +238,14 @@ void float_curve_t::recalc_tangents_and_coefficients( iterator it)
 void float_curve_t::recalc_tangents_and_coefficients()
 {
     for_each_position( keys(),
-                       boost::bind( &float_curve_t::recalc_tangents_and_coefficients,
-                                    this,
-                                    _1));
+                       [this]( iterator it) { recalc_tangents_and_coefficients( it);});
 }
 
 Imath::Box2f float_curve_t::bounds() const
 {
     Imath::Box2f bounds;
 
-    BOOST_FOREACH( const anim::float_key_t& k, keys())
+    for( const anim::float_key_t& k : keys())
         bounds.extendBy( Imath::V2f( k.time(), k.value()));
 
     return bounds;
@@ -258,7 +255,7 @@ Imath::Box2f float_curve_t::selection_bounds() const
 {
     Imath::Box2f bounds;
 
-    BOOST_FOREACH( const anim::float_key_t& k, keys())
+    for( const anim::float_key_t& k : keys())
     {
         if( k.selected())
             bounds.extendBy( Imath::V2f( k.time(), k.value()));
@@ -271,7 +268,7 @@ std::string float_curve_t::str() const
 {
     std::stringstream s;
     s << extrapolation();
-    boost::range::for_each( keys(), boost::bind( &float_key_t::str, _1, boost::ref( s)));
+    std::ranges::for_each( keys(), std::bind( &float_key_t::str, std::placeholders::_1, std::ref( s)));
     return s.str();
 }
 
@@ -303,7 +300,7 @@ void float_curve_t::write( serialization::yaml_oarchive_t& out) const
 
 	out << YAML::Key << "keys" << YAML::Value;
 	    out.begin_seq();
-            boost::range::for_each( keys(), boost::bind( &float_key_t::write, _1, boost::ref( out)));
+            std::ranges::for_each( keys(), std::bind( &float_key_t::write, std::placeholders::_1, std::ref( out)));
 	    out.end_seq();
 
 	out.end_map();

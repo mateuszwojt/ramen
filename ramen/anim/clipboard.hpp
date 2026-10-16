@@ -9,8 +9,7 @@
 #include<string>
 #include<memory>
 
-#include<boost/noncopyable.hpp>
-#include<boost/shared_ptr.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/anim/any_curve.hpp>
 
@@ -21,11 +20,11 @@ namespace ramen
 namespace anim
 {
 	
-class clipboard_t : boost::noncopyable
+class clipboard_t : ramen::core::noncopyable_t
 {
 public:
 
-	typedef std::pair<std::string, boost::shared_ptr<any_curve_t> > named_curve_type;
+	typedef std::pair<std::string, std::shared_ptr<any_curve_t> > named_curve_type;
 
     static clipboard_t& instance();
 

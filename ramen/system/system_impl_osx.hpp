@@ -25,7 +25,7 @@ struct system_t::impl
         // user name & home path
         struct passwd *p = getpwuid( geteuid());
         self.user_name_ = p->pw_name;
-        self.home_path_ = boost::filesystem::path( p->pw_dir);
+        self.home_path_ = std::filesystem::path( p->pw_dir);
 
         // app user path
         {
@@ -50,7 +50,7 @@ struct system_t::impl
         {
             char buf[PROC_PIDPATHINFO_MAXSIZE];
             if( proc_pidpath( getpid(), buf, sizeof( buf)) >= 0)
-                self.executable_path_ = boost::filesystem::path( buf);
+                self.executable_path_ = std::filesystem::path( buf);
         }
     }
 };

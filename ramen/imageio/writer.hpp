@@ -9,7 +9,7 @@
 
 #include<vector>
 
-#include<boost/cstdint.hpp>
+#include<cstdint>
 
 #include<ramen/assert.hpp>
 #include<ramen/core/dictionary.hpp>
@@ -33,7 +33,7 @@ public:
     writer_t() {}
     virtual ~writer_t() {}
 
-    void write_image( const boost::filesystem::path& p,
+    void write_image( const std::filesystem::path& p,
 						const image::const_image_view_t& view,
                         const core::dictionary_t& params) const
     {
@@ -42,12 +42,12 @@ public:
 
 protected:
 
-    boost::uint8_t convert8( float x) const
+    std::uint8_t convert8( float x) const
     {
        return math::fast_float_to_int( ramen::clamp( x, 0.0f, 1.0f) * 255.0);
     }
 
-    boost::uint16_t convert16( float x) const
+    std::uint16_t convert16( float x) const
     {
        return math::fast_float_to_int( ramen::clamp( x, 0.0f, 1.0f) * 65535.0);
     }
@@ -70,7 +70,7 @@ private:
     writer_t( const writer_t&);
     writer_t& operator=( const writer_t&);
 
-    virtual void do_write_image( const boost::filesystem::path& p,
+    virtual void do_write_image( const std::filesystem::path& p,
                                  const image::const_image_view_t& view,
                                  const core::dictionary_t& params) const = 0;
 };

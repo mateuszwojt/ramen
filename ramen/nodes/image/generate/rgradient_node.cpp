@@ -17,7 +17,6 @@
 #include<ramen/params/color_param.hpp>
 #include<ramen/params/bool_param.hpp>
 
-#include<ramen/math/constants.hpp>
 
 #include<ramen/image/processing.hpp>
 

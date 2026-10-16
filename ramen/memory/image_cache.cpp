@@ -83,7 +83,7 @@ void image_cache_t::insert( node_t *n, const digest_type& key, image::buffer_t& 
     }
 }
 
-boost::optional<image::buffer_t> image_cache_t::find( const digest_type& key, const Imath::Box2i& area)
+std::optional<image::buffer_t> image_cache_t::find( const digest_type& key, const Imath::Box2i& area)
 {
     if( items_.find( key) != items_.end())
     {
@@ -99,7 +99,7 @@ boost::optional<image::buffer_t> image_cache_t::find( const digest_type& key, co
         }
 	}
 	
-    return boost::optional<image::buffer_t>();
+    return std::optional<image::buffer_t>();
 }
 
 void image_cache_t::erase_lru()
@@ -111,7 +111,7 @@ void image_cache_t::erase_lru()
     }
 }
 
-boost::posix_time::ptime image_cache_t::lru_time() const
+std::chrono::steady_clock::time_point image_cache_t::lru_time() const
 {
 	RAMEN_ASSERT( !empty());
 	map_iterator it( use_list_.back());
@@ -121,7 +121,7 @@ boost::posix_time::ptime image_cache_t::lru_time() const
 void image_cache_t::touch( map_iterator it)
 {
     use_list_.remove( it);
-	it->second.touch_time = boost::posix_time::microsec_clock::universal_time();
+	it->second.touch_time = std::chrono::steady_clock::now();
 	use_list_.push_front( it);
 }
 

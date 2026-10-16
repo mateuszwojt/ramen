@@ -4,7 +4,7 @@
 
 #include<ramen/util/string.hpp>
 
-#include<boost/lexical_cast.hpp>
+#include<ramen/util/lexical_cast.hpp>
 
 namespace ramen
 {
@@ -19,7 +19,7 @@ std::string get_number( const std::string& str)
     try
     {
         // this is a quick fix, if all str are nums
-        int num = boost::lexical_cast<int>( str);
+        int num = util::lexical_cast<int>( str);
         return str;
     }
     catch( ...) {}
@@ -60,8 +60,8 @@ void increment_string_number( std::string& str)
     else
     {
         std::string base( str, 0, str.length() - num_str.length());
-        int num = boost::lexical_cast<int>( num_str);
-        num_str = boost::lexical_cast<std::string>( ++num);
+        int num = util::lexical_cast<int>( num_str);
+        num_str = util::lexical_cast<std::string>( ++num);
         str = base + num_str;
     }
 }

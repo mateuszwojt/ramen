@@ -7,9 +7,9 @@
 
 #include<utility>
 
-#include<boost/noncopyable.hpp>
-#include<boost/shared_ptr.hpp>
-#include<boost/function.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<memory>
+#include<functional>
 
 #include<Imath/ImathColor.h>
 
@@ -22,11 +22,11 @@ namespace ramen
 namespace ocio
 {
 
-class gl_display_manager_t : boost::noncopyable
+class gl_display_manager_t : ramen::core::noncopyable_t
 {
 public:
 
-	typedef boost::function<std::pair<std::string, std::string>( int)> get_context_callback_t;
+	typedef std::function<std::pair<std::string, std::string>( int)> get_context_callback_t;
 	
     enum view_channels_t
     {
@@ -38,7 +38,7 @@ public:
     };
 
     gl_display_manager_t( int lut_size = 32, GLenum texture_num = GL_TEXTURE1);
-	gl_display_manager_t( boost::shared_ptr<gl_lut3d_t> lut);
+	gl_display_manager_t( std::shared_ptr<gl_lut3d_t> lut);
 
 	void set_context_callback( const get_context_callback_t& f);
 	
@@ -74,7 +74,7 @@ private:
 	OCIO::ConstProcessorRcPtr processor_;
 
 	gl::program_t program_;
-	boost::shared_ptr<gl_lut3d_t> lut_;
+	std::shared_ptr<gl_lut3d_t> lut_;
 
 	float exposure_;
 	float gamma_;

@@ -40,7 +40,7 @@ void png_format_t::add_extensions( std::vector<std::string>& ext) const
     ext.push_back( "PNG");
 }
 
-core::auto_ptr_t<reader_t> png_format_t::reader( const boost::filesystem::path& p) const
+core::auto_ptr_t<reader_t> png_format_t::reader( const std::filesystem::path& p) const
 {
     return core::auto_ptr_t<reader_t>( new oiio_reader_t( p));
 }

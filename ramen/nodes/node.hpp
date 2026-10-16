@@ -150,7 +150,7 @@ public:
     virtual void param_edit_finished();
 
     // signals
-    boost::signals2::signal<void ( node_t*)> changed;
+    core::signal_t<void ( node_t*)> changed;
 
     void notify();
 
@@ -218,8 +218,8 @@ public:
     virtual std::unique_ptr<QWidget> create_toolbar() { return std::unique_ptr<QWidget>();}
 
     // paths
-    virtual void convert_relative_paths( const boost::filesystem::path& old_base,
-                                         const boost::filesystem::path& new_base);
+    virtual void convert_relative_paths( const std::filesystem::path& old_base,
+                                         const std::filesystem::path& new_base);
 
     virtual void make_paths_absolute();
     virtual void make_paths_relative();
@@ -279,11 +279,11 @@ private:
     // data
 
     std::vector<node_input_plug_t> inputs_;
-    boost::ptr_vector<node_output_plug_t> outputs_;
+    container::ptr_vector<node_output_plug_t> outputs_;
 
     mutable graph_color_t graph_color_;
 
-    boost::uint32_t flags_;
+    std::uint32_t flags_;
     Imath::V2f loc_;
     std::vector<std::pair<int, float> > frames_needed_;
 

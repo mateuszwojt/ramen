@@ -14,7 +14,6 @@
 #include<ramen/nodes/image/roto/roto_node.hpp>
 #include<ramen/nodes/image/roto/roto_commands.hpp>
 
-#include<ramen/app/document.hpp>
 
 namespace ramen
 {

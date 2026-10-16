@@ -38,7 +38,7 @@ public:
 
     void insert_in_cache( node_t *n, const digest_type& key, image::buffer_t& img);
 
-    boost::optional<image::buffer_t> find_in_cache( const digest_type& key,
+    std::optional<image::buffer_t> find_in_cache( const digest_type& key,
                                                     const Imath::Box2i& area);
 
     image_allocator_type& image_allocator() { return *img_alloc_;}
@@ -47,7 +47,7 @@ private:
 
     friend class ramen::application_t;
 
-    explicit manager_t( boost::uint64_t img_cache_size);
+    explicit manager_t( std::uint64_t img_cache_size);
 
     // non-copyable
     manager_t( const manager_t&);

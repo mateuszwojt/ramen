@@ -10,7 +10,7 @@
 #include<map>
 #include<list>
 
-#include<boost/optional.hpp>
+#include<optional>
 
 #include<ramen/nodes/node_fwd.hpp>
 #include<ramen/image/buffer.hpp>
@@ -38,10 +38,10 @@ public:
 
     void insert( node_t *n, const digest_type& key, image::buffer_t& img);
 
-    boost::optional<image::buffer_t> find( const digest_type& key, const Imath::Box2i& area);
+    std::optional<image::buffer_t> find( const digest_type& key, const Imath::Box2i& area);
 
     virtual void erase_lru();
-    virtual boost::posix_time::ptime lru_time() const;
+    virtual std::chrono::steady_clock::time_point lru_time() const;
 
 private:
 
@@ -53,11 +53,11 @@ private:
     {
         entry_t( image::buffer_t buf) : buffer( buf)
         {
-            touch_time = boost::posix_time::microsec_clock::universal_time();
+            touch_time = std::chrono::steady_clock::now();
         }
 
         image::buffer_t buffer;
-        boost::posix_time::ptime touch_time;
+        std::chrono::steady_clock::time_point touch_time;
     };
 
     typedef std::multimap<digest_type, entry_t> map_type;

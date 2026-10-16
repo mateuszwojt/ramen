@@ -7,9 +7,8 @@
 #include<string>
 #include<algorithm>
 
-#include<boost/unordered_set.hpp>
-#include<boost/thread/mutex.hpp>
-#include<boost/thread/locks.hpp>
+#include<unordered_set>
+#include<mutex>
 
 #include<ramen/assert.hpp>
 
@@ -22,12 +21,12 @@ namespace
 
 struct name_pool_t
 {
-    typedef boost::unordered::unordered_set<std::string> name_set_type;
+    typedef std::unordered_set<std::string> name_set_type;
     typedef name_set_type::const_iterator	const_iterator;
     typedef name_set_type::iterator			iterator;
 
-    typedef boost::mutex                    mutex_type;
-    typedef boost::lock_guard<mutex_type>   lock_type;
+    typedef std::mutex                    mutex_type;
+    typedef std::lock_guard<mutex_type>   lock_type;
 
     name_pool_t()
     {

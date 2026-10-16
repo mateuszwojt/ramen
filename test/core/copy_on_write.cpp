@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<gtest/gtest.h>
+#include<utility>
 
 #include<ramen/core/copy_on_write.hpp>
 
@@ -35,7 +36,7 @@ TEST( CopyOnWrite, CopyMove)
 
     // Move
     movable_t mx( 11);
-    copy_on_write_t<movable_t> x( boost::move( mx));
+    copy_on_write_t<movable_t> x( std::move( mx));
     EXPECT_TRUE( mx.was_moved());
 }
 

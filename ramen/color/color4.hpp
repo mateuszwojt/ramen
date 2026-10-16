@@ -9,7 +9,7 @@
 
 #include<cassert>
 
-#include<boost/operators.hpp>
+
 
 #include<Imath/half.h>
 
@@ -25,7 +25,7 @@ namespace color
 \brief A RGBA color.
 */
 template<class T>
-class color4_t : boost::equality_comparable<color4_t<T> >
+class color4_t
 {
 public:
 

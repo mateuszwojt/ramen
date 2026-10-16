@@ -4,7 +4,7 @@
 
 #include<ramen/params/file_param.hpp>
 
-#include<boost/filesystem/operations.hpp>
+#include<filesystem>
 
 #include<QPushButton>
 #include<QFileDialog>
@@ -28,7 +28,7 @@ namespace ramen
 file_param_t::file_param_t( const std::string& name) : static_param_t( name)
 {
     is_input_ = true;
-    set_default_value( boost::filesystem::path());
+    set_default_value( std::filesystem::path());
     ext_list_string_ = "File (*.*)";
 }
 
@@ -40,9 +40,9 @@ file_param_t::file_param_t( const file_param_t& other) : static_param_t( other)
     button_ = 0;
 }
 
-void file_param_t::set_default_value( const boost::filesystem::path& p) { value().assign( p);}
+void file_param_t::set_default_value( const std::filesystem::path& p) { value().assign( p);}
 
-void file_param_t::set_value( const boost::filesystem::path& p, change_reason reason)
+void file_param_t::set_value( const std::filesystem::path& p, change_reason reason)
 {
     if( can_undo())
         param_set()->add_command( this);
@@ -53,30 +53,30 @@ void file_param_t::set_value( const boost::filesystem::path& p, change_reason re
 
 bool file_param_t::empty() const
 {
-    boost::filesystem::path p( get_value<boost::filesystem::path>( *this));
+    std::filesystem::path p( get_value<std::filesystem::path>( *this));
     return p.empty();
 }
 
 bool file_param_t::file_exists() const
 {
-    boost::filesystem::path p( get_value<boost::filesystem::path>( *this));
+    std::filesystem::path p( get_value<std::filesystem::path>( *this));
 
     if( !p.empty())
-        return boost::filesystem::exists( p);
+        return std::filesystem::exists( p);
 
     return false;
 }
 
 std::string file_param_t::extension() const
 {
-    boost::filesystem::path p( get_value<boost::filesystem::path>( *this));
+    std::filesystem::path p( get_value<std::filesystem::path>( *this));
     return p.extension().string();
 }
 
 void file_param_t::set_extension( const std::string& ext)
 {
     RAMEN_ASSERT( !is_input_);
-    boost::filesystem::path p( get_value<boost::filesystem::path>( *this));
+    std::filesystem::path p( get_value<std::filesystem::path>( *this));
     p.replace_extension( ext);
     value().assign( p);
     update_input_text();
@@ -85,21 +85,21 @@ void file_param_t::set_extension( const std::string& ext)
 void file_param_t::do_add_to_hash( hash::generator_t& hash_gen) const
 {
     if( is_input_)
-        hash_gen << filesystem::hash_string( get_value<boost::filesystem::path>( *this));
+        hash_gen << filesystem::hash_string( get_value<std::filesystem::path>( *this));
 }
 
 void file_param_t::do_read( const serialization::yaml_node_t& node)
 {
     std::string val;
     node.get_value<std::string>( "value", val);
-    set_value( boost::filesystem::path( val), silent_edit);
+    set_value( std::filesystem::path( val), silent_edit);
 }
 
 void file_param_t::do_write( serialization::yaml_oarchive_t& out) const
 {
     out << YAML::Key << "value"
             << YAML::Value << YAML::DoubleQuoted
-            << filesystem::file_string( get_value<boost::filesystem::path>( *this));
+            << filesystem::file_string( get_value<std::filesystem::path>( *this));
 }
 
 void file_param_t::do_update_widgets()
@@ -117,7 +117,7 @@ void file_param_t::do_enable_widgets( bool e)
     }
 }
 
-void file_param_t::update_input_text( const boost::filesystem::path& p)
+void file_param_t::update_input_text( const std::filesystem::path& p)
 {
     if( input_)
     {
@@ -129,12 +129,12 @@ void file_param_t::update_input_text( const boost::filesystem::path& p)
 
 void file_param_t::update_input_text()
 {
-    update_input_text( get_value<boost::filesystem::path>( *this));
+    update_input_text( get_value<std::filesystem::path>( *this));
 }
 
-void file_param_t::do_convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base)
+void file_param_t::do_convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base)
 {
-    boost::filesystem::path p( get_value<boost::filesystem::path>( *this));
+    std::filesystem::path p( get_value<std::filesystem::path>( *this));
 
     if( p.is_relative())
     {
@@ -147,7 +147,7 @@ void file_param_t::do_make_paths_absolute()
 {
     RAMEN_ASSERT( composition());
 
-    boost::filesystem::path p( get_value<boost::filesystem::path>( *this));
+    std::filesystem::path p( get_value<std::filesystem::path>( *this));
 
     if( p.is_relative())
     {
@@ -160,7 +160,7 @@ void file_param_t::do_make_paths_relative()
 {
     RAMEN_ASSERT( composition());
 
-    boost::filesystem::path p( get_value<boost::filesystem::path>( *this));
+    std::filesystem::path p( get_value<std::filesystem::path>( *this));
 
     if( p.is_absolute())
     {
@@ -251,7 +251,7 @@ void file_param_t::select_pushed()
 
     if( !fname.isEmpty())
     {
-        boost::filesystem::path p( fname.toStdString());
+        std::filesystem::path p( fname.toStdString());
 
         if( is_input_ && relative)
         {
@@ -270,7 +270,7 @@ void file_param_t::select_pushed()
 void file_param_t::text_changed()
 {
     std::string fname( input_->text().toStdString());
-    boost::filesystem::path p( fname);
+    std::filesystem::path p( fname);
     param_set()->begin_edit();
     set_value( p);
     param_set()->end_edit();

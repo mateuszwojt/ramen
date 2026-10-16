@@ -2,7 +2,7 @@
 
 #include<ramen/render/context_guard.hpp>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<ramen/app/composition.hpp>
 
@@ -67,17 +67,17 @@ void context_guard_t::restore( node_t *n)
 {	
 	if( image_node_t *inode = dynamic_cast<image_node_t*>( n))
 	{
-		depth_first_inputs_search( *inode, boost::bind( &image_node_t::calc_format_fun, _1, context_));
-		depth_first_inputs_search( *inode, boost::bind( &image_node_t::calc_bounds_fun, _1, context_));
-		depth_first_inputs_search( *inode, boost::bind( &image_node_t::clear_interest_fun, _1));
+		depth_first_inputs_search( *inode, std::bind( &image_node_t::calc_format_fun, std::placeholders::_1, context_));
+		depth_first_inputs_search( *inode, std::bind( &image_node_t::calc_bounds_fun, std::placeholders::_1, context_));
+		depth_first_inputs_search( *inode, std::bind( &image_node_t::clear_interest_fun, std::placeholders::_1));
 		
 		inode->set_interest( saved_[n].roi);
 
-		breadth_first_inputs_apply( *inode, boost::bind( &image_node_t::calc_inputs_interest_fun, _1, context_));
-		depth_first_inputs_search(  *inode, boost::bind( &image_node_t::calc_defined_fun, _1, context_));
-		depth_first_inputs_search(  *inode, boost::bind( &image_node_t::subsample_areas_fun, _1, context_));
-		depth_first_inputs_search( *inode, boost::bind( &node_t::clear_hash, _1));
-		depth_first_inputs_search( *inode, boost::bind( &node_t::calc_hash_str, _1, context_));
+		breadth_first_inputs_apply( *inode, std::bind( &image_node_t::calc_inputs_interest_fun, std::placeholders::_1, context_));
+		depth_first_inputs_search(  *inode, std::bind( &image_node_t::calc_defined_fun, std::placeholders::_1, context_));
+		depth_first_inputs_search(  *inode, std::bind( &image_node_t::subsample_areas_fun, std::placeholders::_1, context_));
+		depth_first_inputs_search( *inode, std::bind( &node_t::clear_hash, std::placeholders::_1));
+		depth_first_inputs_search( *inode, std::bind( &node_t::calc_hash_str, std::placeholders::_1, context_));
 	}
 }
 

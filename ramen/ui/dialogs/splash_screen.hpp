@@ -7,8 +7,8 @@
 
 #include<string>
 
-#include<boost/noncopyable.hpp>
-#include<boost/filesystem/path.hpp>
+#include<ramen/core/noncopyable.hpp>
+#include<filesystem>
 
 #include<QImage>
 
@@ -21,7 +21,7 @@ namespace ui
 
 class splash_screen_widget_t;
 	
-class splash_screen_t : boost::noncopyable
+class splash_screen_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -42,7 +42,7 @@ private:
     splash_screen_t();
 
 	bool render_splash();
-	bool do_render_splash( const boost::filesystem::path& p);
+	bool do_render_splash( const std::filesystem::path& p);
 	
     splash_screen_widget_t *splash_;
 	QImage image_;

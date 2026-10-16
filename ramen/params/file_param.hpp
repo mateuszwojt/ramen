@@ -24,9 +24,9 @@ public:
 
     explicit file_param_t( const std::string& name);
 
-    void set_default_value( const boost::filesystem::path& p);
+    void set_default_value( const std::filesystem::path& p);
 
-    void set_value( const boost::filesystem::path& p, change_reason reason = user_edited);
+    void set_value( const std::filesystem::path& p, change_reason reason = user_edited);
 
     void set_is_input( bool b) { is_input_ = b;}
 
@@ -51,7 +51,7 @@ private:
     virtual void do_add_to_hash( hash::generator_t& hash_gen) const;
 
     // paths
-    virtual void do_convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base);
+    virtual void do_convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base);
     virtual void do_make_paths_absolute();
     virtual void do_make_paths_relative();
 
@@ -61,7 +61,7 @@ private:
     virtual void do_update_widgets();
     virtual void do_enable_widgets( bool e);
 
-    void update_input_text( const boost::filesystem::path& p);
+    void update_input_text( const std::filesystem::path& p);
     void update_input_text();
 
     virtual QWidget *do_create_widgets();

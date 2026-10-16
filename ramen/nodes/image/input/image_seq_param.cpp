@@ -4,7 +4,7 @@
 
 #include<ramen/nodes/image/input/image_seq_param.hpp>
 
-#include<boost/filesystem/operations.hpp>
+#include<filesystem>
 
 #include<QPushButton>
 #include<QGridLayout>
@@ -88,7 +88,7 @@ void image_seq_param_t::do_enable_widgets( bool e)
 
 void image_seq_param_t::select_pushed()
 {
-	boost::filesystem::path p;
+	std::filesystem::path p;
 	bool sequence, relative;
 	
 	if( app().ui()->image_sequence_file_selector( p, sequence, relative))

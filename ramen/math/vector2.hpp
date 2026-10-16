@@ -9,7 +9,7 @@
 
 #include<limits>
 
-#include<boost/operators.hpp>
+#include<ramen/core/operators.hpp>
 
 #include<Imath/half.h>
 
@@ -26,12 +26,10 @@ namespace math
 \brief Two dimensional vector.
 */
 template<class T>
-class vector2_t     : boost::addable<vector2_t<T>
-                    , boost::subtractable<vector2_t<T>
-                    , boost::dividable2<vector2_t<T>, T
-                    , boost::multipliable2<vector2_t<T>, T
-                    , boost::equality_comparable<vector2_t<T>
-                    > > > > >
+class RAMEN_EMPTY_BASES vector2_t : public core::addable<vector2_t<T>>
+                , public core::subtractable<vector2_t<T>>
+                , public core::dividable2<vector2_t<T>, T>
+                , public core::multipliable2<vector2_t<T>, T>
 {
 public:
 

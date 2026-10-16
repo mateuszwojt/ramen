@@ -9,7 +9,7 @@
 
 #include<limits>
 
-#include<boost/operators.hpp>
+#include<ramen/core/operators.hpp>
 
 #include<Imath/half.h>
 
@@ -26,12 +26,10 @@ namespace math
 \brief Three dimensional vector.
 */
 template<class T>
-class vector3_t     : boost::addable<vector3_t<T>
-                    , boost::subtractable<vector3_t<T>
-                    , boost::dividable2<vector3_t<T>, T
-                    , boost::multipliable2<vector3_t<T>, T
-                    , boost::equality_comparable<vector3_t<T>
-                    > > > > >
+class RAMEN_EMPTY_BASES vector3_t : public core::addable<vector3_t<T>>
+                , public core::subtractable<vector3_t<T>>
+                , public core::dividable2<vector3_t<T>, T>
+                , public core::multipliable2<vector3_t<T>, T>
 {
 public:
 

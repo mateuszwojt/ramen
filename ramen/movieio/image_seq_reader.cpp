@@ -4,8 +4,8 @@
 
 #include<ramen/movieio/image_seq_reader.hpp>
 
-#include<boost/filesystem/operations.hpp>
-#include<boost/lexical_cast.hpp>
+#include<filesystem>
+#include<ramen/util/lexical_cast.hpp>
 
 #include<ramen/movieio/exceptions.hpp>
 
@@ -25,7 +25,7 @@ image_seq_reader_t::image_seq_reader_t( const filesystem::path_sequence_t& seq) 
 	init();	
 }
 
-image_seq_reader_t::image_seq_reader_t( const boost::filesystem::path& p, bool sequence)
+image_seq_reader_t::image_seq_reader_t( const std::filesystem::path& p, bool sequence)
 {
 	RAMEN_ASSERT( p.is_absolute());
 	
@@ -33,7 +33,7 @@ image_seq_reader_t::image_seq_reader_t( const boost::filesystem::path& p, bool s
 	
 	if( sequence)
 	{
-		boost::filesystem::directory_iterator it( p.parent_path());
+		std::filesystem::directory_iterator it( p.parent_path());
 		seq_.add_paths( it);
 	}
 	
@@ -59,9 +59,9 @@ std::string image_seq_reader_t::format_string() const
 	if( seq_.is_sequence())
 	{
 		str.append( 1, '[');
-		str += boost::lexical_cast<std::string>( seq_.start());
+		str += util::lexical_cast<std::string>( seq_.start());
 		str.append( 1, '-');
-		str += boost::lexical_cast<std::string>( seq_.end());
+		str += util::lexical_cast<std::string>( seq_.end());
 		str.append( 1, ']');
 	}
 	
@@ -104,7 +104,7 @@ void image_seq_reader_t::do_read_frame( const image::image_view_t& view,
 void image_seq_reader_t::do_read_frame( const image::image_view_t& view,
                                         const math::box2i_t& crop,
                                         int subsample,
-                                        const boost::tuple<int, int, int, int>& channels) const
+                                        const std::tuple<int, int, int, int>& channels) const
 {
 	if( !reader_)
 		throw movieio::unknown_movie_format();

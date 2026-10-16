@@ -5,7 +5,7 @@
 #include<algorithm>
 #include<iostream>
 
-#include<boost/bind.hpp>
+#include<functional>
 #include<chrono>
 
 #include<ramen/app/composition.hpp>
@@ -71,7 +71,7 @@ void render_sequence( composition_t& comp, int start, int end, int proxy_level,
     new_context.motion_blur_extra_samples = mb_extra_samples;
     new_context.motion_blur_shutter_factor = mb_shutter_factor;
 
-    for_each_output( comp, false, boost::bind( &node_output_interface::begin_output, _1, start, end));
+    for_each_output( comp, false, std::bind( &node_output_interface::begin_output, std::placeholders::_1, start, end));
 
     int rendered_frames = 0;
 	typedef std::chrono::steady_clock clock_type;
@@ -82,7 +82,7 @@ void render_sequence( composition_t& comp, int start, int end, int proxy_level,
     {
         new_context.frame = i;
 
-        BOOST_FOREACH( node_t& n, comp.nodes())
+        for( node_t& n : comp.nodes())
         {
             if( node_output_interface *out = dynamic_cast<node_output_interface*>( &n))
             {
@@ -105,7 +105,7 @@ void render_sequence( composition_t& comp, int start, int end, int proxy_level,
         }
     }
 	
-    for_each_output( comp, false, boost::bind( &node_output_interface::end_output, _1, true));
+    for_each_output( comp, false, std::bind( &node_output_interface::end_output, std::placeholders::_1, true));
 	std::cout << "\nRender done. Frames renderered = " << rendered_frames << ". Total time = " << std::chrono::duration<double>( clock_type::now() - total_start).count() << " seconds.\n";
 }
 

@@ -8,7 +8,7 @@
 #include<utility>
 #include<sstream>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/serialization/yaml_node.hpp>
 
@@ -17,7 +17,7 @@ namespace ramen
 namespace serialization
 {
 
-class yaml_iarchive_t : boost::noncopyable
+class yaml_iarchive_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -42,7 +42,7 @@ public:
 		return root().get_optional_value( key, value);
 	}
 
-	boost::optional<yaml_node_t> get_optional_node( const std::string& key) const;
+	std::optional<yaml_node_t> get_optional_node( const std::string& key) const;
 
 	// errors
 	std::stringstream& error_stream() { return error_stream_;}

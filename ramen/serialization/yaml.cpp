@@ -48,14 +48,14 @@ YAML::Emitter& operator<<( YAML::Emitter& out, const core::empty_t& x)
     return out;
 }
 
-void operator>>( const YAML::Node& in, boost::filesystem::path& p)
+void operator>>( const YAML::Node& in, std::filesystem::path& p)
 {
 	std::string tmp;
 	in >> tmp;
-	p = boost::filesystem::path( tmp);
+	p = std::filesystem::path( tmp);
 }
 
-YAML::Emitter& operator<<( YAML::Emitter& out, const boost::filesystem::path& p)
+YAML::Emitter& operator<<( YAML::Emitter& out, const std::filesystem::path& p)
 {
     out << YAML::DoubleQuoted << filesystem::file_string( p);
     return out;

@@ -36,8 +36,7 @@ target_include_directories( ramen PUBLIC    ${PROJECT_SOURCE_DIR}
                                             ${PROJECT_BINARY_DIR}/include
                                             )
 
-target_compile_definitions( ramen PUBLIC    BOOST_FILESYSTEM_NO_DEPRECATED
-                                            QT_NO_KEYWORDS
+target_compile_definitions( ramen PUBLIC    QT_NO_KEYWORDS
                                             )
 
 if( APPLE)
@@ -63,8 +62,7 @@ target_link_libraries( ramen PUBLIC Qt6::Core
                                     GLEW::GLEW
                                     OpenGL::GL
 
-                                    Boost::filesystem
-                                    Boost::thread
+                                    Boost::headers
                                     TBB::tbb
                                     yaml-cpp::yaml-cpp
                                     Agg::Agg

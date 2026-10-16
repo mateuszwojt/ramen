@@ -10,7 +10,7 @@
 #include<vector>
 #include<string>
 
-#include<boost/tuple/tuple.hpp>
+#include<tuple>
 
 #include<Imath/ImathBox.h>
 
@@ -35,7 +35,7 @@ class RAMEN_API reader_t
 public:
 
 	reader_t();
-    explicit reader_t( const boost::filesystem::path& p);
+    explicit reader_t( const std::filesystem::path& p);
 	
     virtual ~reader_t();
 	
@@ -72,7 +72,7 @@ public:
     void read_frame( const image::image_view_t& view,
                      const math::box2i_t& crop,
                      int subsample,
-                     const boost::tuple<int, int, int, int>& channels) const;
+                     const std::tuple<int, int, int, int>& channels) const;
 	
 private:
 
@@ -89,11 +89,11 @@ private:
     virtual void do_read_frame( const image::image_view_t& view,
                                 const math::box2i_t& crop,
                                 int subsample,
-                                const boost::tuple<int, int, int, int>& channels) const;
+                                const std::tuple<int, int, int, int>& channels) const;
 	
 protected:
 	
-	boost::filesystem::path p_;
+	std::filesystem::path p_;
     core::dictionary_t info_;
 	std::vector<std::string> channels_;
 	int frame_;

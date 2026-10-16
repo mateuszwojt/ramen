@@ -7,9 +7,9 @@
 
 #include<ramen/nodes/image_node.hpp>
 
-#include<boost/optional.hpp>
-#include<boost/shared_ptr.hpp>
-#include<boost/tuple/tuple.hpp>
+#include<optional>
+#include<memory>
+#include<tuple>
 
 #include<ramen/filesystem/path.hpp>
 
@@ -30,12 +30,12 @@ public:
     virtual const node_metaclass_t *metaclass() const;
 
     input_node_t();
-    input_node_t( const boost::filesystem::path& path, bool sequence,
-						const boost::filesystem::path& from_dir);
+    input_node_t( const std::filesystem::path& path, bool sequence,
+						const std::filesystem::path& from_dir);
 	
 	// set / get for undo
-	boost::tuple<int,int,int,int> get_channels() const;
-	void set_channels( const boost::tuple<int,int,int,int>& c);
+	std::tuple<int,int,int,int> get_channels() const;
+	void set_channels( const std::tuple<int,int,int,int>& c);
 		
     void set_channels( const std::string& red, const std::string& green,
 						const std::string& blue, const std::string& alpha);
@@ -57,13 +57,13 @@ private:
     virtual node_t *do_clone() const { return new input_node_t( *this);}
 
     virtual void do_create_params();
-	void create_image_params( const boost::filesystem::path& p = boost::filesystem::path());
+	void create_image_params( const std::filesystem::path& p = std::filesystem::path());
 	void create_more_params();
 	
     void param_changed( param_t *p, param_t::change_reason reason);
 	
     virtual void do_set_frame( float t);
-	boost::optional<int> map_frame_to_sequence( float t) const;
+	std::optional<int> map_frame_to_sequence( float t) const;
 	
     virtual bool do_is_valid() const;
 	
@@ -80,7 +80,7 @@ private:
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 	
 	// paths
-    virtual void convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base);
+    virtual void convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base);
 	virtual void make_paths_absolute();
 	virtual void make_paths_relative();
 
@@ -90,15 +90,15 @@ private:
 	
 	int index_for_proxy_level( int proxy_level) const;
 	void create_reader( int proxy_level);
-	void create_reader( int proxy_level, const boost::filesystem::path& from_dir);
+	void create_reader( int proxy_level, const std::filesystem::path& from_dir);
 	
-	void file_picked( const boost::filesystem::path& p, int level, bool sequence, bool relative);
+	void file_picked( const std::filesystem::path& p, int level, bool sequence, bool relative);
 	
 	static const int num_proxy_levels;
 	
     Imath::Box2i real_defined_;
 	std::vector<input_clip_t> clips_;
-	std::vector<boost::shared_ptr<movieio::reader_t> > readers_;
+	std::vector<std::shared_ptr<movieio::reader_t> > readers_;
 };
 
 } // namespace

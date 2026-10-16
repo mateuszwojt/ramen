@@ -12,7 +12,7 @@ namespace ramen
 namespace ui
 {
 
-struct pick_tangents_visitor : public boost::static_visitor<>
+struct pick_tangents_visitor
 {
     pick_tangents_visitor( const anim_curves_view_t& view, const Imath::V2i& p);
 	
@@ -30,7 +30,7 @@ private:
     Imath::V2i p_;
 };
 
-struct pick_keyframe_visitor : public boost::static_visitor<>
+struct pick_keyframe_visitor
 {
     pick_keyframe_visitor( const anim_curves_view_t& view, const Imath::V2i& p);
 
@@ -45,7 +45,7 @@ private:
     Imath::V2i p_;
 };
 
-struct box_pick_keyframes_visitor : public boost::static_visitor<>
+struct box_pick_keyframes_visitor
 {
     box_pick_keyframes_visitor( const anim_curves_view_t& view, const Imath::Box2i& box);
 

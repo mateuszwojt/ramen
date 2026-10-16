@@ -41,14 +41,14 @@
 
 #include<ramen/noise/noise_base.hpp>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 namespace ramen
 {
 namespace noise
 {
 
-class simplex_noise_t : public noise_base_t, boost::noncopyable
+class simplex_noise_t : public noise_base_t, ramen::core::noncopyable_t
 {
 public:
 

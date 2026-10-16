@@ -9,7 +9,7 @@
 
 #include<algorithm>
 
-#include<boost/operators.hpp>
+#include<ramen/core/operators.hpp>
 
 #include<ramen/math/hpoint2.hpp>
 
@@ -23,8 +23,7 @@ namespace math
 \brief A 3x3 matrix.
 */
 template<class T>
-class matrix33_t :  boost::multipliable<matrix33_t<T>,
-                    boost::equality_comparable<matrix33_t<T> > >
+class RAMEN_EMPTY_BASES matrix33_t : public core::multipliable<matrix33_t<T>>
 {
 public:
 

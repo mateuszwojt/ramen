@@ -39,12 +39,12 @@ void ocio_file_transform_node_t::do_create_params()
 	
 	std::unique_ptr<popup_param_t> pop( new popup_param_t( "Direction"));
 	pop->set_id( "direction");
-	pop->menu_items() = boost::assign::list_of( "Forward")( "Inverse");
+	pop->menu_items() = { "Forward", "Inverse"};
 	add_param( std::move( pop));
 
 	pop.reset( new popup_param_t( "Interpolation"));
 	pop->set_id( "interpolation");
-	pop->menu_items() = boost::assign::list_of( "Nearest")( "Linear");
+	pop->menu_items() = { "Nearest", "Linear"};
 	add_param( std::move( pop));
 }
 
@@ -61,7 +61,7 @@ void ocio_file_transform_node_t::do_process( const image::const_image_view_t& sr
 {
     boost::gil::copy_pixels( src, dst);
 
-	boost::filesystem::path path( get_value<boost::filesystem::path>( param( "file")));
+	std::filesystem::path path( get_value<std::filesystem::path>( param( "file")));
 	std::string cccid( get_value<std::string>( param( "cccid")));
 
     try

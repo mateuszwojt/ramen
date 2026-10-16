@@ -40,7 +40,7 @@ void alpha_layer_node_t::do_create_params()
 {
     std::unique_ptr<popup_param_t> p( new popup_param_t( "Layer Mode"));
     p->set_id( "layer_mode");
-    p->menu_items() = boost::assign::list_of( "Add")( "Mult")( "Sub")( "Mix")( "Max")( "Min");
+    p->menu_items() = { "Add", "Mult", "Sub", "Mix", "Max", "Min"};
     add_param( std::move( p));
 
     std::unique_ptr<float_param_t> q( new float_param_t( "Opacity"));

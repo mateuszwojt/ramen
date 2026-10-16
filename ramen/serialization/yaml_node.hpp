@@ -7,7 +7,7 @@
 
 #include<sstream>
 
-#include<boost/optional.hpp>
+#include<optional>
 
 #include<ramen/assert.hpp>
 
@@ -76,7 +76,7 @@ public:
 	
 	// nodes
 	yaml_node_t get_node( const std::string& key) const;
-	boost::optional<yaml_node_t> get_optional_node( const std::string& key) const;
+	std::optional<yaml_node_t> get_optional_node( const std::string& key) const;
 	
 	const YAML::Node& yaml_node() const { return node_;}
 	
@@ -94,7 +94,7 @@ private:
 	mutable int version_;
 };
 
-typedef boost::optional<yaml_node_t> optional_yaml_node_t;
+typedef std::optional<yaml_node_t> optional_yaml_node_t;
 
 } // namespace
 } // namespace

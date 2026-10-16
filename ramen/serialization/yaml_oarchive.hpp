@@ -5,7 +5,7 @@
 #ifndef RAMEN_SERIALIZATION_YAML_OARCHIVE_HPP
 #define RAMEN_SERIALIZATION_YAML_OARCHIVE_HPP
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/serialization/yaml.hpp>
 
@@ -14,7 +14,7 @@ namespace ramen
 namespace serialization
 {
 
-class RAMEN_API yaml_oarchive_t : boost::noncopyable
+class RAMEN_API yaml_oarchive_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -23,7 +23,7 @@ public:
 	void write_composition_header();
 	bool header_written() const { return header_written_;}
 
-	void write_to_file( const boost::filesystem::path& p);
+	void write_to_file( const std::filesystem::path& p);
 
 	void begin_map();
 	void end_map();

@@ -4,7 +4,7 @@
 
 #include<ramen/anim/track.hpp>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<ramen/assert.hpp>
 
@@ -81,7 +81,7 @@ void track_t::make_full_names()
 	for( int i = 0; i < num_children(); ++i)
 		child( i)->do_make_full_names();
 		
-	for_each_track_depth_first( this, boost::bind( &track_t::make_curve_name, _1));
+	for_each_track_depth_first( this, std::bind( &track_t::make_curve_name, std::placeholders::_1));
 }
 
 void track_t::do_make_full_names()
@@ -110,7 +110,7 @@ void track_t::set_color( const Imath::Color3c& col) { color_ = col;}
 void track_t::notify()
 {
 	RAMEN_ASSERT( curve());
-    changed( curve().get());
+    changed( curve().value());
 }
 
 } // namespace

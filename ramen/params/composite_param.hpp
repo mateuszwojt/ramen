@@ -11,7 +11,7 @@
 
 #include<memory>
 
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<ramen/container/ptr_vector.hpp>
 
 #include<ramen/undo/command.hpp>
 
@@ -29,8 +29,8 @@ public:
 
     void set_create_track( bool b) { create_track_ = b;}
 
-    const boost::ptr_vector<param_t>& params() const	{ return params_;}
-    boost::ptr_vector<param_t>& params()				{ return params_;}
+    const container::ptr_vector<param_t>& params() const	{ return params_;}
+    container::ptr_vector<param_t>& params()				{ return params_;}
 
     template<class T>
     void add_param( std::unique_ptr<T> p) { do_add_param( p.release());}
@@ -67,14 +67,14 @@ private:
     virtual void do_format_changed( const Imath::Box2i& new_format, float aspect, const Imath::V2f& proxy_scale);
 
     // paths
-    virtual void do_convert_relative_paths( const boost::filesystem::path& old_base,
-                                            const boost::filesystem::path& new_base);
+    virtual void do_convert_relative_paths( const std::filesystem::path& old_base,
+                                            const std::filesystem::path& new_base);
 
     virtual void do_make_paths_absolute();
     virtual void do_make_paths_relative();
 
     // util
-    virtual void do_apply_function( const boost::function<void ( param_t*)>& f);
+    virtual void do_apply_function( const std::function<void ( param_t*)>& f);
 
     // serialization
     virtual void do_read( serialization::yaml_iarchive_t& node);
@@ -82,7 +82,7 @@ private:
 
     virtual QWidget *do_create_widgets();
 
-    boost::ptr_vector<param_t> params_;
+    container::ptr_vector<param_t> params_;
     bool create_track_;
 };
 

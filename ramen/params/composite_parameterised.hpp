@@ -7,7 +7,7 @@
 
 #include<ramen/params/parameterised.hpp>
 
-#include<boost/ptr_container/ptr_vector.hpp>
+#include<ramen/container/ptr_vector.hpp>
 
 namespace ramen
 {
@@ -20,7 +20,7 @@ class RAMEN_API composite_parameterised_t : public parameterised_t
 {
 public:
 
-    typedef boost::ptr_vector<parameterised_t> parameterised_container_type;
+    typedef container::ptr_vector<parameterised_t> parameterised_container_type;
     typedef parameterised_container_type::const_iterator    const_iterator;
     typedef parameterised_container_type::iterator          iterator;
 

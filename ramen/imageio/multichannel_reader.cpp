@@ -9,7 +9,7 @@ namespace ramen
 namespace imageio
 {
 
-multichannel_reader_t::multichannel_reader_t( const boost::filesystem::path& p) : reader_t( p)
+multichannel_reader_t::multichannel_reader_t( const std::filesystem::path& p) : reader_t( p)
 {
     has_extra_channels_ = false;
 }
@@ -23,7 +23,7 @@ void multichannel_reader_t::do_read_image( const image::image_view_t& view,
                                            const math::box2i_t& crop,
                                            int subsample) const
 {
-    multichannel_reader_t::read_image( view, crop, subsample, boost::make_tuple( 0, 1, 2, 3));
+    multichannel_reader_t::read_image( view, crop, subsample, std::make_tuple( 0, 1, 2, 3));
 }
 
 } // imageio

@@ -4,7 +4,7 @@
 
 #include<ramen/params/curve_param.hpp>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<ramen/anim/track.hpp>
 
@@ -29,7 +29,7 @@ void curve_param_t::do_create_tracks( anim::track_t *parent)
 {
     std::unique_ptr<anim::track_t> t( new anim::track_t( name(), &( curve( 0))));
     t->set_color( color_);
-    t->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
+    t->changed.connect( std::bind( &animated_param_t::anim_curve_changed, this, std::placeholders::_1));
     parent->add_child( std::move( t));
 }
 

@@ -7,7 +7,7 @@
 
 #include<ramen/config.hpp>
 
-#include<boost/operators.hpp>
+
 
 #include<ramen/math/point2.hpp>
 
@@ -21,7 +21,7 @@ namespace math
 \brief A two dimensional bounding box.
 */
 template<class T>
-class box2_t : boost::equality_comparable<box2_t<T> >
+class box2_t
 {
 public:
 

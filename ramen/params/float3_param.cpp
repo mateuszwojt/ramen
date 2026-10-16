@@ -6,7 +6,7 @@
 
 #include<limits>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<ramen/algorithm/clamp.hpp>
 

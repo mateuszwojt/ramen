@@ -4,8 +4,8 @@
 
 #include<ramen/nodes/image/roto/select_tool.hpp>
 
-#include<boost/foreach.hpp>
-#include<boost/bind.hpp>
+
+#include<functional>
 
 #include<ramen/assert.hpp>
 
@@ -98,7 +98,7 @@ void select_tool_t::mouse_press_event( const ui::mouse_press_event_t& event)
 			drag_curve_mode_ = true;
 
 			if( selected_->parent() && selected_->parent()->inv_global_xform())
-				inv_xf_ = selected_->parent()->inv_global_xform().get();
+				inv_xf_ = selected_->parent()->inv_global_xform().value();
 
 			event.view->update();
 			return;
@@ -150,7 +150,7 @@ void select_tool_t::mouse_press_event( const ui::mouse_press_event_t& event)
 		drag_curve_mode_ = true;
 
 		if( selected_->parent() && selected_->parent()->inv_global_xform())
-			inv_xf_ = selected_->parent()->inv_global_xform().get();
+			inv_xf_ = selected_->parent()->inv_global_xform().value();
 		
 		selected_->select( true);
 		parent().selection_changed();
@@ -166,7 +166,7 @@ void select_tool_t::mouse_press_event( const ui::mouse_press_event_t& event)
 finish:
 
 	if( selected_ && selected_->inv_global_xform())
-		inv_xf_ = selected_->inv_global_xform().get();
+		inv_xf_ = selected_->inv_global_xform().value();
 	
 	parent().selection_changed();
 	event.view->update();
@@ -227,7 +227,7 @@ void select_tool_t::mouse_drag_event( const ui::mouse_drag_event_t& event)
 	{
 		RAMEN_ASSERT( !selected_->is_null());
 
-		BOOST_FOREACH( triple_t& t, selected_->triples())
+		for( triple_t& t : selected_->triples())
 		{
 			if( t.selected())
 				t.move( off);
@@ -355,7 +355,7 @@ bool select_tool_t::pick_axes( const shape_t& s, const ui::mouse_event_t& event,
 
 shape_t *select_tool_t::pick_nulls( const ui::mouse_press_event_t& event, bool& xaxis, bool& yaxis)
 {
-	BOOST_FOREACH( roto::shape_t& s, parent().scene())
+	for( roto::shape_t& s : parent().scene())
 	{
 		if( s.is_null())
 		{
@@ -369,21 +369,21 @@ shape_t *select_tool_t::pick_nulls( const ui::mouse_press_event_t& event, bool& 
 
 shape_t *select_tool_t::pick_shape( const ui::mouse_press_event_t& event)
 {
-	BOOST_FOREACH( roto::shape_t& s, parent().scene())
+	for( roto::shape_t& s : parent().scene())
 	{
 		if( !s.is_null())
 		{
 			if( s.inv_global_xform())
 			{
 				Imath::V2f p( event.wpos.x / event.aspect_ratio, event.wpos.y);
-				p = p * s.inv_global_xform().get();
+				p = p * s.inv_global_xform().value();
 				p -= s.offset();
 				
 				Imath::Box2f box( s.bbox());
 				
 				if( inside_pick_distance( box, p, event.pixel_scale * 2))
 				{
-					if( s.for_each_span_while( boost::bind( &select_tool_t::pick_span, this, _1, p, event.pixel_scale)))
+					if( s.for_each_span_while( std::bind( &select_tool_t::pick_span, this, std::placeholders::_1, p, event.pixel_scale)))
 						return &s;
 				}
 			}
@@ -411,10 +411,10 @@ triple_t *select_tool_t::pick_tangent( shape_t& s, const ui::mouse_event_t& even
 	if( s.inv_global_xform())
 	{
 		Imath::V2f p( event.wpos.x / event.aspect_ratio, event.wpos.y);
-		p = p * s.inv_global_xform().get();
+		p = p * s.inv_global_xform().value();
 		p -= s.offset();
 	
-		BOOST_FOREACH( triple_t& t, s.triples())
+		for( triple_t& t : s.triples())
 		{
 			if( inside_pick_distance( t.p0(), p, event.pixel_scale))
 			{

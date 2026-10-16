@@ -9,7 +9,7 @@
 
 #include<string>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<Imath/ImathColor.h>
 
@@ -26,7 +26,7 @@ namespace ramen
 \ingroup manips
 \brief Base class for on-screen controls that recieve events and can be drawn.
 */
-class RAMEN_API manipulator_t : boost::noncopyable
+class RAMEN_API manipulator_t : ramen::core::noncopyable_t
 {
 public:
 

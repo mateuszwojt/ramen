@@ -76,7 +76,7 @@ void resize_node_t::do_create_params()
     add_param( std::move( top));
     std::unique_ptr<popup_param_t> p( new popup_param_t( "Filter"));
     p->set_id( "filter");
-    p->menu_items() = boost::assign::list_of( "Lanczos3")( "Mitchell")( "Catrom");
+    p->menu_items() = { "Lanczos3", "Mitchell", "Catrom"};
     add_param( std::move( p));
 }
 

@@ -10,7 +10,7 @@
 #include<vector>
 #include<string>
 
-#include<boost/filesystem/path.hpp>
+#include<filesystem>
 
 #include<OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
@@ -56,7 +56,7 @@ private:
     manager_t& operator=( const manager_t&);
 
 	void init();
-	bool init_from_file( const boost::filesystem::path& p);
+	bool init_from_file( const std::filesystem::path& p);
 
 	void get_displays();
 

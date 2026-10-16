@@ -6,8 +6,8 @@
 
 #include<algorithm>
 
-#include<boost/foreach.hpp>
-#include<boost/filesystem/fstream.hpp>
+
+#include<fstream>
 
 #include<ramen/imageio/algorithm.hpp>
 #include<ramen/imageio/exceptions.hpp>
@@ -34,7 +34,7 @@ bool factory_t::register_image_format( core::auto_ptr_t<format_t> format)
     return true;
 }
 
-bool factory_t::is_image_file( const boost::filesystem::path& p) const
+bool factory_t::is_image_file( const std::filesystem::path& p) const
 {
     const_iterator it = format_for_extension( p);
 
@@ -54,7 +54,7 @@ bool factory_t::is_image_format_tag( const std::string& tag) const
 	return format_for_tag( tag) != formats_.end();
 }
 
-core::auto_ptr_t<reader_t> factory_t::reader_for_image( const boost::filesystem::path& p) const
+core::auto_ptr_t<reader_t> factory_t::reader_for_image( const std::filesystem::path& p) const
 {
     const_iterator it = format_for_extension( p);
 
@@ -81,7 +81,7 @@ core::auto_ptr_t<writer_t> factory_t::writer_for_tag( const std::string& tag) co
     return core::auto_ptr_t<writer_t>();
 }
 
-factory_t::const_iterator factory_t::format_for_extension( const boost::filesystem::path& p) const
+factory_t::const_iterator factory_t::format_for_extension( const std::filesystem::path& p) const
 {
     std::string ext( p.extension().string());
 
@@ -97,9 +97,9 @@ factory_t::const_iterator factory_t::format_for_extension( const boost::filesyst
     return formats_.end();
 }
 
-factory_t::const_iterator factory_t::format_for_file_contents( const boost::filesystem::path& p) const
+factory_t::const_iterator factory_t::format_for_file_contents( const std::filesystem::path& p) const
 {
-    boost::filesystem::ifstream ifile( p, std::ios::in | std::ios::binary);
+    std::ifstream ifile( p, std::ios::in | std::ios::binary);
 
     if( ifile.is_open() && ifile.good())
 	{

@@ -20,7 +20,7 @@ namespace ui
 void tangents_mask( const anim::float_key_t& k, const anim::float_key_t *prev, const anim::float_key_t *next, bool& left, bool& right);
 
 // visitors
-struct draw_curve_visitor : public boost::static_visitor<>
+struct draw_curve_visitor
 {
     draw_curve_visitor( const anim_curves_view_t& view);
     void operator()( const anim::float_curve_t *c);
@@ -31,7 +31,7 @@ private:
     const anim_curves_view_t& view_;
 };
 
-struct draw_keyframes_visitor : public boost::static_visitor<>
+struct draw_keyframes_visitor
 {
     draw_keyframes_visitor( const anim_curves_view_t& view, bool draw_tangents = true);
     void operator()( const anim::float_curve_t *c);
@@ -43,7 +43,7 @@ private:
 	bool draw_tangents_;
 };
 
-struct bbox_curve_visitor : public boost::static_visitor<>
+struct bbox_curve_visitor
 {
     bbox_curve_visitor( const Imath::Box2f box = Imath::Box2f(), bool sel_only = false);
     void operator()( const anim::float_curve_t *c);

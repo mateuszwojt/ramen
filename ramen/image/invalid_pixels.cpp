@@ -4,7 +4,7 @@
 
 #include<ramen/image/invalid_pixels.hpp>
 
-#include<boost/math/special_functions/fpclassify.hpp>
+#include<cmath>
 
 namespace ramen
 {
@@ -27,8 +27,8 @@ struct count_invalid_pixels_fun
 		float b = boost::gil::get_color( p, boost::gil::blue_t());
 		float a = boost::gil::get_color( p, boost::gil::alpha_t());
 		
-        if( boost::math::isnan( r) || boost::math::isnan( g) ||
-            boost::math::isnan( b) || boost::math::isnan( a))
+        if( std::isnan( r) || std::isnan( g) ||
+            std::isnan( b) || std::isnan( a))
 		{
 			nans++;
 			return;

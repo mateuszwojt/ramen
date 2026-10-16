@@ -7,8 +7,8 @@
 
 #include<ramen/config.hpp>
 
-#include<boost/shared_array.hpp>
-#include<boost/cstdint.hpp>
+#include<memory>
+#include<cstdint>
 
 #include<Imath/ImathBox.h>
 
@@ -34,7 +34,7 @@ public:
     int channels() const;
 
     bool empty() const  { return !pixels_;}
-    bool unique() const { return pixels_.unique();}
+    bool unique() const { return pixels_.use_count() == 1;}
     
     void clear();
 
@@ -82,7 +82,7 @@ private:
 
     Imath::Box2i bounds_;
     int channels_;
-    boost::shared_array<unsigned char> pixels_;
+    std::shared_ptr<unsigned char[]> pixels_;
 	std::size_t rowbytes_;
     bool cached_pixels_;
 	bool use_disk_cache_;

@@ -88,43 +88,43 @@ void paste_keys( const anim::float_curve_t& src, anim::float_curve_t& dst, float
 
 /***************************************************************************/
 
-struct copy_keys_visitor : public boost::static_visitor<>
+struct copy_keys_visitor
 {
-	copy_keys_visitor( boost::shared_ptr<any_curve_t>& dst) : dst_( dst) {}
+	copy_keys_visitor( std::shared_ptr<any_curve_t>& dst) : dst_( dst) {}
 
 	template<class Curve>
 	void operator()( const Curve *src)
 	{
 		dst_.reset( new any_curve_t( Curve()));
-		do_copy_keys( *src, boost::get<Curve>( *dst_));
+		do_copy_keys( *src, std::get<Curve>( *dst_));
 	}
 	
 private:
 	
-	boost::shared_ptr<any_curve_t>& dst_;
+	std::shared_ptr<any_curve_t>& dst_;
 };
 
 /***************************************************************************/
 
-struct copy_curve_visitor : public boost::static_visitor<>
+struct copy_curve_visitor
 {
-	copy_curve_visitor( boost::shared_ptr<any_curve_t>& dst) : dst_( dst) {}
+	copy_curve_visitor( std::shared_ptr<any_curve_t>& dst) : dst_( dst) {}
 
 	template<class Curve>
 	void operator()( const Curve *src)
 	{
 		dst_.reset( new any_curve_t( Curve()));
-		do_copy_curve( *src, boost::get<Curve>( *dst_));
+		do_copy_curve( *src, std::get<Curve>( *dst_));
 	}
 	
 private:
 	
-	boost::shared_ptr<any_curve_t>& dst_;
+	std::shared_ptr<any_curve_t>& dst_;
 };
 
 /***************************************************************************/
 
-struct get_first_key_time_visitor : public boost::static_visitor<>
+struct get_first_key_time_visitor
 {
 	get_first_key_time_visitor() : frame( 1) {}
 
@@ -136,7 +136,7 @@ struct get_first_key_time_visitor : public boost::static_visitor<>
 
 /***************************************************************************/
 
-struct can_paste_visitor : public boost::static_visitor<>
+struct can_paste_visitor
 {
 	can_paste_visitor( any_curve_t& src, bool paste_curve_mode) : src_( src), paste_curve_mode_( paste_curve_mode)
 	{
@@ -145,13 +145,13 @@ struct can_paste_visitor : public boost::static_visitor<>
 
 	void operator()( const float_curve_t *c) const
 	{ 
-		const float_curve_t *scurve = boost::get<const float_curve_t>( &src_);
+		const float_curve_t *scurve = std::get_if<float_curve_t>( &src_);
 		result = scurve;
 	}
 
 	void operator()( const shape_curve2f_t *c) const
 	{
-		const shape_curve2f_t *scurve = boost::get<const shape_curve2f_t>( &src_);
+		const shape_curve2f_t *scurve = std::get_if<shape_curve2f_t>( &src_);
 		
 		if( !scurve)
 			return;
@@ -175,7 +175,7 @@ private:
 
 /***************************************************************************/
 
-struct paste_keys_visitor : public boost::static_visitor<>
+struct paste_keys_visitor
 {
 	paste_keys_visitor( any_curve_t& src, float offset) : src_( src)
 	{
@@ -185,12 +185,12 @@ struct paste_keys_visitor : public boost::static_visitor<>
 	template<class Curve>
 	void operator()( Curve *dst)
 	{
-		paste_keys( boost::get<const Curve>( src_), *dst, offset_);
+		paste_keys( std::get<Curve>( src_), *dst, offset_);
 	}
 	
 	void operator()( anim::float_curve_t *dst)
 	{
-		paste_keys( boost::get<const anim::float_curve_t>( src_), *dst, offset_);
+		paste_keys( std::get<anim::float_curve_t>( src_), *dst, offset_);
 		dst->recalc_tangents_and_coefficients();
 	}
 	
@@ -228,9 +228,9 @@ void clipboard_t::copy_curve( const std::string& name, const anim::any_curve_ptr
 	RAMEN_ASSERT( copying_);
 	
 	copy_curves_mode_ = true;
-	contents_.push_back( named_curve_type( name, boost::shared_ptr<any_curve_t>()));
+	contents_.push_back( named_curve_type( name, std::shared_ptr<any_curve_t>()));
 	copy_curve_visitor v( contents_.back().second);
-	boost::apply_visitor( v, c);
+	std::visit( v, c);
 }
 
 void clipboard_t::copy_keys( const std::string& name, const anim::any_curve_ptr_t& c)
@@ -238,9 +238,9 @@ void clipboard_t::copy_keys( const std::string& name, const anim::any_curve_ptr_
 	RAMEN_ASSERT( copying_);
 	
 	copy_curves_mode_ = false;
-	contents_.push_back( named_curve_type( name, boost::shared_ptr<any_curve_t>()));
+	contents_.push_back( named_curve_type( name, std::shared_ptr<any_curve_t>()));
 	copy_keys_visitor v( contents_.back().second);
-	boost::apply_visitor( v, c);
+	std::visit( v, c);
 }
 
 void clipboard_t::end_copy()
@@ -266,12 +266,12 @@ void clipboard_t::paste( const std::string& name, anim::any_curve_ptr_t& c, floa
 	if( !copy_curves_mode_)
 	{
 		get_first_key_time_visitor v;
-		boost::apply_visitor( v, *contents_[i].second.get());
+		std::visit( v, *contents_[i].second.get());
 		offset = frame - v.frame;
 	}
 	
 	paste_keys_visitor v( *contents_[i].second.get(), offset);
-	boost::apply_visitor( v, c);
+	std::visit( v, c);
 }
 
 int clipboard_t::find_compatible_curve( const std::string& name, const anim::any_curve_ptr_t& c)
@@ -284,10 +284,10 @@ int clipboard_t::find_compatible_curve( const std::string& name, const anim::any
 	
 	for( int i = 0; i < contents_.size(); ++i)
 	{
-		if( contents_[i].second && contents_[i].second->which() == c.which())
+		if( contents_[i].second && contents_[i].second->index() == c.index())
 		{
 			can_paste_visitor v( *contents_[i].second.get(), copy_curves_mode_);
-			boost::apply_visitor( v, c);
+			std::visit( v, c);
 				
 			if( v.result)
 			{
@@ -311,16 +311,16 @@ bool clipboard_t::can_paste()
 	if( empty() || !contents_[0].second)
 		return false;
 
-	return boost::get<const float_curve_t>( contents_[0].second.get());
+	return std::get_if<float_curve_t>( contents_[0].second.get());
 }
 
 void clipboard_t::copy( const float_curve_t& c)
 {
 	RAMEN_ASSERT( copying_);
 	
-	boost::shared_ptr<any_curve_t> p( new any_curve_t( float_curve_t()));
+	std::shared_ptr<any_curve_t> p( new any_curve_t( float_curve_t()));
 	contents_.push_back( named_curve_type( "curve", p));
-	do_copy_curve( c, *boost::get<float_curve_t>( contents_[0].second.get()));
+	do_copy_curve( c, *std::get_if<float_curve_t>( contents_[0].second.get()));
 	copy_curves_mode_ = true;
 }
 
@@ -329,7 +329,7 @@ void clipboard_t::paste( float_curve_t& dst)
 	RAMEN_ASSERT( !copying_);	
 	RAMEN_ASSERT( !empty());
 
-	paste_keys( *boost::get<float_curve_t>( contents_[0].second.get()), dst, 0);
+	paste_keys( *std::get_if<float_curve_t>( contents_[0].second.get()), dst, 0);
 	dst.recalc_tangents_and_coefficients();
 }
 

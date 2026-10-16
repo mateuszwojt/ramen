@@ -5,7 +5,7 @@
 #ifndef HALF_HALF_LUT_HPP
 #define	HALF_HALF_LUT_HPP
 
-#include<boost/scoped_array.hpp>
+#include<memory>
 
 #include<Imath/half.h>
 
@@ -71,7 +71,7 @@ public:
 
 private:
 
-    boost::scoped_array<half> lut_;
+    std::unique_ptr<half[]> lut_;
 };
 
 #endif

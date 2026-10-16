@@ -8,8 +8,7 @@
 #include<iostream>
 #include<exception>
 
-#include<boost/version.hpp>
-#include<boost/static_assert.hpp>
+
 
 #include<ramen/core/exceptions.hpp>
 

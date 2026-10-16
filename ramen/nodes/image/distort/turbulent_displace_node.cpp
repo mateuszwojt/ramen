@@ -178,7 +178,7 @@ void turbulent_displace_node_t::do_create_params()
 
     std::unique_ptr<popup_param_t> r( new popup_param_t( "Borders"));
     r->set_id( "borders");
-    r->menu_items() = boost::assign::list_of( "Black")( "Tile")( "Mirror");
+    r->menu_items() = { "Black", "Tile", "Mirror"};
     add_param( std::move( r));	
 }
 

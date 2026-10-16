@@ -7,7 +7,7 @@
 #include<limits>
 #include<cmath>
 
-#include<boost/bind.hpp>
+#include<functional>
 
 #include<QLabel>
 
@@ -125,21 +125,21 @@ void color_param_t::do_create_tracks( anim::track_t *parent)
     std::unique_ptr<anim::track_t> t( new anim::track_t( name()));
 
     std::unique_ptr<anim::track_t> tr( new anim::track_t( "R", &( curve( 0))));
-    tr->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
+    tr->changed.connect( std::bind( &animated_param_t::anim_curve_changed, this, std::placeholders::_1));
     t->add_child( std::move( tr));
 
     std::unique_ptr<anim::track_t> tg( new anim::track_t( "G", &( curve( 1))));
-    tg->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
+    tg->changed.connect( std::bind( &animated_param_t::anim_curve_changed, this, std::placeholders::_1));
     t->add_child( std::move( tg));
 
     std::unique_ptr<anim::track_t> tb( new anim::track_t( "B", &( curve( 2))));
-    tb->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
+    tb->changed.connect( std::bind( &animated_param_t::anim_curve_changed, this, std::placeholders::_1));
     t->add_child( std::move( tb));
 
     if( is_rgba())
     {
         std::unique_ptr<anim::track_t> ta( new anim::track_t( "A", &( curve( 3))));
-        ta->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
+        ta->changed.connect( std::bind( &animated_param_t::anim_curve_changed, this, std::placeholders::_1));
         t->add_child( std::move( ta));
     }
 

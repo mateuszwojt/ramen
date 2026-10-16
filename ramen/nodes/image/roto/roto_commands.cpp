@@ -4,7 +4,7 @@
 
 #include<ramen/nodes/image/roto/roto_commands.hpp>
 
-#include<boost/foreach.hpp>
+
 
 #include<ramen/app/application.hpp>
 
@@ -57,8 +57,8 @@ delete_roto_command_t::delete_roto_command_t( image::roto_node_t& node, roto::sh
 	parent_ = shape->parent();
 	shape_->select( false);
 	
-	BOOST_FOREACH( roto::shape_t& s, shape_->children())
-		children_.push_back( &s);
+	for( roto::shape_t *s : shape_->children())
+		children_.push_back( s);
 }
 
 void delete_roto_command_t::undo()

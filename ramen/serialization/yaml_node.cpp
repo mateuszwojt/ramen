@@ -36,12 +36,12 @@ yaml_node_t yaml_node_t::get_node( const std::string& key) const
 	return yaml_node_t( parent_, ramen::get_node( node_, key), version());
 }
 
-boost::optional<yaml_node_t> yaml_node_t::get_optional_node( const std::string& key) const
+std::optional<yaml_node_t> yaml_node_t::get_optional_node( const std::string& key) const
 {
 	if( const YAML::Node n = find_value( node_, key))
 		return yaml_node_t( parent_, n, version());
 	
-	return boost::optional<yaml_node_t>();
+	return std::optional<yaml_node_t>();
 }
 
 std::stringstream& yaml_node_t::error_stream() const

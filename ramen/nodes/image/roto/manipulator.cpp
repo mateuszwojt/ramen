@@ -4,9 +4,9 @@
 
 #include<ramen/nodes/image/roto/manipulator.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/foreach.hpp>
-#include<boost/range/algorithm/for_each.hpp>
+#include<functional>
+
+#include<algorithm>
 
 #include<ramen/assert.hpp>
 
@@ -41,7 +41,7 @@ void manipulator_t::do_draw_overlay( const ui::paint_event_t& event) const
 	gl_scalef( event.aspect_ratio, 1);
 	
 	glEnable( GL_MAP1_VERTEX_3);
-    boost::range::for_each( roto->scene(), boost::bind( &roto::manipulator_t::draw_shape, _1, boost::cref( event), roto->aspect_ratio(), true));
+    std::ranges::for_each( roto->scene(), std::bind( &roto::manipulator_t::draw_shape, std::placeholders::_1, std::cref( event), roto->aspect_ratio(), true));
 	glDisable( GL_MAP1_VERTEX_3);
 	
 	// clear errors
@@ -120,7 +120,7 @@ void manipulator_t::draw_shape( const shape_t& s, const ui::paint_event_t& event
 
     gl_line_width( 1);
     gl_color( s.display_color());
-	s.for_each_span( boost::bind( &roto::manipulator_t::draw_bezier_span, _1, s.global_xform(), s.offset()));
+	s.for_each_span( std::bind( &roto::manipulator_t::draw_bezier_span, std::placeholders::_1, s.global_xform(), s.offset()));
 
     if( s.selected())
 	{
@@ -153,8 +153,8 @@ void manipulator_t::draw_axes( const shape_t& s, const ui::paint_event_t& event,
 
 void manipulator_t::draw_control_polygon( const shape_t& s, float pixel_scale)
 {
-    boost::range::for_each( s.triples(), boost::bind( &manipulator_t::draw_triple, _1,
-												boost::cref( s.global_xform()),
+    std::ranges::for_each( s.triples(), std::bind( &manipulator_t::draw_triple, std::placeholders::_1,
+												std::cref( s.global_xform()),
 												s.offset(), pixel_scale));
 }
 

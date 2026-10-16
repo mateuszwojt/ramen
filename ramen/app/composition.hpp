@@ -9,7 +9,7 @@
 #include<utility>
 #include<memory>
 
-#include<boost/noncopyable.hpp>
+#include<ramen/core/noncopyable.hpp>
 
 #include<ramen/nodes/node_graph.hpp>
 #include<ramen/nodes/node.hpp>
@@ -30,7 +30,7 @@ namespace ramen
 \ingroup app
 \brief Composition class.
 */
-class composition_t : boost::noncopyable
+class composition_t : ramen::core::noncopyable_t
 {
 public:
 
@@ -77,17 +77,17 @@ public:
 	std::string make_name_unique( const std::string& s) const;
 	
     // observer
-    typedef boost::signals2::connection connection_type;
-    typedef boost::signals2::signal<void ( node_t*)> signal_type;
+    typedef core::connection_t connection_type;
+    typedef core::signal_t<void ( node_t*)> signal_type;
 
     // called when a node is added, used in the inspector and viewer
-    connection_type attach_add_observer( signal_type::slot_function_type subscriber)
+    connection_type attach_add_observer( signal_type::slot_type subscriber)
     {
         return added_.connect( subscriber);
     }
 
     // called when a node is released, used in the inspector and viewer
-    connection_type attach_release_observer( signal_type::slot_function_type subscriber)
+    connection_type attach_release_observer( signal_type::slot_type subscriber)
     {
         return released_.connect( subscriber);
     }
@@ -130,10 +130,10 @@ public:
     void set_frame_rate( int f)   { frame_rate_ = f;}
 	
     // selections
-    typedef boost::signals2::signal<void ()> selection_signal_type;
+    typedef core::signal_t<void ()> selection_signal_type;
     selection_signal_type selection_changed;
 
-    connection_type attach_selection_observer( selection_signal_type::slot_function_type subscriber)
+    connection_type attach_selection_observer( selection_signal_type::slot_type subscriber)
     {
         return selection_changed.connect( subscriber);
     }
@@ -145,22 +145,22 @@ public:
     node_t *selected_node();
 
 	// composition settings
-	boost::signals2::signal<void ( composition_t *)> settings_changed;
+	core::signal_t<void ( composition_t *)> settings_changed;
 	
     // home directory, for relative paths
-    const boost::filesystem::path& composition_dir() const;
-    void set_composition_dir( const boost::filesystem::path& dir);
+    const std::filesystem::path& composition_dir() const;
+    void set_composition_dir( const std::filesystem::path& dir);
 	
 	// convert
-	void convert_all_relative_paths( const boost::filesystem::path& new_base);
+	void convert_all_relative_paths( const std::filesystem::path& new_base);
 	void make_all_paths_absolute();	
 	void make_all_paths_relative();
 	
-    boost::filesystem::path relative_to_absolute( const boost::filesystem::path& p) const;
-    boost::filesystem::path absolute_to_relative( const boost::filesystem::path& p) const;
+    std::filesystem::path relative_to_absolute( const std::filesystem::path& p) const;
+    std::filesystem::path absolute_to_relative( const std::filesystem::path& p) const;
 
     // serialization
-	void load_from_file( const boost::filesystem::path& p);
+	void load_from_file( const std::filesystem::path& p);
 	
 	void read( serialization::yaml_iarchive_t& in);
 	void write( serialization::yaml_oarchive_t& out) const;
@@ -178,7 +178,7 @@ private:
 	
     void write_edge( serialization::yaml_oarchive_t& out, const edge_t& e) const;
 
-    boost::filesystem::path composition_dir_;
+    std::filesystem::path composition_dir_;
 
     graph_type g_;
     unique_name_map_t<node_t*> node_map_;

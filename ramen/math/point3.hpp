@@ -7,6 +7,8 @@
 
 #include<ramen/config.hpp>
 
+#include<ramen/core/operators.hpp>
+
 #include<ramen/math/vector3.hpp>
 #include<ramen/math/normal.hpp>
 
@@ -20,12 +22,10 @@ namespace math
 \brief Three dimensional point.
 */
 template<class T>
-class point3_t  : boost::addable2<point3_t<T>, vector3_t<T>
-                , boost::subtractable2<point3_t<T>, vector3_t<T>
-                , boost::addable2<point3_t<T>, normal_t<T>
-                , boost::subtractable2<point3_t<T>, normal_t<T>
-                , boost::equality_comparable<point3_t<T>
-                > > > > >
+class RAMEN_EMPTY_BASES point3_t : public core::addable2<point3_t<T>, vector3_t<T>>
+               , public core::subtractable2<point3_t<T>, vector3_t<T>>
+               , public core::addable2<point3_t<T>, normal_t<T>>
+               , public core::subtractable2<point3_t<T>, normal_t<T>>
 {
 public:
 

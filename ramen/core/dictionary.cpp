@@ -6,7 +6,8 @@
 
 #include<algorithm>
 
-#include<boost/container/flat_map.hpp>
+#include<utility>
+#include<vector>
 
 #include<ramen/core/exceptions.hpp>
 
@@ -17,7 +18,50 @@ namespace core
 
 struct dictionary_t::impl
 {
-    typedef boost::container::flat_map<key_type, value_type> map_type;
+    typedef std::pair<key_type, value_type> item_type;
+
+    // a map stored as a sorted vector, iterators are pointers to the items.
+    struct map_type : public std::vector<item_type>
+    {
+        typedef std::vector<item_type> base_type;
+
+        typename base_type::iterator lower_bound( const key_type& key)
+        {
+            return std::lower_bound( begin(), end(), key, compare);
+        }
+
+        typename base_type::const_iterator lower_bound( const key_type& key) const
+        {
+            return std::lower_bound( begin(), end(), key, compare);
+        }
+
+        typename base_type::iterator find( const key_type& key)
+        {
+            typename base_type::iterator it( lower_bound( key));
+            return ( it != end() && !( key < it->first)) ? it : end();
+        }
+
+        typename base_type::const_iterator find( const key_type& key) const
+        {
+            typename base_type::const_iterator it( lower_bound( key));
+            return ( it != end() && !( key < it->first)) ? it : end();
+        }
+
+        std::pair<typename base_type::iterator, bool> insert( const item_type& x)
+        {
+            typename base_type::iterator it( lower_bound( x.first));
+
+            if( it != end() && !( x.first < it->first))
+                return std::make_pair( it, false);
+
+            return std::make_pair( base_type::insert( it, x), true);
+        }
+
+    private:
+
+        static bool compare( const item_type& x, const key_type& key) { return x.first < key;}
+    };
+
     typedef map_type::const_iterator    const_iterator;
     typedef map_type::iterator          iterator;
 
@@ -97,7 +141,7 @@ dictionary_t::value_type& dictionary_t::operator[]( const dictionary_t::key_type
 dictionary_t::const_iterator dictionary_t::begin() const
 {
     if( pimpl_)
-        return reinterpret_cast<const_iterator>( pimpl_->items.begin().get_ptr());
+        return reinterpret_cast<const_iterator>( pimpl_->items.data());
 
     return 0;
 }
@@ -105,7 +149,7 @@ dictionary_t::const_iterator dictionary_t::begin() const
 dictionary_t::const_iterator dictionary_t::end() const
 {
     if( pimpl_)
-        return reinterpret_cast<const_iterator>( pimpl_->items.end().get_ptr());
+        return reinterpret_cast<const_iterator>( ( pimpl_->items.data() + pimpl_->items.size()));
 
     return 0;
 }
@@ -113,7 +157,7 @@ dictionary_t::const_iterator dictionary_t::end() const
 dictionary_t::iterator dictionary_t::begin()
 {
     if( pimpl_)
-        return reinterpret_cast<iterator>( pimpl_->items.begin().get_ptr());
+        return reinterpret_cast<iterator>( pimpl_->items.data());
 
     return 0;
 }
@@ -121,7 +165,7 @@ dictionary_t::iterator dictionary_t::begin()
 dictionary_t::iterator dictionary_t::end()
 {
     if( pimpl_)
-        return reinterpret_cast<iterator>( pimpl_->items.end().get_ptr());
+        return reinterpret_cast<iterator>( ( pimpl_->items.data() + pimpl_->items.size()));
 
     return 0;
 }

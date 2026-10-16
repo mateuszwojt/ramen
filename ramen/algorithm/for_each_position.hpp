@@ -7,9 +7,8 @@
 
 #include<ramen/config.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/range/begin.hpp>
-#include<boost/range/end.hpp>
+#include<functional>
+#include<iterator>
 
 namespace ramen
 {
@@ -27,13 +26,13 @@ inline void for_each_position( InputIterator first, InputIterator last, UnaryFun
 template<class InputRange, class UnaryFunction>
 inline void for_each_position( InputRange& range, UnaryFunction f)
 {
-    for_each_position( boost::begin( range), boost::end( range), f);
+    for_each_position( std::begin( range), std::end( range), f);
 }
 
 template<class InputRange, class UnaryFunction>
 inline void for_each_position( const InputRange& range, UnaryFunction f)
 {
-    for_each_position( boost::begin( range), boost::end( range), f);
+    for_each_position( std::begin( range), std::end( range), f);
 }
 
 } // ramen

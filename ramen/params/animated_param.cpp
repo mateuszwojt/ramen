@@ -4,8 +4,8 @@
 
 #include<ramen/params/animated_param.hpp>
 
-#include<boost/bind.hpp>
-#include<boost/foreach.hpp>
+#include<functional>
+
 
 #include<Imath/ImathFun.h>
 
@@ -38,24 +38,24 @@ int animated_param_t::num_curves() const { return curves_.size();}
 const std::string& animated_param_t::curve_name( int indx) const
 {
 	RAMEN_ASSERT( indx >= 0 && indx < num_curves());
-	return boost::get<0>( curves_[indx]);
+	return std::get<0>( curves_[indx]);
 }
 
 const anim::float_curve_t& animated_param_t::curve( int indx) const
 {
 	RAMEN_ASSERT( indx >= 0 && indx < num_curves());
-	return boost::get<1>( curves_[indx]);
+	return std::get<1>( curves_[indx]);
 }
 
 anim::float_curve_t& animated_param_t::curve( int indx)
 {
 	RAMEN_ASSERT( indx >= 0 && indx < num_curves());
-	return boost::get<1>( curves_[indx]);
+	return std::get<1>( curves_[indx]);
 }
 
 void animated_param_t::add_curve( const std::string& name)
 {
-	curves_.push_back( curve_entry_type( boost::flyweight<std::string>( name), anim::float_curve_t()));
+	curves_.push_back( curve_entry_type( std::string( name), anim::float_curve_t()));
 }
 
 void animated_param_t::eval_curve( int index, float frame, float& v) const
@@ -253,7 +253,7 @@ void animated_param_t::do_create_tracks( anim::track_t *parent)
 	if( num_curves() == 1)
 	{
 		t.reset( new anim::track_t( curve_name(), &curve()));
-	    t->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
+	    t->changed.connect( std::bind( &animated_param_t::anim_curve_changed, this, std::placeholders::_1));
 	}
 	else
 	{
@@ -262,7 +262,7 @@ void animated_param_t::do_create_tracks( anim::track_t *parent)
 		for( int i = 0; i < num_curves(); ++i)
 		{
 			std::unique_ptr<anim::track_t> tx( new anim::track_t( curve_name( i), &curve( i)));
-			tx->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
+			tx->changed.connect( std::bind( &animated_param_t::anim_curve_changed, this, std::placeholders::_1));
 			t->add_child( std::move( tx));
 		}
 	}
@@ -277,7 +277,7 @@ void animated_param_t::read_curves( const serialization::yaml_node_t& node)
 	
 	if( curves)
 	{
-		for( serialization::yaml_node_t::const_iterator it( curves.get().begin()); it != curves.get().end(); ++it)
+		for( serialization::yaml_node_t::const_iterator it( curves.value().begin()); it != curves.value().end(); ++it)
 		{
 			std::string key;
 			it->first >> key;

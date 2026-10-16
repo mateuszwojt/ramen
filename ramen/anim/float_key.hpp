@@ -9,7 +9,7 @@
 
 #include<sstream>
 
-#include<boost/array.hpp>
+#include<array>
 
 #include<ramen/serialization/archive_fwd.hpp>
 
@@ -59,7 +59,7 @@ public:
 
     value_type evaluate_derivative( time_type t) const;
 
-    const boost::array<value_type,4>& cubic_polynomial() const { return coeffs_;}
+    const std::array<value_type,4>& cubic_polynomial() const { return coeffs_;}
 
     // constants
     static value_type max_slope();
@@ -75,7 +75,7 @@ private:
     value_type value_;
     value_type v0_, v1_; // tangents
     bool tangent_cont_;
-    boost::array<value_type,4> coeffs_;
+    std::array<value_type,4> coeffs_;
 };
 
 } // namespace

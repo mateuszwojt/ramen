@@ -8,9 +8,9 @@
 #include<string>
 #include<memory>
 
-#include<boost/optional.hpp>
-#include<boost/ptr_container/ptr_vector.hpp>
-#include<boost/signals2/signal.hpp>
+#include<optional>
+#include<ramen/container/ptr_vector.hpp>
+#include<ramen/core/signal.hpp>
 
 #include<Imath/ImathColor.h>
 
@@ -45,8 +45,8 @@ public:
     int row() const;
 
     // ranges
-    const boost::ptr_vector<track_t>& children() const	{ return children_;}
-    boost::ptr_vector<track_t>& children()              { return children_;}
+    const container::ptr_vector<track_t>& children() const	{ return children_;}
+    container::ptr_vector<track_t>& children()              { return children_;}
 
     const std::string& name() const;
     void set_name( const std::string& name);
@@ -62,12 +62,12 @@ public:
     void set_color( const Imath::Color3c& col);
 
     // observer
-    boost::signals2::signal<void ( any_curve_ptr_t&)> changed;
+    core::signal_t<void ( any_curve_ptr_t&)> changed;
 
     void notify();
 
-    const boost::optional<any_curve_ptr_t>& curve() const   { return curve_;}
-    boost::optional<any_curve_ptr_t>& curve()               { return curve_;}
+    const std::optional<any_curve_ptr_t>& curve() const   { return curve_;}
+    std::optional<any_curve_ptr_t>& curve()               { return curve_;}
 
 private:
 
@@ -79,8 +79,8 @@ private:
 	
     std::string name_, full_name_, curve_name_;
     track_t *parent_;
-    boost::ptr_vector<track_t> children_;
-    boost::optional<any_curve_ptr_t> curve_;
+    container::ptr_vector<track_t> children_;
+    std::optional<any_curve_ptr_t> curve_;
     Imath::Color3c color_;
 };
 
@@ -109,7 +109,7 @@ template<class Fun>
 void for_each_curve( track_t *t, Fun f)
 {
     if( t->is_leaf() && t->curve())
-        f( t->curve().get());
+        f( t->curve().value());
     else
     {
         for( int i = 0; i < t->num_children(); ++i)

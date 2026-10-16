@@ -7,7 +7,7 @@
 #include<sstream>
 #include<iostream>
 
-#include<boost/foreach.hpp>
+
 
 #include<QKeyEvent>
 #include<QMouseEvent>
@@ -229,8 +229,8 @@ void composition_view_t::mousePressEvent( QMouseEvent *event)
 {
     event->accept();
 
-    drag_handler_    = boost::function<void ( QMouseEvent *)>();
-    release_handler_ = boost::function<void ( QMouseEvent *)>();
+    drag_handler_    = std::function<void ( QMouseEvent *)>();
+    release_handler_ = std::function<void ( QMouseEvent *)>();
     connect_mode_ = false;
     box_pick_mode_ = false;
 
@@ -250,14 +250,14 @@ void composition_view_t::mousePressEvent( QMouseEvent *event)
         {
             zoom_mode_ = true;
             zoom_center_ = wpos;
-            drag_handler_ = boost::bind( &composition_view_t::zoom_drag_handler, this, _1);
-            release_handler_ = boost::bind( &composition_view_t::scroll_zoom_release_handler, this, _1);
+            drag_handler_ = std::bind( &composition_view_t::zoom_drag_handler, this, std::placeholders::_1);
+            release_handler_ = std::bind( &composition_view_t::scroll_zoom_release_handler, this, std::placeholders::_1);
         }
         else
         {
             scroll_mode_ = true;
-            drag_handler_ = boost::bind( &composition_view_t::scroll_drag_handler, this, _1);
-            release_handler_ = boost::bind( &composition_view_t::scroll_zoom_release_handler, this, _1);
+            drag_handler_ = std::bind( &composition_view_t::scroll_drag_handler, this, std::placeholders::_1);
+            release_handler_ = std::bind( &composition_view_t::scroll_zoom_release_handler, this, std::placeholders::_1);
         }
 
         return;
@@ -285,8 +285,8 @@ void composition_view_t::mousePressEvent( QMouseEvent *event)
     if( (last_pick_.component != pick_result_t::no_pick) && ( last_pick_.component != pick_result_t::body_picked))
     {
         connect_mode_ = true;
-        drag_handler_	 = boost::bind( &composition_view_t::connect_drag_handler, this, _1);
-        release_handler_ = boost::bind( &composition_view_t::connect_release_handler, this, _1);
+        drag_handler_	 = std::bind( &composition_view_t::connect_drag_handler, this, std::placeholders::_1);
+        release_handler_ = std::bind( &composition_view_t::connect_release_handler, this, std::placeholders::_1);
     }
 
     // single push
@@ -294,8 +294,8 @@ void composition_view_t::mousePressEvent( QMouseEvent *event)
     {
         app().document().composition().deselect_all();
         box_pick_mode_ = true;
-        drag_handler_	 = boost::bind( &composition_view_t::box_pick_drag_handler, this, _1);
-        release_handler_ = boost::bind( &composition_view_t::box_pick_release_handler, this, _1);
+        drag_handler_	 = std::bind( &composition_view_t::box_pick_drag_handler, this, std::placeholders::_1);
+        release_handler_ = std::bind( &composition_view_t::box_pick_release_handler, this, std::placeholders::_1);
     }
     else
     {
@@ -307,14 +307,14 @@ void composition_view_t::mousePressEvent( QMouseEvent *event)
                     app().document().composition().deselect_all();
 
                 last_pick_.node->toggle_selection();
-                drag_handler_ = boost::bind( &composition_view_t::move_nodes_drag_handler, this, _1);
+                drag_handler_ = std::bind( &composition_view_t::move_nodes_drag_handler, this, std::placeholders::_1);
             }
             else
             {
                 if( event->modifiers() & Qt::ShiftModifier)
                     last_pick_.node->select( false);
                 else
-                    drag_handler_ = boost::bind( &composition_view_t::move_nodes_drag_handler, this, _1);
+                    drag_handler_ = std::bind( &composition_view_t::move_nodes_drag_handler, this, std::placeholders::_1);
             }
         }
     }
@@ -482,7 +482,7 @@ void composition_view_t::box_pick_release_handler( QMouseEvent *event)
     Imath::Box2f b( screen_to_world( Imath::V2i( push_x_, push_y_)));
     b.extendBy( screen_to_world( Imath::V2i( last_x_, last_y_)));
 
-    BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+    for( node_t& n : app().document().composition().nodes())
     {
         if( box_pick_node( &n, b))
             n.toggle_selection();
@@ -570,7 +570,7 @@ void composition_view_t::draw_edges( QPainter& p)
 {
     draw_edges_visitor visitor( *this, p);
 
-    BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+    for( node_t& n : app().document().composition().nodes())
         n.accept( visitor);
 }
 
@@ -578,7 +578,7 @@ void composition_view_t::draw_nodes( QPainter& p)
 {
     draw_node_visitor visitor( p);
 
-    BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+    for( node_t& n : app().document().composition().nodes())
         n.accept( visitor);
 }
 
@@ -625,7 +625,7 @@ bool composition_view_t::pick_edge( const Imath::V2f& p, node_t *&src, node_t *&
 {
     pick_edge_visitor visitor( *this, p);
 
-    BOOST_FOREACH( node_t& n, app().document().composition().nodes())
+    for( node_t& n : app().document().composition().nodes())
     {
         n.accept( visitor);
 

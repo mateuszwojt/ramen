@@ -5,10 +5,10 @@
 #ifndef RAMEN_PARAM_VALUE_HPP
 #define RAMEN_PARAM_VALUE_HPP
 
-#include<boost/static_assert.hpp>
-#include<boost/type_traits/is_same.hpp>
+
 
 #include<ramen/core/poly_regular.hpp>
+#include<utility>
 
 #include<ramen/Concepts/ParamValueConcept.hpp>
 
@@ -24,7 +24,7 @@ struct poly_param_value_instance : core::optimized_storage_type<T, poly_param_va
 {
 private:
 
-    BOOST_CONCEPT_ASSERT(( ParamValueConcept<T>));
+    static_assert( ParamValueConcept<T>);
 
 public:
 
@@ -32,7 +32,7 @@ public:
 
     poly_param_value_instance(const T& x) : base_type( x) {}
 
-    poly_param_value_instance( BOOST_RV_REF( T) x) : base_type( boost::move( x)) {}
+    poly_param_value_instance( T&& x) : base_type( std::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( poly_param_value_instance, base_type)
 
@@ -53,7 +53,7 @@ struct param_value : core::poly_base<poly_param_value_interface, poly_param_valu
     explicit param_value( const T& s) : base_type( s) {}
 
     template <typename T>
-    explicit param_value( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : base_type( boost::move( x)) {}
+    explicit param_value( T&& x, std::enable_if_t<!std::is_lvalue_reference_v<T> >* = nullptr) : base_type( std::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( param_value, base_type)
 
@@ -74,7 +74,7 @@ struct poly_param_indexable_value_instance : core::optimized_storage_type<T, pol
 {
 private:
 
-    BOOST_CONCEPT_ASSERT(( IndexableParamValueConcept<T>));
+    static_assert( IndexableParamValueConcept<T>);
 
 public:
 
@@ -82,7 +82,7 @@ public:
 
     poly_param_indexable_value_instance( const T& x) : base_type( x) {}
 
-    poly_param_indexable_value_instance( BOOST_RV_REF( T) x) : base_type( boost::move( x)) {}
+    poly_param_indexable_value_instance( T&& x) : base_type( std::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( poly_param_indexable_value_instance, base_type)
 
@@ -122,7 +122,7 @@ struct param_indexable_value : core::poly_base<poly_param_indexable_value_interf
     explicit param_indexable_value( const T& x) : base_type( x) {}
 
     template <typename T>
-    explicit param_indexable_value( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : base_type( boost::move( x)) {}
+    explicit param_indexable_value( T&& x, std::enable_if_t<!std::is_lvalue_reference_v<T> >* = nullptr) : base_type( std::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( param_indexable_value, base_type)
 

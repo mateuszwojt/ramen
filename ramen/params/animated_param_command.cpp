@@ -4,7 +4,7 @@
 
 #include<ramen/params/animated_param_command.hpp>
 
-#include<boost/foreach.hpp>
+
 
 #include<ramen/params/animated_param.hpp>
 #include<ramen/nodes/node.hpp>

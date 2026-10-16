@@ -4,10 +4,9 @@
 
 #include<vector>
 
-#include<boost/foreach.hpp>
-#include<boost/bind.hpp>
-#include<boost/range/algorithm/for_each.hpp>
-#include<boost/range/algorithm/count_if.hpp>
+
+#include<functional>
+#include<algorithm>
 
 #include<ramen/assert.hpp>
 
@@ -67,7 +66,7 @@ shape_t::shape_t( const shape_t& other) : parameterised_t( other), parent_( 0), 
     xform_param_ = dynamic_cast<shape_transform_param_t*>( &param( "xform"));
     RAMEN_ASSERT( xform_param_);
 
-    param_set().param_changed.connect( boost::bind( &shape_t::param_changed, this, _1, _2));
+    param_set().param_changed.connect( std::bind( &shape_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void shape_t::init()
@@ -83,7 +82,7 @@ void shape_t::init()
     is_null_ = false;
     offset_ = Imath::V2f( 0, 0);
 
-    param_set().param_changed.connect( boost::bind( &shape_t::param_changed, this, _1, _2));
+    param_set().param_changed.connect( std::bind( &shape_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 shape_t *shape_t::do_clone() const { return new shape_t( *this);}
@@ -109,14 +108,14 @@ void shape_t::set_parent( shape_t *s)
 {
     if( parent_)
     {
-        parent_->children().erase( list_type::s_iterator_to( *this));
+        std::erase( parent_->children(), this);
         parent_ = 0;
     }
 
     if( s)
     {
         RAMEN_ASSERT( scene() == s->scene());
-        s->children().push_back( *this);
+        s->children().push_back( this);
         parent_ = s;
     }
 
@@ -133,12 +132,8 @@ std::string shape_t::parent_name() const
 
 void shape_t::unparent_all_children()
 {
-    std::vector<shape_t*> childs;
-
-    BOOST_FOREACH( roto::shape_t& s, children())
-        childs.push_back( &s);
-
-    boost::range::for_each( childs, boost::bind( &shape_t::set_parent, _1, (shape_t *) 0));
+    std::vector<shape_t*> childs( children());
+    std::ranges::for_each( childs, std::bind( &shape_t::set_parent, std::placeholders::_1, (shape_t *) 0));
 }
 
 bool shape_t::find_in_children( const shape_t *shape) const
@@ -148,7 +143,7 @@ bool shape_t::find_in_children( const shape_t *shape) const
 
     for( list_type::const_iterator it( children().begin()), e( children().end()); it != e; ++it)
     {
-        if( it->find_in_children( shape))
+        if( (*it)->find_in_children( shape))
             return true;
     }
 
@@ -274,12 +269,12 @@ void shape_t::do_create_manipulators() {}
 
 void shape_t::deselect_all_points() const
 {
-    boost::range::for_each( triples(), boost::bind( &triple_t::select, _1, false));
+    std::ranges::for_each( triples(), std::bind( &triple_t::select, std::placeholders::_1, false));
 }
 
 bool shape_t::any_point_selected() const
 {
-    BOOST_FOREACH( const triple_t& t, triples())
+    for( const triple_t& t : triples())
     {
         if( t.selected())
             return true;
@@ -290,7 +285,7 @@ bool shape_t::any_point_selected() const
 
 bool shape_t::all_points_selected() const
 {
-    BOOST_FOREACH( const triple_t& t, triples())
+    for( const triple_t& t : triples())
     {
         if( !t.selected())
             return false;
@@ -361,7 +356,7 @@ void shape_t::update_xforms( bool motion_blur_only)
     else
         global_ = local_;
 
-    boost::range::for_each( children(), boost::bind( &shape_t::update_xforms, _1, motion_blur_only));
+    std::ranges::for_each( children(), std::bind( &shape_t::update_xforms, std::placeholders::_1, motion_blur_only));
 
     inv_local_ = Imath::inverse( local_);
     inv_global_ = Imath::inverse( global_);
@@ -371,7 +366,7 @@ Imath::Box2f shape_t::bbox() const
 {
     Imath::Box2f box;
 
-    BOOST_FOREACH( const triple_t& t, triples())
+    for( const triple_t& t : triples())
     {
         box.extendBy( t.p0() + offset_);
         box.extendBy( t.p1() + offset_);
@@ -385,7 +380,7 @@ Imath::Box2f shape_t::global_bbox() const
 {
     Imath::Box2f box;
 
-    BOOST_FOREACH( const triple_t& t, triples())
+    for( const triple_t& t : triples())
     {
         box.extendBy( ( t.p0() + offset_) * global_xform());
         box.extendBy( ( t.p1() + offset_) * global_xform());
@@ -558,7 +553,7 @@ void shape_t::set_shape_key( float frame)
 {
     anim::shape_key2f_t& key( curve_.insert( frame));
 
-    BOOST_FOREACH( const triple_t& t, triples())
+    for( const triple_t& t : triples())
     {
         key.value().push_back( t.p0());
         key.value().push_back( t.p1());
@@ -584,8 +579,8 @@ bool shape_t::can_delete_selected_points() const
     if( !any_point_selected() || all_points_selected())
         return false;
 
-    int num_selected = boost::range::count_if( triples(),
-                                               boost::bind( &triple_t::selected, _1));
+    int num_selected = std::ranges::count_if( triples(),
+                                               std::bind( &triple_t::selected, std::placeholders::_1));
 
     if( size() - num_selected < 3)
         return false;
@@ -600,7 +595,7 @@ void shape_t::delete_selected_points()
     if( anim_curve().empty())
     {
         triples().erase( std::remove_if( triples().begin(), triples().end(),
-                                         boost::bind( &triple_t::selected, _1)), triples().end());
+                                         std::bind( &triple_t::selected, std::placeholders::_1)), triples().end());
     }
     else
     {
@@ -719,7 +714,7 @@ void shape_t::insert_point( int span, float t)
 
 void shape_t::insert_point_in_keys( int span, float t)
 {
-    BOOST_FOREACH( anim::shape_key2f_t& k, anim_curve().keys())
+    for( anim::shape_key2f_t& k : anim_curve().keys())
       insert_point_in_key( k, span, t);
 }
 
@@ -780,7 +775,7 @@ void shape_t::do_create_tracks( anim::track_t *parent)
     if( !is_null())
     {
         std::unique_ptr<anim::track_t> t( new anim::track_t( "Points", &curve_));
-        t->changed.connect( boost::bind( &shape_t::shape_curve_changed, this, _1));
+        t->changed.connect( std::bind( &shape_t::shape_curve_changed, this, std::placeholders::_1));
         parent->add_child( std::move( t));
     }
 }
@@ -851,17 +846,17 @@ void shape_t::read( const serialization::yaml_node_t& node, int version)
     {
         RAMEN_ASSERT( !is_null());
 
-        for( int i = 0; i < points.get().size(); ++i)
+        for( int i = 0; i < points.value().size(); ++i)
         {
             triple_t t;
-            t.read( points.get()[i], version);
+            t.read( points.value()[i], version);
             triples().push_back( t);
         }
 
         serialization::optional_yaml_node_t curve_node( node.get_optional_node( "curve"));
 
         if( curve_node)
-            curve_.read( curve_node.get());
+            curve_.read( curve_node.value());
     }
 }
 
@@ -887,7 +882,7 @@ void shape_t::write( serialization::yaml_oarchive_t& out, int version) const
         {
             out << YAML::Key << "points" << YAML::Value;
                 out.begin_seq();
-                    boost::range::for_each( triples(), boost::bind( &triple_t::write, _1, boost::ref( out), version));
+                    std::ranges::for_each( triples(), std::bind( &triple_t::write, std::placeholders::_1, std::ref( out), version));
                 out.end_seq();
 
             if( !curve_.empty())

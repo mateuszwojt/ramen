@@ -4,7 +4,7 @@
 
 #include<ramen/movieio/reader.hpp>
 
-#include<boost/lexical_cast.hpp>
+#include<ramen/util/lexical_cast.hpp>
 
 namespace ramen
 {
@@ -12,7 +12,7 @@ namespace movieio
 {
 
 reader_t::reader_t() : frame_( 0) {}
-reader_t::reader_t( const boost::filesystem::path& p) : p_( p), frame_( 0) {}
+reader_t::reader_t( const std::filesystem::path& p) : p_( p), frame_( 0) {}
 
 reader_t::~reader_t() {}
 
@@ -28,7 +28,7 @@ std::string reader_t::string_for_current_frame() const
 	std::string str( filesystem::hash_string( p_));
 
 	if( is_sequence())
-		return str + "-" + boost::lexical_cast<std::string>( frame_);
+		return str + "-" + util::lexical_cast<std::string>( frame_);
 
 	return str;
 }
@@ -89,7 +89,7 @@ void reader_t::read_frame( const image::image_view_t& view,
 void reader_t::read_frame( const image::image_view_t& view,
                            const math::box2i_t& crop,
                            int subsample,
-                           const boost::tuple<int, int, int, int>& channels) const
+                           const std::tuple<int, int, int, int>& channels) const
 {
 	do_read_frame( view, crop, subsample, channels);
 }
@@ -97,7 +97,7 @@ void reader_t::read_frame( const image::image_view_t& view,
 void reader_t::do_read_frame( const image::image_view_t& view,
                               const math::box2i_t& crop,
                               int subsample,
-                              const boost::tuple<int, int, int, int>& channels) const
+                              const std::tuple<int, int, int, int>& channels) const
 {
 	throw movieio::exception( "Movie format does not support multichannel reading");	
 }

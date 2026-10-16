@@ -7,10 +7,10 @@
 #include<string>
 #include<stdexcept>
 
-#include<boost/bind.hpp>
-#include<boost/foreach.hpp>
+#include<functional>
 
-#include<boost/range/algorithm/for_each.hpp>
+
+#include<algorithm>
 
 #include<QWidget>
 #include<QVBoxLayout>
@@ -34,12 +34,12 @@ composite_param_t::composite_param_t( const composite_param_t& other) : param_t(
 
 void composite_param_t::do_init()
 {
-    boost::range::for_each( params(), boost::bind( &param_t::init, _1));
+    std::ranges::for_each( params(), std::bind( &param_t::init, std::placeholders::_1));
 }
 
 void composite_param_t::do_set_param_set( param_set_t *parent)
 {
-    BOOST_FOREACH( param_t& p, params())
+    for( param_t& p : params())
         p.set_param_set( parent);
 }
 
@@ -73,7 +73,7 @@ const param_t *composite_param_t::find( const std::string& id) const
 
 param_t *composite_param_t::find( const std::string& id)
 {
-    BOOST_FOREACH( param_t& p, params())
+    for( param_t& p : params())
     {
         if( p.id() == id)
             return &p;
@@ -92,7 +92,7 @@ param_t *composite_param_t::find( const std::string& id)
 
 void composite_param_t::do_set_frame( float frame)
 {
-    boost::range::for_each( params(), boost::bind( &param_t::set_frame, _1, frame));
+    std::ranges::for_each( params(), std::bind( &param_t::set_frame, std::placeholders::_1, frame));
 }
 
 void composite_param_t::do_create_tracks( anim::track_t *parent)
@@ -100,60 +100,60 @@ void composite_param_t::do_create_tracks( anim::track_t *parent)
     if( create_track_)
     {
         std::unique_ptr<anim::track_t> t( new anim::track_t( name()));
-        boost::range::for_each( params(), boost::bind( &param_t::create_tracks, _1, t.get()));
+        std::ranges::for_each( params(), std::bind( &param_t::create_tracks, std::placeholders::_1, t.get()));
 
         if( t->num_children() != 0)
             parent->add_child( std::move( t));
     }
     else
-        boost::range::for_each( params(), boost::bind( &param_t::create_tracks, _1, parent));
+        std::ranges::for_each( params(), std::bind( &param_t::create_tracks, std::placeholders::_1, parent));
 }
 
 void composite_param_t::do_evaluate( float frame)
 {
-    boost::range::for_each( params(), boost::bind( &param_t::evaluate, _1, frame));
+    std::ranges::for_each( params(), std::bind( &param_t::evaluate, std::placeholders::_1, frame));
 }
 
 void composite_param_t::do_add_to_hash( hash::generator_t& hash_gen) const
 {
-    BOOST_FOREACH( const param_t& p, params())
+    for( const param_t& p : params())
         p.add_to_hash( hash_gen);
 }
 
 void composite_param_t::do_update_widgets()
 {
-    boost::range::for_each( params_, boost::bind( &param_t::update_widgets, _1));
+    std::ranges::for_each( params_, std::bind( &param_t::update_widgets, std::placeholders::_1));
 }
 
 void composite_param_t::do_enable_widgets( bool e)
 {
-    boost::range::for_each( params_, boost::bind( &param_t::enable_widgets, _1, e));
+    std::ranges::for_each( params_, std::bind( &param_t::enable_widgets, std::placeholders::_1, e));
 }
 
 void composite_param_t::do_format_changed( const Imath::Box2i& new_format, float aspect, const Imath::V2f& proxy_scale)
 {
-    boost::range::for_each( params_, boost::bind( &param_t::format_changed, _1, new_format, aspect, proxy_scale));
+    std::ranges::for_each( params_, std::bind( &param_t::format_changed, std::placeholders::_1, new_format, aspect, proxy_scale));
 }
 
-void composite_param_t::do_convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base)
+void composite_param_t::do_convert_relative_paths( const std::filesystem::path& old_base, const std::filesystem::path& new_base)
 {
-    boost::range::for_each( params_, boost::bind( &param_t::convert_relative_paths, _1, old_base, new_base));
+    std::ranges::for_each( params_, std::bind( &param_t::convert_relative_paths, std::placeholders::_1, old_base, new_base));
 }
 
 void composite_param_t::do_make_paths_absolute()
 {
-    boost::range::for_each( params_, boost::bind( &param_t::make_paths_absolute, _1));
+    std::ranges::for_each( params_, std::bind( &param_t::make_paths_absolute, std::placeholders::_1));
 }
 
 void composite_param_t::do_make_paths_relative()
 {
-    boost::range::for_each( params(), boost::bind( &param_t::make_paths_relative, _1));
+    std::ranges::for_each( params(), std::bind( &param_t::make_paths_relative, std::placeholders::_1));
 }
 
 // util
-void composite_param_t::do_apply_function( const boost::function<void ( param_t*)>& f)
+void composite_param_t::do_apply_function( const std::function<void ( param_t*)>& f)
 {
-    boost::range::for_each( params(), boost::bind( &param_t::apply_function, _1, f));
+    std::ranges::for_each( params(), std::bind( &param_t::apply_function, std::placeholders::_1, f));
 }
 
 void composite_param_t::do_read( serialization::yaml_iarchive_t& node)
@@ -170,7 +170,7 @@ void composite_param_t::do_write( serialization::yaml_oarchive_t& out) const
 {
     out << YAML::Key << "children" << YAML::Value;
         out.begin_seq();
-            boost::range::for_each( params(), boost::bind( &param_t::write, _1, boost::ref( out)));
+            std::ranges::for_each( params(), std::bind( &param_t::write, std::placeholders::_1, std::ref( out)));
         out.end_seq();
 }
 
@@ -188,7 +188,7 @@ void composite_param_t::create_widgets_inside_widget( QWidget *parent)
     layout->setSpacing( 5);
     layout->setSizeConstraint( QLayout::SetFixedSize);
 
-    BOOST_FOREACH( param_t& p, params())
+    for( param_t& p : params())
     {
         if( !p.secret())
         {

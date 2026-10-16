@@ -15,7 +15,7 @@
 #include<QMainWindow>
 #include<QDockWidget>
 
-#include<boost/filesystem/fstream.hpp>
+#include<fstream>
 
 #include<ramen/core/memory.hpp>
 
@@ -68,7 +68,7 @@ public:
 
     bool can_close_document();
 
-    void update_recent_files_menu( const boost::filesystem::path& p);
+    void update_recent_files_menu( const std::filesystem::path& p);
 
 protected:
 

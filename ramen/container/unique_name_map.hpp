@@ -9,7 +9,7 @@
 #include<string>
 #include<stdexcept>
 
-#include<boost/lexical_cast.hpp>
+#include<ramen/util/lexical_cast.hpp>
 
 #include<ramen/util/string.hpp>
 

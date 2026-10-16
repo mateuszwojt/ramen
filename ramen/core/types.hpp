@@ -7,8 +7,7 @@
 
 #include<ramen/config.hpp>
 
-#include<boost/cstdint.hpp>
-#include<boost/mpl/bool.hpp>
+#include<cstdint>
 
 #include<ramen/math/hpoint2.hpp>
 #include<ramen/math/hpoint3.hpp>
@@ -89,14 +88,14 @@ RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( half, half_k);
 RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( float, float_k);
 RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( double, double_k);
 
-RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( boost::int8_t, int8_k);
-RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( boost::uint8_t, uint8_k);
-RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( boost::int16_t, int16_k);
-RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( boost::uint16_t, uint16_k);
-RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( boost::int32_t, int32_k);
-RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( boost::uint32_t, uint32_k);
-RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( boost::int64_t, int64_k);
-RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( boost::uint64_t, uint64_k);
+RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( std::int8_t, int8_k);
+RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( std::uint8_t, uint8_k);
+RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( std::int16_t, int16_k);
+RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( std::uint16_t, uint16_k);
+RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( std::int32_t, int32_k);
+RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( std::uint32_t, uint32_k);
+RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( std::int64_t, int64_k);
+RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( std::uint64_t, uint64_k);
 
 RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( math::point2i_t, point2i_k);
 RAMEN_CORE_TYPE_TRAITS_SPECIALIZATION( math::point2h_t, point2h_k);
