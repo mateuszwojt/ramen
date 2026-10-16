@@ -4,7 +4,7 @@
 
 #include<ramen/nodes/image/transform/resize_node.hpp>
 
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathMath.h>
 
 #include<ramen/app/composition.hpp>
 
@@ -43,41 +43,41 @@ resize_node_t::resize_node_t(const resize_node_t& other) : image_node_t(other), 
 
 void resize_node_t::do_create_params()
 {
-    std::auto_ptr<combo_group_param_t> top( new combo_group_param_t( "Method"));
+    std::unique_ptr<combo_group_param_t> top( new combo_group_param_t( "Method"));
     top->set_id( "method");
 
     // Absolute
     {
-		std::auto_ptr<composite_param_t> group( new composite_param_t( "Size"));
+		std::unique_ptr<composite_param_t> group( new composite_param_t( "Size"));
 		group->set_id( "size_group");
 
-		std::auto_ptr<image_format_param_t> fp( new image_format_param_t( "Size"));
+		std::unique_ptr<image_format_param_t> fp( new image_format_param_t( "Size"));
 		fp->set_id( "size");
-		group->add_param( fp);
-		top->add_param( group);
+		group->add_param( std::move( fp));
+		top->add_param( std::move( group));
     }
 
     // Relative
     {
-		std::auto_ptr<composite_param_t> group( new composite_param_t( "Scale"));
+		std::unique_ptr<composite_param_t> group( new composite_param_t( "Scale"));
 		group->set_id( "scale_group");
 
-		std::auto_ptr<float2_param_t> fp( new float2_param_t( "Scale"));
+		std::unique_ptr<float2_param_t> fp( new float2_param_t( "Scale"));
 		fp->set_id( "scale");
 		fp->set_min( 0);
 		fp->set_step( 0.05);
 		fp->set_default_value( Imath::V2f( 1, 1));
 		fp->set_proportional( true);
 		fp->set_static( true);
-		group->add_param( fp);
-        top->add_param( group);
+		group->add_param( std::move( fp));
+        top->add_param( std::move( group));
     }
 
-    add_param( top);
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Filter"));
+    add_param( std::move( top));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Filter"));
     p->set_id( "filter");
     p->menu_items() = boost::assign::list_of( "Lanczos3")( "Mitchell")( "Catrom");
-    add_param( p);
+    add_param( std::move( p));
 }
 
 bool resize_node_t::do_is_identity() const

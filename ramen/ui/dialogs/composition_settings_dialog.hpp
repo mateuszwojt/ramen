@@ -9,7 +9,7 @@
 
 #include<QDialog>
 
-#include"ui_composition_settings.h"
+#include "ui_composition_settings.h"
 
 namespace ramen
 {

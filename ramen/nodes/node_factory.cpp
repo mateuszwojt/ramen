@@ -108,10 +108,10 @@ void node_factory_t::sort_by_menu_item()
     std::sort( metaclasses_.begin(), metaclasses_.end(), compare_menu_items());
 }
 
-std::auto_ptr<node_t> node_factory_t::create_by_id( const std::string& id, bool ui)
+std::unique_ptr<node_t> node_factory_t::create_by_id( const std::string& id, bool ui)
 {
     std::map<std::string, node_metaclass_t>::iterator it( newest_node_infos_.find( id));
-    std::auto_ptr<node_t> n;
+    std::unique_ptr<node_t> n;
 
     if( it != newest_node_infos_.end())
     {
@@ -138,7 +138,7 @@ std::auto_ptr<node_t> node_factory_t::create_by_id( const std::string& id, bool 
     return n;
 }
 
-std::auto_ptr<node_t> node_factory_t::create_by_id_with_version( const std::string& id, const std::pair<int, int>& version)
+std::unique_ptr<node_t> node_factory_t::create_by_id_with_version( const std::string& id, const std::pair<int, int>& version)
 {
     std::vector<node_metaclass_t>::iterator best( metaclasses_.end());
     std::vector<node_metaclass_t>::iterator it( metaclasses_.begin());
@@ -159,7 +159,7 @@ std::auto_ptr<node_t> node_factory_t::create_by_id_with_version( const std::stri
         }
     }
 
-    std::auto_ptr<node_t> n;
+    std::unique_ptr<node_t> n;
 
     if( best_minor < version.second)
         return n;

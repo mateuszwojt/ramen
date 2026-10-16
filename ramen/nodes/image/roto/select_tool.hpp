@@ -54,7 +54,7 @@ private:
 	
 	Imath::M33f inv_xf_;
 
-	std::auto_ptr<undo::command_t> cmd_;
+	std::unique_ptr<undo::command_t> cmd_;
 };
 
 } // namespace

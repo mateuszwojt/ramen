@@ -32,7 +32,7 @@ public:
 
     poly_param_value_instance(const T& x) : base_type( x) {}
 
-    poly_param_value_instance( BOOST_RV_REF( T) x) : base_type( x) {}
+    poly_param_value_instance( BOOST_RV_REF( T) x) : base_type( boost::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( poly_param_value_instance, base_type)
 
@@ -53,7 +53,7 @@ struct param_value : core::poly_base<poly_param_value_interface, poly_param_valu
     explicit param_value( const T& s) : base_type( s) {}
 
     template <typename T>
-    explicit param_value( BOOST_RV_REF( T) x) : base_type( x) {}
+    explicit param_value( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : base_type( boost::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( param_value, base_type)
 
@@ -82,7 +82,7 @@ public:
 
     poly_param_indexable_value_instance( const T& x) : base_type( x) {}
 
-    poly_param_indexable_value_instance( BOOST_RV_REF( T) x) : base_type( x) {}
+    poly_param_indexable_value_instance( BOOST_RV_REF( T) x) : base_type( boost::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( poly_param_indexable_value_instance, base_type)
 
@@ -122,7 +122,7 @@ struct param_indexable_value : core::poly_base<poly_param_indexable_value_interf
     explicit param_indexable_value( const T& x) : base_type( x) {}
 
     template <typename T>
-    explicit param_indexable_value( BOOST_RV_REF( T) x) : base_type( x) {}
+    explicit param_indexable_value( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : base_type( boost::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( param_indexable_value, base_type)
 

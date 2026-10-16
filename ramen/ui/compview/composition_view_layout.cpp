@@ -6,7 +6,7 @@
 
 #include<boost/foreach.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/assert.hpp>
 

@@ -7,8 +7,8 @@
 
 #include<boost/optional.hpp>
 
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathRandom.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathRandom.h>
 
 #include<ramen/nodes/node_fwd.hpp>
 

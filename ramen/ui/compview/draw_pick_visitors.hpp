@@ -7,7 +7,7 @@
 
 #include<ramen/nodes/node_visitor.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/ui/compview/pick_result.hpp>
 

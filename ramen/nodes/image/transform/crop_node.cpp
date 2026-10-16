@@ -120,13 +120,13 @@ crop_node_t::crop_node_t() : image_node_t()
 
 void crop_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> p( new float_param_t( "Top"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Top"));
     p->set_id( "top");
     p->set_range( 0, 1);
     p->set_numeric_type( numeric_param_t::relative_size_y, 0);
     p->set_default_value( 0);
     p->set_static( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Left"));
     p->set_id( "left");
@@ -134,7 +134,7 @@ void crop_node_t::do_create_params()
     p->set_numeric_type( numeric_param_t::relative_size_x, 0);
     p->set_default_value( 0);
     p->set_static( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Bottom"));
     p->set_id( "bottom");
@@ -142,7 +142,7 @@ void crop_node_t::do_create_params()
     p->set_numeric_type( numeric_param_t::relative_size_y, 0);
     p->set_default_value( 0);
     p->set_static( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Right"));
     p->set_id( "right");
@@ -150,43 +150,43 @@ void crop_node_t::do_create_params()
     p->set_numeric_type( numeric_param_t::relative_size_x, 0);
     p->set_default_value( 0);
     p->set_static( true);
-    add_param( p);
+    add_param( std::move( p));
 	
-	std::auto_ptr<separator_param_t> sep( new separator_param_t());
-	add_param( sep);
+	std::unique_ptr<separator_param_t> sep( new separator_param_t());
+	add_param( std::move( sep));
 	
     p.reset( new float_param_t( "Soft Top"));
     p->set_id( "soft_top");
     p->set_range( 0, 1);
     p->set_numeric_type( numeric_param_t::relative_size_y, 0);
     p->set_default_value( 0);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Soft Left"));
     p->set_id( "soft_left");
     p->set_range( 0, 1);
     p->set_numeric_type( numeric_param_t::relative_size_x, 0);
     p->set_default_value( 0);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Soft Bottom"));
     p->set_id( "soft_bottom");
     p->set_range( 0, 1);
     p->set_numeric_type( numeric_param_t::relative_size_y, 0);
     p->set_default_value( 0);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Soft Right"));
     p->set_id( "soft_right");
     p->set_range( 0, 1);
     p->set_numeric_type( numeric_param_t::relative_size_x, 0);
     p->set_default_value( 0);
-    add_param( p);
+    add_param( std::move( p));
 	
-	std::auto_ptr<bool_param_t> b( new bool_param_t( "Alpha only"));
+	std::unique_ptr<bool_param_t> b( new bool_param_t( "Alpha only"));
 	b->set_id( "alpha_only");
 	b->set_default_value( false);
-	add_param( b);
+	add_param( std::move( b));
 }
 
 void crop_node_t::do_calc_format( const render::context_t& context)

@@ -127,7 +127,7 @@ private:
 
     std::set<anim::track_t*> active_tracks_;
 
-    std::auto_ptr<undo::anim_editor_command_t> command_;
+    std::unique_ptr<undo::anim_editor_command_t> command_;
 	
 	QWidget *window_;
 	

@@ -29,10 +29,6 @@ TEST( HPoint, Construct)
     hpoint3f_t q( 0.53f, 7.1f, 2.0f);
 }
 
-TEST( Point, )
-{
-}
-
 /*
 BOOST_AUTO_TEST_CASE( point2_test)
 {

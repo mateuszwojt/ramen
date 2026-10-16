@@ -9,7 +9,7 @@
 
 #include<QDialog>
 
-#include"ui_smooth_anim_curves.h"
+#include "ui_smooth_anim_curves.h"
 
 namespace ramen
 {

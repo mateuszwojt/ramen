@@ -72,7 +72,7 @@ public:
 } // detail
 
 template<class View1, class View2>
-GIL_FORCEINLINE void tbb_copy_pixels( const View1& src, const View2& dst)
+BOOST_FORCEINLINE void tbb_copy_pixels( const View1& src, const View2& dst)
 { 
     assert(src.dimensions()==dst.dimensions());
     tbb::parallel_for( tbb::blocked_range<std::size_t>( 0, src.height()),
@@ -81,14 +81,14 @@ GIL_FORCEINLINE void tbb_copy_pixels( const View1& src, const View2& dst)
 }
 
 template <typename V1, typename V2,typename CC>
-GIL_FORCEINLINE void tbb_copy_and_convert_pixels(const V1& src, const V2& dst,CC cc)
+BOOST_FORCEINLINE void tbb_copy_and_convert_pixels(const V1& src, const V2& dst,CC cc)
 {
     detail::tbb_copy_and_convert_pixels_fn<CC> ccp(cc);
     ccp( src, dst);
 }
 
 template <typename View1, typename View2>
-GIL_FORCEINLINE void tbb_copy_and_convert_pixels(const View1& src, const View2& dst)
+BOOST_FORCEINLINE void tbb_copy_and_convert_pixels(const View1& src, const View2& dst)
 {
     detail::tbb_copy_and_convert_pixels_fn<default_color_converter> ccp;
     ccp( src, dst);

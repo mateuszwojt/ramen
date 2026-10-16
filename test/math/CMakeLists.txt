@@ -4,10 +4,10 @@
 # See CDDL_LICENSE.txt for a copy of the license.                    #
 ######################################################################
 
-ADD_RAMEN_TEST( box)
-ADD_RAMEN_TEST( cmath)
-ADD_RAMEN_TEST( fast_float)
-ADD_RAMEN_TEST( matrix)
-ADD_RAMEN_TEST( normal)
-ADD_RAMEN_TEST( points)
-ADD_RAMEN_TEST( vectors)
+add_ramen_test( box)
+add_ramen_test( cmath)
+add_ramen_test( fast_float)
+add_ramen_test( matrix)
+add_ramen_test( normal)
+add_ramen_test( points)
+add_ramen_test( vectors)

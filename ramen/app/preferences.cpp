@@ -9,7 +9,7 @@
 
 #include<boost/filesystem/fstream.hpp>
 #include<boost/filesystem/operations.hpp>
-#include<boost/filesystem/convenience.hpp>
+#include<boost/filesystem/operations.hpp>
 
 #include<ramen/app/application.hpp>
 
@@ -47,10 +47,7 @@ void preferences_t::load()
 
     try
     {
-        YAML::Parser parser( ifs);
-
-        YAML::Node doc;
-        parser.GetNextDocument(doc);
+        const YAML::Node doc = YAML::Load( ifs);
 
         int version;
 

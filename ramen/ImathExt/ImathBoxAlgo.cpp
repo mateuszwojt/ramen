@@ -27,8 +27,8 @@ Imath::Box2i scale( const Imath::Box2i& b, float s) { return scale( b, s, s);}
 
 Imath::Box2i scale( const Imath::Box2i& b, float sx, float sy)
 {
-    return Imath::Box2i( Imath::V2i( Imath::Math<float>::floor( b.min.x * sx), Imath::Math<float>::floor( b.min.y * sy)),
-			 Imath::V2i( Imath::Math<float>::ceil(  b.max.x * sx), Imath::Math<float>::ceil(  b.max.y * sy)));
+    return Imath::Box2i( Imath::V2i( std::floor( b.min.x * sx), std::floor( b.min.y * sy)),
+			 Imath::V2i( std::ceil(  b.max.x * sx), std::ceil(  b.max.y * sy)));
 }
 
 Imath::Box2i scale( const Imath::Box2i& b, float sx, float sy, int xcenter, int ycenter)

@@ -1,22 +1,19 @@
 # Find Antigrain headers and libraries.
 #
-#  AGG_INCLUDE_DIRS - where to find agg includes.
-#  AGG_LIBRARIES    - List of libraries when using agg.
-#  AGG_FOUND        - True if agg found.
+#  Agg::Agg  - imported target.
+#  Agg_FOUND - True if agg found.
 
-FIND_PATH( AGG_INCLUDE_DIR NAMES agg2/agg_bspline.h)
-FIND_LIBRARY( AGG_LIBRARY NAMES agg)
+find_path( AGG_INCLUDE_DIR NAMES agg2/agg_bspline.h)
+find_library( AGG_LIBRARY NAMES agg)
 
-INCLUDE( FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( AGG DEFAULT_MSG AGG_LIBRARY AGG_INCLUDE_DIR)
+include( FindPackageHandleStandardArgs)
+find_package_handle_standard_args( Agg DEFAULT_MSG AGG_LIBRARY AGG_INCLUDE_DIR)
 
-# Copy the results to the output variables.
-IF( AGG_FOUND)
-    SET( AGG_LIBRARIES ${AGG_LIBRARY})
-    SET( AGG_INCLUDE_DIRS ${AGG_INCLUDE_DIR})
-ELSE()
-    SET( AGG_LIBRARIES)
-    SET( AGG_INCLUDE_DIRS)
-ENDIF()
+if( Agg_FOUND AND NOT TARGET Agg::Agg)
+    add_library( Agg::Agg UNKNOWN IMPORTED)
+    set_target_properties( Agg::Agg PROPERTIES
+                            IMPORTED_LOCATION "${AGG_LIBRARY}"
+                            INTERFACE_INCLUDE_DIRECTORIES "${AGG_INCLUDE_DIR}")
+endif()
 
-MARK_AS_ADVANCED( AGG_INCLUDE_DIR AGG_LIBRARY)
+mark_as_advanced( AGG_INCLUDE_DIR AGG_LIBRARY)

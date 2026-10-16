@@ -11,7 +11,7 @@
 #include<boost/shared_ptr.hpp>
 #include<boost/function.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<ramen/GL/program.hpp>
 
@@ -42,7 +42,7 @@ public:
 
 	void set_context_callback( const get_context_callback_t& f);
 	
-	void set_display_transform( OCIO::ConstConfigRcPtr config, OCIO::DisplayTransformRcPtr transform);
+	void set_display_transform( OCIO::ConstConfigRcPtr config, OCIO::DisplayViewTransformRcPtr transform);
 
 	Imath::Color3f transform( const Imath::Color3f& c) const;
 	Imath::Color4f transform( const Imath::Color4f& c) const;

@@ -33,7 +33,7 @@ public:
     boost::ptr_vector<param_t>& params()				{ return params_;}
 
     template<class T>
-    void add_param( std::auto_ptr<T> p) { do_add_param( p.release());}
+    void add_param( std::unique_ptr<T> p) { do_add_param( p.release());}
 
     const param_t *find( const std::string& id) const;
     param_t *find( const std::string& id);

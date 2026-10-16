@@ -62,8 +62,8 @@ public:
 
     bool has_command_for_param( param_t *p) { return commands_.find( p) != commands_.end();}
 
-    void add_command( param_t *p, std::auto_ptr<undo::command_t> c) { commands_.insert( p, c);}
-    void add_command( std::auto_ptr<undo::command_t> c) { more_commands_.push_back( c);}
+    void add_command( param_t *p, std::unique_ptr<undo::command_t> c) { commands_.insert( p, std::move( c));}
+    void add_command( std::unique_ptr<undo::command_t> c) { more_commands_.push_back( std::move( c));}
 
     virtual void undo()
     {
@@ -166,7 +166,7 @@ void param_set_t::begin_edit()
 void param_set_t::end_edit( bool notify)
 {
     if( command_.get() && !is_command_empty())
-        app().document().undo_stack().push_back( command_);
+        app().document().undo_stack().push_back( std::move( command_));
     else
         command_.reset();
 
@@ -174,7 +174,8 @@ void param_set_t::end_edit( bool notify)
         notify_parent();
 
     app().ui()->update();
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 bool param_set_t::editing() const { return command_.get();}
@@ -196,10 +197,10 @@ void param_set_t::add_command( param_t *p)
     {
         if( !command_->has_command_for_param( p))
         {
-            std::auto_ptr<undo::command_t> c( p->create_command());
+            std::unique_ptr<undo::command_t> c( p->create_command());
 
             if( c.get())
-                command_->add_command( p, c);
+                command_->add_command( p, std::move( c));
         }
    }
 }

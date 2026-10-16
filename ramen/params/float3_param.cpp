@@ -424,7 +424,8 @@ void float3_param_t::spinbox_dragged( double value)
     else
         parameterised()->update_overlay();
 
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 void float3_param_t::spinbox_released()

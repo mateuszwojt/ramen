@@ -18,23 +18,23 @@ percentile_filter_node_t::percentile_filter_node_t() : areaop_node_t() { set_nam
 
 void percentile_filter_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Channels"));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
     p->set_id( "channels");
     p->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<float_param_t> q( new float_param_t( "Radius"));
+    std::unique_ptr<float_param_t> q( new float_param_t( "Radius"));
     q->set_id( "radius");
     q->set_default_value( 1);
     q->set_range( 0, 50);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new float_param_t( "Percent"));
     q->set_id( "percent");
     q->set_static( true);
     q->set_default_value( 0.5);
     q->set_range( 0, 1);
-    add_param( q);
+    add_param( std::move( q));
 }
 
 void percentile_filter_node_t::get_expand_radius( int& hradius, int& vradius) const

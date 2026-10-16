@@ -6,8 +6,8 @@
 
 #include<boost/config.hpp>
 
-#include<OpenEXR/ImathVec.h>
-#include<OpenEXR/ImathRandom.h>
+#include<Imath/ImathVec.h>
+#include<Imath/ImathRandom.h>
 
 #include<ramen/noise/permutation_array.hpp>
 

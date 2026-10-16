@@ -114,7 +114,8 @@ void float_param_t::do_format_changed( const Imath::Box2i& new_domain, float asp
         get_scale_and_offset( scale, offset);
         curve().set_scale( scale);
         curve().set_offset( offset);
-        app().ui()->update_anim_editors();
+        if( app().ui())
+            app().ui()->update_anim_editors();
     }
 
     if( input_)
@@ -239,7 +240,8 @@ void float_param_t::spinbox_dragged( double value)
     else
         parameterised()->update_overlay();
 
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 void float_param_t::spinbox_released()

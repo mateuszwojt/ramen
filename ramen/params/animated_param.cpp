@@ -7,7 +7,7 @@
 #include<boost/bind.hpp>
 #include<boost/foreach.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/params/animated_param_command.hpp>
 
@@ -154,9 +154,9 @@ void animated_param_t::do_anim_curve_changed( anim::any_curve_ptr_t& c)
 	emit_param_changed( user_edited);
 }
 
-std::auto_ptr<undo::command_t> animated_param_t::do_create_command()
+std::unique_ptr<undo::command_t> animated_param_t::do_create_command()
 {
-    return std::auto_ptr<undo::command_t>( new animated_param_command_t( *this->param_set(), id()));
+    return std::unique_ptr<undo::command_t>( new animated_param_command_t( *this->param_set(), id()));
 }
 
 // spinboxes
@@ -185,7 +185,8 @@ void animated_param_t::set_key( int curve_index)
 		curve( curve_index).insert( composition()->frame());
 
     param_set()->end_edit( true);
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 void animated_param_t::delete_key( int curve_index, float time)
@@ -199,7 +200,8 @@ void animated_param_t::delete_key( int curve_index, float time)
 	curve( curve_index).recalc_tangents_and_coefficients();
 
     param_set()->end_edit( true);
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 void animated_param_t::delete_all_keys( int curve_index)
@@ -212,7 +214,8 @@ void animated_param_t::delete_all_keys( int curve_index)
 	curve( curve_index).clear();
 
     param_set()->end_edit( true);
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 void animated_param_t::paste( int curve_index)
@@ -228,7 +231,8 @@ void animated_param_t::paste( int curve_index)
 	
 	evaluate( composition()->frame());
 	update_widgets();
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 bool animated_param_t::all_curves_empty() const
@@ -244,7 +248,7 @@ bool animated_param_t::all_curves_empty() const
 
 void animated_param_t::do_create_tracks( anim::track_t *parent)
 {
-	std::auto_ptr<anim::track_t> t;
+	std::unique_ptr<anim::track_t> t;
 
 	if( num_curves() == 1)
 	{
@@ -257,13 +261,13 @@ void animated_param_t::do_create_tracks( anim::track_t *parent)
 
 		for( int i = 0; i < num_curves(); ++i)
 		{
-			std::auto_ptr<anim::track_t> tx( new anim::track_t( curve_name( i), &curve( i)));
+			std::unique_ptr<anim::track_t> tx( new anim::track_t( curve_name( i), &curve( i)));
 			tx->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
-			t->add_child( tx);
+			t->add_child( std::move( tx));
 		}
 	}
 
-	parent->add_child( t);
+	parent->add_child( std::move( t));
 }
 
 // serialization
@@ -276,11 +280,11 @@ void animated_param_t::read_curves( const serialization::yaml_node_t& node)
 		for( serialization::yaml_node_t::const_iterator it( curves.get().begin()); it != curves.get().end(); ++it)
 		{
 			std::string key;
-			it.first() >> key;
+			it->first >> key;
 			
 			if( anim::float_curve_t *c = find_curve( key))
 			{
-				serialization::yaml_node_t crv_node( node, &( it.second()));
+				serialization::yaml_node_t crv_node( node, it->second);
 				c->read( crv_node);
 			}
 			else

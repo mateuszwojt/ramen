@@ -5,7 +5,7 @@
 #ifndef RAMEN_IMAGE_ACCUMULATOR_HPP
 #define	RAMEN_IMAGE_ACCUMULATOR_HPP
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/image/processing.hpp>
 

@@ -7,6 +7,7 @@
 #include<gil/extension/half.hpp>
 
 #include<OpenEXR/ImfOutputFile.h>
+#include<OpenEXR/ImfFrameBuffer.h>
 #include<OpenEXR/ImfChannelList.h>
 
 #include<ramen/assert.hpp>

@@ -17,24 +17,24 @@ adjust_hsv_node_t::adjust_hsv_node_t() : pointop_node_t() { set_name("adjust_hsv
 
 void adjust_hsv_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> p( new float_param_t( "Hue rot"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Hue rot"));
     p->set_id( "hue_rot");
     p->set_default_value( 0);
     p->set_step( 0.5f);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Saturation"));
     p->set_id( "sat");
     p->set_default_value( 1);
     p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Value"));
     p->set_id( "value");
     p->set_min( 0);
     p->set_default_value( 1);
     p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void adjust_hsv_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

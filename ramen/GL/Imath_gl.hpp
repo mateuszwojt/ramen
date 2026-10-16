@@ -7,9 +7,9 @@
 
 #include<ramen/GL/gl.hpp>
 
-#include<OpenEXR/ImathVec.h>
-#include<OpenEXR/ImathMatrix.h>
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathVec.h>
+#include<Imath/ImathMatrix.h>
+#include<Imath/ImathColor.h>
 
 namespace ramen
 {

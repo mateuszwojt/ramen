@@ -80,30 +80,30 @@ displace_node_t::displace_node_t() : distort_node_t()
 
 void displace_node_t::do_create_params()
 {
-    std::auto_ptr<float2_param_t> p( new float2_param_t( "Amplitude"));
+    std::unique_ptr<float2_param_t> p( new float2_param_t( "Amplitude"));
     p->set_id( "amplitude");
     p->set_proportional( true);
     p->set_min( 0);
     p->set_default_value( Imath::V2f( 0, 0));
     p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<popup_param_t> q( new popup_param_t( "X channel"));
+    std::unique_ptr<popup_param_t> q( new popup_param_t( "X channel"));
     q->set_id( "xchannel");
     q->menu_items() = boost::assign::list_of( "Red")( "Green")( "Blue")( "Alpha");
     q->set_default_value( 0);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new popup_param_t( "Y channel"));
     q->set_id( "ychannel");
     q->menu_items() = boost::assign::list_of( "Red")( "Green")( "Blue")( "Alpha");
     q->set_default_value( 1);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new popup_param_t( "Borders"));
     q->set_id( "borders");
     q->menu_items() = boost::assign::list_of( "Black")( "Tile")( "Mirror");
-    add_param( q);	
+    add_param( std::move( q));	
 }
 
 bool displace_node_t::do_is_identity() const

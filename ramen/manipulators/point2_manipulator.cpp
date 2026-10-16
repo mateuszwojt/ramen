@@ -66,7 +66,8 @@ void point2_manipulator_t::do_mouse_drag_event( const ui::mouse_drag_event_t& ev
 	Imath::V2f q = get_absolute_value<Imath::V2f>( *param_);
 	param_->set_absolute_value( q + offset);
 	param_->update_widgets();
-	app().ui()->update_anim_editors();
+	if( app().ui())
+	    app().ui()->update_anim_editors();
 	
 	if( param_->track_mouse())
 		param_->param_set()->notify_parent();

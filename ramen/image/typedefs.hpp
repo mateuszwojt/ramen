@@ -5,9 +5,9 @@
 #ifndef RAMEN_IMAGE_TYPEDEFS_HPP
 #define RAMEN_IMAGE_TYPEDEFS_HPP
 
-#include<boost/gil/gil_all.hpp>
+#include<boost/gil.hpp>
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ramen/gil/extension/half.hpp>
 
@@ -16,7 +16,7 @@ namespace ramen
 namespace image
 {
 
-typedef boost::gil::bits32f	channel_t;
+typedef boost::gil::float32_t	channel_t;
 typedef channel_t*			channel_ptr_t;
 typedef const channel_t*	const_channel_ptr_t;
 

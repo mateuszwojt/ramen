@@ -15,6 +15,7 @@
 #include<QResizeEvent>
 #include<QHelpEvent>
 #include<QPainter>
+#include<QPainterPath>
 #include<QPen>
 #include<QBrush>
 #include<QToolTip>
@@ -208,7 +209,7 @@ void composition_view_t::keyReleaseEvent( QKeyEvent *event)
 
 void composition_view_t::mouseDoubleClickEvent( QMouseEvent *event)
 {
-    Imath::V2f wpos = screen_to_world( Imath::V2i( event->x(), event->y()));
+    Imath::V2f wpos = screen_to_world( Imath::V2i( event->position().x(), event->position().y()));
     layout_.set_interest_point( wpos);
 
     if( last_pick_.component == pick_result_t::body_picked)
@@ -273,9 +274,9 @@ void composition_view_t::mousePressEvent( QMouseEvent *event)
         if( pick_edge( wpos, src, dst, port))
         {
             // TODO: if either src or dest are groups, resolve the real nodes.
-            std::auto_ptr<undo::command_t> c( new undo::disconnect_command_t( src, dst, port));
+            std::unique_ptr<undo::command_t> c( new undo::disconnect_command_t( src, dst, port));
             c->redo();
-            app().document().undo_stack().push_back( c);
+            app().document().undo_stack().push_back( std::move( c));
             app().ui()->update();
             return;
         }
@@ -339,7 +340,7 @@ void composition_view_t::mouseMoveEvent( QMouseEvent *event)
 
 void composition_view_t::mouseReleaseEvent( QMouseEvent *event)
 {
-    Imath::V2f wpos = screen_to_world( Imath::V2i( event->x(), event->y()));
+    Imath::V2f wpos = screen_to_world( Imath::V2i( event->position().x(), event->position().y()));
     layout_.set_interest_point( wpos);
 
     if( release_handler_)
@@ -352,9 +353,9 @@ void composition_view_t::mouseReleaseEvent( QMouseEvent *event)
 
 void composition_view_t::wheelEvent( QWheelEvent *event)
 {
-    Imath::V2f wpos = screen_to_world( Imath::V2i( event->x(), event->y()));
+    Imath::V2f wpos = screen_to_world( Imath::V2i( event->position().x(), event->position().y()));
     layout_.set_interest_point( wpos);
-    if ( event->delta() > 0)
+    if ( event->angleDelta().y() > 0)
         viewport().zoom( wpos, 1.10f);
     else
         viewport().zoom( wpos, 1.0f / 1.10f);
@@ -465,9 +466,9 @@ void composition_view_t::connect_release_handler( QMouseEvent *event)
     // TODO: if either source or dest are groups, resolve the real nodes here.
     if( app().document().composition().can_connect( src, dst, port))
     {
-        std::auto_ptr<undo::command_t> c( new undo::connect_command_t( src, dst, port));
+        std::unique_ptr<undo::command_t> c( new undo::connect_command_t( src, dst, port));
         c->redo();
-        app().document().undo_stack().push_back( c);
+        app().document().undo_stack().push_back( std::move( c));
         app().ui()->update();
     }
     else

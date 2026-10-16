@@ -38,10 +38,10 @@ set_matte_node_t::set_matte_node_t() : image_node_t()
 
 void set_matte_node_t::do_create_params()
 {
-    std::auto_ptr<bool_param_t> q( new bool_param_t( "Premultiply"));
+    std::unique_ptr<bool_param_t> q( new bool_param_t( "Premultiply"));
     q->set_id( "premultiply");
     q->set_default_value( true);
-    add_param( q);
+    add_param( std::move( q));
 }
 
 void set_matte_node_t::do_calc_bounds( const render::context_t& context)

@@ -8,7 +8,7 @@
 #include<ramen/nodes/image_node.hpp>
 #include<ramen/nodes/node_output_interface.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 namespace ramen
 {

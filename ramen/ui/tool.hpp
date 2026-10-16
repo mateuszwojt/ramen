@@ -3,7 +3,7 @@
 #ifndef RAMEN_UI_TOOL_HPP
 #define	RAMEN_UI_TOOL_HPP
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/GL/gl.hpp>
 

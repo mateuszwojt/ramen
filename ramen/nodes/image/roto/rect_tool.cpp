@@ -51,7 +51,7 @@ void rect_tool_t::mouse_release_event( const ui::mouse_release_event_t& event)
 	{
 		box_.min.x /= event.aspect_ratio;
 		box_.max.x /= event.aspect_ratio;
-		std::auto_ptr<roto::shape_t> s = parent().create_shape( box_);
+		std::unique_ptr<roto::shape_t> s = parent().create_shape( box_);
 		
 		s->set_center( s->bbox().center(), false);
 		s->set_translation( Imath::V2f( 0, 0));
@@ -59,9 +59,9 @@ void rect_tool_t::mouse_release_event( const ui::mouse_release_event_t& event)
 		if( s->autokey())
 			s->set_shape_key( app().document().composition().frame());
 		
-		std::auto_ptr<undo::add_roto_command_t> cmd( new undo::add_roto_command_t( parent(), s));
+		std::unique_ptr<undo::add_roto_command_t> cmd( new undo::add_roto_command_t( parent(), std::move( s)));
 		cmd->redo();
-		app().document().undo_stack().push_back( cmd);
+		app().document().undo_stack().push_back( std::move( cmd));
 		app().ui()->update();
 	}
 

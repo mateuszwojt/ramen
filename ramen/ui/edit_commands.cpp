@@ -82,8 +82,8 @@ void delete_command_t::undo()
 
     while( !node_storage_.empty())
     {
-        std::auto_ptr<node_t> ptr( node_storage_.pop_back().release());
-        app().document().composition().add_node( ptr);
+        std::unique_ptr<node_t> ptr( node_storage_.pop_back().release());
+        app().document().composition().add_node( std::move( ptr));
     }
 
     boost::range::for_each( edges_to_remove_, boost::bind( &composition_t::add_edge, comp, _1, true));
@@ -95,8 +95,8 @@ void delete_command_t::redo()
 {
     for( std::vector<node_t*>::const_iterator it( nodes_.begin()); it != nodes_.end(); ++it)
     {
-        std::auto_ptr<node_t> ptr( app().document().composition().release_node( *it));
-        node_storage_.push_back( ptr);
+        std::unique_ptr<node_t> ptr( app().document().composition().release_node( *it));
+        node_storage_.push_back( std::move( ptr));
     }
 
     composition_t *comp = &app().document().composition();
@@ -109,10 +109,10 @@ void delete_command_t::redo()
 
 duplicate_command_t::duplicate_command_t() : command_t( "Duplicate") {}
 
-void duplicate_command_t::add_node( std::auto_ptr<node_t> n)
+void duplicate_command_t::add_node( std::unique_ptr<node_t> n)
 {
     nodes_.push_back( n.get());
-    node_storage_.push_back( n);
+    node_storage_.push_back( std::move( n));
 }
 
 void duplicate_command_t::add_edge( const edge_t& e) { edges_.push_back( e);}
@@ -121,8 +121,8 @@ void duplicate_command_t::undo()
 {
     for( std::vector<node_t*>::const_iterator it( nodes_.begin()); it != nodes_.end(); ++it)
     {
-        std::auto_ptr<node_t> ptr( app().document().composition().release_node( *it));
-        node_storage_.push_back( ptr);
+        std::unique_ptr<node_t> ptr( app().document().composition().release_node( *it));
+        node_storage_.push_back( std::move( ptr));
     }
 
     composition_t *comp = &app().document().composition();
@@ -134,8 +134,8 @@ void duplicate_command_t::redo()
 {
     while( !node_storage_.empty())
     {
-        std::auto_ptr<node_t> ptr( node_storage_.pop_back().release());
-        app().document().composition().add_node( ptr);
+        std::unique_ptr<node_t> ptr( node_storage_.pop_back().release());
+        app().document().composition().add_node( std::move( ptr));
     }
 
     composition_t *comp = &app().document().composition();

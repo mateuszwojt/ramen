@@ -41,7 +41,7 @@ tbb_for_each_pixel_fun<View, Fun> make_tbb_for_each_pixel_fun( const View& view,
 } // detail
 
 template<class View, class Fun>
-GIL_FORCEINLINE void tbb_for_each_pixel( const View& v, Fun f)
+BOOST_FORCEINLINE void tbb_for_each_pixel( const View& v, Fun f)
 {
     tbb::parallel_for( tbb::blocked_range<std::size_t>( 0, v.height()),
                         detail::make_tbb_for_each_pixel_fun( v, f),

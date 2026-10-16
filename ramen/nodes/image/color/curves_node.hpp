@@ -5,7 +5,7 @@
 
 #include<ramen/nodes/image/pointop_node.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 namespace ramen
 {

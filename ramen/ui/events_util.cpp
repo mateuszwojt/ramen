@@ -27,7 +27,7 @@ int translate_mouse_buttons( QMouseEvent *event)
     case Qt::LeftButton:
         return mouse_event_t::left_button;
 
-    case Qt::MidButton:
+    case Qt::MiddleButton:
         return mouse_event_t::middle_button;
 
     case Qt::RightButton:

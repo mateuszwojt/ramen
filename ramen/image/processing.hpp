@@ -5,7 +5,7 @@
 
 #include<ramen/config.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/image/typedefs.hpp>
 

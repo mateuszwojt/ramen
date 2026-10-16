@@ -215,7 +215,7 @@ public:
     // user interface
     virtual const char *help_string() const;
 
-    virtual std::auto_ptr<QWidget> create_toolbar() { return std::auto_ptr<QWidget>();}
+    virtual std::unique_ptr<QWidget> create_toolbar() { return std::unique_ptr<QWidget>();}
 
     // paths
     virtual void convert_relative_paths( const boost::filesystem::path& old_base,

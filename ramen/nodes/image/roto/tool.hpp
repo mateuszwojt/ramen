@@ -7,7 +7,7 @@
 
 #include<ramen/ui/tool.hpp>
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ramen/bezier/algorithm.hpp>
 

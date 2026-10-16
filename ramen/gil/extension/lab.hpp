@@ -8,7 +8,7 @@
 
 #include<cmath>
 
-#include<boost/gil/gil_all.hpp>
+#include<boost/gil.hpp>
 #include<boost/type_traits/is_floating_point.hpp>
 
 /*
@@ -106,16 +106,16 @@ struct rgb2lab_color_converter
     template <typename P1, typename P2>
     void operator()( const P1& src, P2& dst) const
     {
-	bits32f temp_red   = channel_convert<bits32f>( get_color( src, red_t()   ));
-	bits32f temp_green = channel_convert<bits32f>( get_color( src, green_t() ));
-	bits32f temp_blue  = channel_convert<bits32f>( get_color( src, blue_t()  ));
+	float32_t temp_red   = channel_convert<float32_t>( get_color( src, red_t()   ));
+	float32_t temp_green = channel_convert<float32_t>( get_color( src, green_t() ));
+	float32_t temp_blue  = channel_convert<float32_t>( get_color( src, blue_t()  ));
 
 	float l, a, b;
 	detail::rgb2lab( (float) temp_red, (float) temp_green, (float) temp_blue, l, a, b, gamma_);
 
-	get_color( dst, luminance_t()) = channel_convert<typename color_element_type<luminance_t, P2>::type>((bits32f) l);
-	get_color( dst, a_color_t())   = channel_convert<typename color_element_type<a_color_t  , P2>::type>((bits32f) a);
-	get_color( dst, b_color_t())   = channel_convert<typename color_element_type<b_color_t  , P2>::type>((bits32f) b);
+	get_color( dst, luminance_t()) = channel_convert<typename color_element_type<luminance_t, P2>::type>((float32_t) l);
+	get_color( dst, a_color_t())   = channel_convert<typename color_element_type<a_color_t  , P2>::type>((float32_t) a);
+	get_color( dst, b_color_t())   = channel_convert<typename color_element_type<b_color_t  , P2>::type>((float32_t) b);
     }
 
 private:
@@ -130,16 +130,16 @@ struct lab2rgb_color_converter
     template <typename P1, typename P2>
     void operator()( const P1& src, P2& dst) const
     {
-	bits32f temp_l = channel_convert<bits32f>( get_color( src, luminance_t()));
-	bits32f temp_a = channel_convert<bits32f>( get_color( src, a_color_t()));
-	bits32f temp_b = channel_convert<bits32f>( get_color( src, b_color_t()));
+	float32_t temp_l = channel_convert<float32_t>( get_color( src, luminance_t()));
+	float32_t temp_a = channel_convert<float32_t>( get_color( src, a_color_t()));
+	float32_t temp_b = channel_convert<float32_t>( get_color( src, b_color_t()));
 
 	float r, g, b;
 	detail::lab2rgb( (float) temp_l, (float) temp_a, (float) temp_b, r, g, b);
 
-	get_color( dst, red_t())   = channel_convert<typename color_element_type<red_t  , P2>::type>((bits32f) r);
-	get_color( dst, green_t()) = channel_convert<typename color_element_type<green_t, P2>::type>((bits32f) g);
-	get_color( dst, blue_t())  = channel_convert<typename color_element_type<blue_t , P2>::type>((bits32f) b);
+	get_color( dst, red_t())   = channel_convert<typename color_element_type<red_t  , P2>::type>((float32_t) r);
+	get_color( dst, green_t()) = channel_convert<typename color_element_type<green_t, P2>::type>((float32_t) g);
+	get_color( dst, blue_t())  = channel_convert<typename color_element_type<blue_t , P2>::type>((float32_t) b);
     }
 
 private:

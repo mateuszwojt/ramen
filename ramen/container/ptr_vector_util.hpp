@@ -18,9 +18,9 @@ namespace container
 {
 
 template<class T, class C, class A>
-std::auto_ptr<T> release_ptr( T *p, boost::ptr_vector<T,C,A>& vec)
+std::unique_ptr<T> release_ptr( T *p, boost::ptr_vector<T,C,A>& vec)
 {
-    std::auto_ptr<T> result;
+    std::unique_ptr<T> result;
 
 	for( typename boost::ptr_vector<T,C,A>::iterator it( vec.begin()), e( vec.end()); it != e; ++it)
 	{

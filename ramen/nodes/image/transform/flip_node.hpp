@@ -5,7 +5,7 @@
 
 #include<ramen/nodes/image_node.hpp>
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 namespace ramen
 {

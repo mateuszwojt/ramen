@@ -32,8 +32,8 @@ protected:
     composite_parameterised_t( const composite_parameterised_t& other);
     void operator=( const parameterised_t& other);
 
-    void add_parameterised( std::auto_ptr<parameterised_t> p);
-    std::auto_ptr<parameterised_t> remove_parameterised( parameterised_t *p);
+    void add_parameterised( std::unique_ptr<parameterised_t> p);
+    std::unique_ptr<parameterised_t> remove_parameterised( parameterised_t *p);
 
     const parameterised_container_type& children() const    { return children_;}
     parameterised_container_type& children()                { return children_;}

@@ -5,7 +5,7 @@
 #ifndef RAMEN_MANIPULATORS_PICK_HPP
 #define RAMEN_MANIPULATORS_PICK_HPP
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 namespace ramen
 {

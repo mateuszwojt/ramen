@@ -5,7 +5,7 @@
 #ifndef RAMEN_IMAGE_GENERIC_APPLY_COLOR_MATRIX_HPP
 #define RAMEN_IMAGE_GENERIC_APPLY_COLOR_MATRIX_HPP
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ramen/image/typedefs.hpp>
 

@@ -7,7 +7,7 @@
 
 #include<boost/cstdint.hpp>
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 #include<ramen/serialization/archive_fwd.hpp>
 

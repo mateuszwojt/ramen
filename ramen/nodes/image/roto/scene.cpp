@@ -34,12 +34,12 @@ scene_t::scene_t( const scene_t& other) : parent_( 0)
 
     BOOST_FOREACH( const shape_t& s, other.shapes())
     {
-        std::auto_ptr<shape_t> new_s( new_clone( s));
+        std::unique_ptr<shape_t> new_s( new_clone( s));
         relation[ new_s.get()] = &s;
 
         names_.insert( new_s.get());
         new_s->set_scene( this);
-        shapes_.push_back( new_s);
+        shapes_.push_back( std::move( new_s));
     }
 
     BOOST_FOREACH( shape_t& s, shapes())
@@ -67,19 +67,19 @@ scene_t::~scene_t()
     }
 }
 
-void scene_t::add_shape( std::auto_ptr<shape_t> s)
+void scene_t::add_shape( std::unique_ptr<shape_t> s)
 {
     RAMEN_ASSERT( s->parent() == 0);
 
     names_.insert( s.get());
     s->set_scene( this);
     s->update_xforms();
-    shapes_.push_back( s);
+    shapes_.push_back( std::move( s));
 }
 
-std::auto_ptr<shape_t> scene_t::release_shape( shape_t *s)
+std::unique_ptr<shape_t> scene_t::release_shape( shape_t *s)
 {
-    std::auto_ptr<shape_t> result;
+    std::unique_ptr<shape_t> result;
     iterator it;
 
     for( it = shapes_.begin(); it != shapes_.end(); ++it)
@@ -265,7 +265,7 @@ void scene_t::read( const serialization::yaml_node_t& node)
 
     for( int i = 0; i < shapes.size(); ++i)
     {
-        std::auto_ptr<shape_t> newshape;
+        std::unique_ptr<shape_t> newshape;
 
         bool is_null;
         shapes[i].get_value( "is_null", is_null);
@@ -286,7 +286,7 @@ void scene_t::read( const serialization::yaml_node_t& node)
         if( !is_null)
             newshape->close();
 
-        add_shape( newshape);
+        add_shape( std::move( newshape));
     }
 
     for( std::map<shape_t*,std::string>::const_iterator it( parent_map.begin()); it != parent_map.end(); ++it)

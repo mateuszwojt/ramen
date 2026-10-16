@@ -99,11 +99,11 @@ void composite_param_t::do_create_tracks( anim::track_t *parent)
 {
     if( create_track_)
     {
-        std::auto_ptr<anim::track_t> t( new anim::track_t( name()));
+        std::unique_ptr<anim::track_t> t( new anim::track_t( name()));
         boost::range::for_each( params(), boost::bind( &param_t::create_tracks, _1, t.get()));
 
         if( t->num_children() != 0)
-            parent->add_child( t);
+            parent->add_child( std::move( t));
     }
     else
         boost::range::for_each( params(), boost::bind( &param_t::create_tracks, _1, parent));

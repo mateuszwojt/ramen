@@ -72,7 +72,7 @@ void composite_command_t::redo()
 	command_t::redo();
 }
 	
-void composite_command_t::push_back( std::auto_ptr<command_t> c) { commands_.push_back( c);}
+void composite_command_t::push_back( std::unique_ptr<command_t> c) { commands_.push_back( std::move( c));}
 
 } // namespace
 } // namespace

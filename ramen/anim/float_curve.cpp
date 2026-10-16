@@ -14,7 +14,7 @@
 #include<boost/foreach.hpp>
 #include<boost/range/algorithm/for_each.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/algorithm/for_each_position.hpp>
 

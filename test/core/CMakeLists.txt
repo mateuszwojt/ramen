@@ -4,11 +4,11 @@
 # See CDDL_LICENSE.txt for a copy of the license.                    #
 ######################################################################
 
-ADD_RAMEN_TEST( copy_on_write)
-ADD_RAMEN_TEST( dictionary)
-ADD_RAMEN_TEST( memory)
-ADD_RAMEN_TEST( name)
-ADD_RAMEN_TEST( poly)
-ADD_RAMEN_TEST( string)
-ADD_RAMEN_TEST( types)
-ADD_RAMEN_TEST( variant)
+add_ramen_test( copy_on_write)
+add_ramen_test( dictionary)
+add_ramen_test( memory)
+add_ramen_test( name)
+add_ramen_test( poly)
+add_ramen_test( string)
+add_ramen_test( types)
+add_ramen_test( variant)

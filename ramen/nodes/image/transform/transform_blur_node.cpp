@@ -40,24 +40,24 @@ transform_blur_node_t::transform_blur_node_t() : image_node_t()
 
 void transform_blur_node_t::do_create_params()
 {
-    std::auto_ptr<transform2_param_t> xp( new transform2_param_t( "xform", "xf"));
-    add_param( xp);
+    std::unique_ptr<transform2_param_t> xp( new transform2_param_t( "xform", "xf"));
+    add_param( std::move( xp));
 
-    std::auto_ptr<separator_param_t> sep( new separator_param_t());
-    add_param( sep);
+    std::unique_ptr<separator_param_t> sep( new separator_param_t());
+    add_param( std::move( sep));
 
-    std::auto_ptr<float_param_t> p( new float_param_t( "Samples"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Samples"));
     p->set_id( "samples");
 	p->set_static( true);
     p->set_min( 1);
     p->set_default_value( 1);
     p->set_round_to_int( true);
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<popup_param_t> q( new popup_param_t( "Borders"));
+    std::unique_ptr<popup_param_t> q( new popup_param_t( "Borders"));
     q->set_id( "borders");
     q->menu_items() = boost::assign::list_of( "Black")( "Tile")( "Mirror");
-    add_param( q);
+    add_param( std::move( q));
 }
 
 void transform_blur_node_t::do_calc_bounds( const render::context_t& context)
@@ -101,7 +101,7 @@ void transform_blur_node_t::do_calc_inputs_interest( const render::context_t& co
 			Imath::Box2i box( ImathExt::transform( interest(), inv_m, false));
 			roi.extendBy( box);
 		}
-		catch( Iex::MathExc& e)
+		catch( std::exception& e)
 		{
 		}       
     }
@@ -179,7 +179,7 @@ void transform_blur_node_t::do_process( const image::image_view_t& dst, const Im
 			}
         }
     }
-    catch( Iex::MathExc)
+    catch( const std::exception&)
     {
     }
 }

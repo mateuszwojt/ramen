@@ -28,32 +28,32 @@ color_correct_node_t::color_correct_node_t() : pointop_node_t()
 
 void color_correct_node_t::do_create_params()
 {
-    std::auto_ptr<group_param_t> g( new group_param_t( "Master"));
+    std::unique_ptr<group_param_t> g( new group_param_t( "Master"));
     create_params_inside_param( g.get(), "");
-    add_param( g);
+    add_param( std::move( g));
 
     g.reset( new group_param_t( "Shadows"));
     create_params_inside_param( g.get(), "sh_");
-    add_param( g);
+    add_param( std::move( g));
 
     g.reset( new group_param_t( "Midtones"));
     create_params_inside_param( g.get(), "mid_");
-    add_param( g);
+    add_param( std::move( g));
 
     g.reset( new group_param_t( "Highlights"));
     create_params_inside_param( g.get(), "high_");
-    add_param( g);
+    add_param( std::move( g));
 }
 
 void color_correct_node_t::create_params_inside_param( composite_param_t *g, const std::string& id_prefix)
 {
-    std::auto_ptr<float3_param_t> p( new float3_param_t( "Gamma"));
+    std::unique_ptr<float3_param_t> p( new float3_param_t( "Gamma"));
     p->set_id( id_prefix + "gamma");
     p->set_range( 0.1, 20);
     p->set_step( 0.005);
     p->set_default_value( Imath::V3f( 1, 1, 1));
     p->set_proportional( true);
-    g->add_param( p);
+    g->add_param( std::move( p));
 
     p.reset( new float3_param_t( "Gain"));
     p->set_id( id_prefix + "gain");
@@ -61,7 +61,7 @@ void color_correct_node_t::create_params_inside_param( composite_param_t *g, con
     p->set_step( 0.005);
     p->set_default_value( Imath::V3f( 1, 1, 1));
     p->set_proportional( true);
-    g->add_param( p);
+    g->add_param( std::move( p));
 
     p.reset( new float3_param_t( "Offset"));
     p->set_id( id_prefix + "offset");
@@ -69,21 +69,21 @@ void color_correct_node_t::create_params_inside_param( composite_param_t *g, con
     p->set_step( 0.005);
     p->set_default_value( Imath::V3f( 0, 0, 0));
     p->set_proportional( true);
-    g->add_param( p);
+    g->add_param( std::move( p));
 
-    std::auto_ptr<float_param_t> q( new float_param_t( "Saturation"));
+    std::unique_ptr<float_param_t> q( new float_param_t( "Saturation"));
     q->set_id( id_prefix + "saturation");
     q->set_range( 0, 10);
     q->set_step( 0.005);
     q->set_default_value( 1);
-    g->add_param( q);
+    g->add_param( std::move( q));
 
     q.reset( new float_param_t( "Contrast"));
     q->set_id( id_prefix + "contrast");
     q->set_range( 0, 10);
     q->set_step( 0.005);
     q->set_default_value( 1);
-    g->add_param( q);
+    g->add_param( std::move( q));
 }
 
 void color_correct_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

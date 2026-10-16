@@ -5,7 +5,7 @@
 #include<tbb/parallel_for.h>
 #include<tbb/blocked_range.h>
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 #include<ramen/params/float_param.hpp>
 
@@ -99,19 +99,19 @@ chroma_blur_node_t::chroma_blur_node_t() : areaop_node_t() { set_name( "chroma_b
 
 void chroma_blur_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> q( new float_param_t( "Spatial"));
+    std::unique_ptr<float_param_t> q( new float_param_t( "Spatial"));
     q->set_id( "spatial");
     q->set_range( 0, 10);
     q->set_step( 0.25);
     q->set_default_value( 1);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new float_param_t( "Color"));
     q->set_id( "color");
     q->set_range( 0, 20);
     q->set_step( 0.05);
     q->set_default_value( 0.075);
-    add_param( q);
+    add_param( std::move( q));
 }
 
 void chroma_blur_node_t::get_expand_radius( int& hradius, int& vradius) const

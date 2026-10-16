@@ -102,7 +102,7 @@ void import_multichannel_exr( const boost::filesystem::path& p, bool relative, b
     }
 
     app().document().composition().deselect_all();
-    std::auto_ptr<undo::add_nodes_command_t> command( new undo::add_nodes_command_t());
+    std::unique_ptr<undo::add_nodes_command_t> command( new undo::add_nodes_command_t());
 
     image::input_node_t *node = new image::input_node_t( p, sequence, app().document().composition().composition_dir());
     node->set_composition( &app().document().composition());
@@ -123,11 +123,11 @@ void import_multichannel_exr( const boost::filesystem::path& p, bool relative, b
         Imf::ChannelList::ConstIterator it, last;
         ch_list.channelsInLayer( *sit, it, last);
 
-        std::auto_ptr<node_t> node_copy( new_clone( *node));
+        std::unique_ptr<node_t> node_copy( new_clone( *node));
         node->set_location( loc);
         loc.x += node_spacing;
         import_layer( node_copy.get(), it, last, channel_set);
-        command->add_node( node_copy);
+        command->add_node( std::move( node_copy));
     }
 
     std::vector<std::string> channels;
@@ -140,11 +140,11 @@ void import_multichannel_exr( const boost::filesystem::path& p, bool relative, b
         channels.push_back( "G");
         channels.push_back( "R");
 
-        std::auto_ptr<node_t> node_copy( new_clone( *node));
+        std::unique_ptr<node_t> node_copy( new_clone( *node));
         node->set_location( loc);
         loc.x += node_spacing;
         import_layer( node_copy.get(), channels, channel_set);
-        command->add_node( node_copy);
+        command->add_node( std::move( node_copy));
     }
 
     if( channel_set.count( "Y") || channel_set.count( "RY") || channel_set.count( "BY"))
@@ -154,11 +154,11 @@ void import_multichannel_exr( const boost::filesystem::path& p, bool relative, b
         channels.push_back( "RY");
         channels.push_back( "Y");
 
-        std::auto_ptr<node_t> node_copy( new_clone( *node));
+        std::unique_ptr<node_t> node_copy( new_clone( *node));
         node->set_location( loc);
         loc.x += node_spacing;
         import_layer( node_copy.get(), channels, channel_set);
-        command->add_node( node_copy);
+        command->add_node( std::move( node_copy));
     }
 
     if( !channel_set.empty())
@@ -169,26 +169,26 @@ void import_multichannel_exr( const boost::filesystem::path& p, bool relative, b
 
             if( channels.size() == 4)
             {
-                std::auto_ptr<node_t> node_copy( new_clone( *node));
+                std::unique_ptr<node_t> node_copy( new_clone( *node));
                 node->set_location( loc);
                 loc.x += node_spacing;
                 import_layer( node_copy.get(), channels, channel_set);
-                command->add_node( node_copy);
+                command->add_node( std::move( node_copy));
             }
         }
 
         if( !channels.empty())
         {
-            std::auto_ptr<node_t> node_copy( new_clone( *node));
+            std::unique_ptr<node_t> node_copy( new_clone( *node));
             node->set_location( loc);
             loc.x += node_spacing;
             import_layer( node_copy.get(), channels, channel_set);
-            command->add_node( node_copy);
+            command->add_node( std::move( node_copy));
         }
     }
 
     command->redo();
-    app().document().undo_stack().push_back( command);
+    app().document().undo_stack().push_back( std::move( command));
     app().document().composition().selection_changed();
     app().ui()->update();
     delete node;

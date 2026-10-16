@@ -411,7 +411,7 @@ void image_viewer_strategy_t::paint()
     // world space
     gl_matrix_mode( GL_PROJECTION);
     gl_load_identity();
-    gl_viewport( 0, 0, parent()->width(), parent()->height());
+    gl_viewport( 0, 0, parent()->width() * parent()->devicePixelRatioF(), parent()->height() * parent()->devicePixelRatioF());
     glu_ortho2d( viewport_.world().min.x, viewport_.world().max.x, viewport_.world().max.y, viewport_.world().min.y);
 
     gl_matrix_mode( GL_MODELVIEW);
@@ -722,7 +722,7 @@ void image_viewer_strategy_t::mouse_move_event( QMouseEvent *event)
 {
     if( event->buttons() == Qt::NoButton)
     {
-        Imath::V2f pw( screen_to_world( Imath::V2i( event->x(), event->y())));
+        Imath::V2f pw( screen_to_world( Imath::V2i( event->position().x(), event->position().y())));
         Imath::V2i p( pw.x / aspect_ratio() / subsample(),
                       pw.y / subsample());
 
@@ -744,7 +744,7 @@ void image_viewer_strategy_t::mouse_move_event( QMouseEvent *event)
             move_event_.aspect_ratio = aspect_ratio();
             move_event_.pixel_scale = pixel_scale();
             move_event_.subsample = subsample();
-            move_event_.pos = Imath::V2i( event->x(), event->y());
+            move_event_.pos = Imath::V2i( event->position().x(), event->position().y());
             move_event_.wpos = pw;
             move_event_.modifiers = translate_modifiers( event);
 
@@ -764,7 +764,7 @@ void image_viewer_strategy_t::mouse_move_event( QMouseEvent *event)
             drag_event_.aspect_ratio = aspect_ratio();
             drag_event_.pixel_scale = pixel_scale();
             drag_event_.subsample = subsample();
-            drag_event_.pos = Imath::V2i( event->x(), event->y());
+            drag_event_.pos = Imath::V2i( event->position().x(), event->position().y());
             drag_event_.wpos = screen_to_world( drag_event_.pos);
             drag_event_.modifiers = translate_modifiers( event);
             drag_event_.button = translate_mouse_buttons( event);
@@ -820,7 +820,7 @@ void image_viewer_strategy_t::mouse_release_event( QMouseEvent *event)
     release_event_.aspect_ratio = aspect_ratio();
     release_event_.pixel_scale = pixel_scale();
     release_event_.subsample = subsample();
-    release_event_.pos = Imath::V2i( event->x(), event->y());
+    release_event_.pos = Imath::V2i( event->position().x(), event->position().y());
     release_event_.wpos = screen_to_world( release_event_.pos);
     release_event_.modifiers = translate_modifiers( event);
     release_event_.button = translate_mouse_buttons( event);
@@ -851,8 +851,8 @@ void image_viewer_strategy_t::mouse_release_event( QMouseEvent *event)
 
 void image_viewer_strategy_t::wheel_event( QWheelEvent *event)
 {
-    Imath::V2f wpos = screen_to_world( Imath::V2i( event->x(), event->y()));
-    if( event->delta() > 0)
+    Imath::V2f wpos = screen_to_world( Imath::V2i( event->position().x(), event->position().y()));
+    if( event->angleDelta().y() > 0)
         viewport_.zoom( wpos, 1.10f);
     else
         viewport_.zoom( wpos, 1.0f / 1.10f);

@@ -11,12 +11,12 @@
 
 #include<ramen/GL/glew.hpp>
 
-#include<QGLWidget>
+#include<QOpenGLWidget>
 
 #include<boost/shared_ptr.hpp>
 #include<boost/ptr_container/ptr_vector.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
@@ -32,7 +32,7 @@ namespace ui
 namespace viewer
 {
 
-class viewer_context_t : public QGLWidget
+class viewer_context_t : public QOpenGLWidget
 {
     Q_OBJECT
 
@@ -66,7 +66,7 @@ public:
 
     // ocio
     OCIO::ConstConfigRcPtr ocio_config() const;
-    OCIO::DisplayTransformRcPtr ocio_transform();
+    OCIO::DisplayViewTransformRcPtr ocio_transform();
 
     boost::shared_ptr<ocio::gl_lut3d_t>& display_lut();
     const std::string& display_device() const;

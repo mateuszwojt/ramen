@@ -10,22 +10,18 @@ namespace ramen
 namespace serialization
 {
 
-yaml_node_t::yaml_node_t( yaml_iarchive_t *parent, const YAML::Node *node, int version)
+yaml_node_t::yaml_node_t( yaml_iarchive_t *parent, const YAML::Node& node, int version) : node_( node)
 {
 	RAMEN_ASSERT( parent);
-	RAMEN_ASSERT( node);
 	RAMEN_ASSERT( version >= 0);
 
 	parent_ = parent;
-	node_ = node;
 	version_ = version;
 }
 
-yaml_node_t::yaml_node_t( const yaml_node_t& parent, const YAML::Node *node)
+yaml_node_t::yaml_node_t( const yaml_node_t& parent, const YAML::Node& node) : node_( node)
 {
-	RAMEN_ASSERT( node);
 	parent_ = parent.parent_;
-	node_ = node;
 	version_ = parent.version_;
 }
 
@@ -37,12 +33,12 @@ void yaml_node_t::set_version( int v) const
 
 yaml_node_t yaml_node_t::get_node( const std::string& key) const
 {
-	return yaml_node_t( parent_, &(*node_)[key], version());
+	return yaml_node_t( parent_, ramen::get_node( node_, key), version());
 }
 
 boost::optional<yaml_node_t> yaml_node_t::get_optional_node( const std::string& key) const
 {
-	if( const YAML::Node *n = node_->FindValue( key))
+	if( const YAML::Node n = find_value( node_, key))
 		return yaml_node_t( parent_, n, version());
 	
 	return boost::optional<yaml_node_t>();

@@ -51,7 +51,7 @@
 #ifndef RAMEN_HALF_EXPLOG_HPP
 #define RAMEN_HALF_EXPLOG_HPP
 
-#include<OpenEXR/half.h>
+#include<Imath/half.h>
 
 extern const unsigned int log10Table[];
 extern const unsigned int logTable[];

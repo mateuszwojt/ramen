@@ -4,7 +4,7 @@
 
 #include<ramen/nodes/image/transform/flip_node.hpp>
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ramen/ImathExt/ImathBoxAlgo.h>
 
@@ -26,10 +26,10 @@ flip_node_t::flip_node_t() : image_node_t()
 
 void flip_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Mode"));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Mode"));
     p->set_id( "mode");
     p->menu_items() = boost::assign::list_of( "Horizontal")( "Vertical")( "Both");
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void flip_node_t::calc_transform_matrix()

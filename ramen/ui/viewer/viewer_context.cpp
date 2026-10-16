@@ -28,7 +28,7 @@ namespace ui
 namespace viewer
 {
 
-viewer_context_t::viewer_context_t( QWidget *parent) : QGLWidget( parent)
+viewer_context_t::viewer_context_t( QWidget *parent) : QOpenGLWidget( parent)
 {
     first_time_ = true;
     autoupdate_ = true;
@@ -176,10 +176,10 @@ OCIO::ConstConfigRcPtr viewer_context_t::ocio_config() const
     return app().ocio_manager().config();
 }
 
-OCIO::DisplayTransformRcPtr viewer_context_t::ocio_transform()
+OCIO::DisplayViewTransformRcPtr viewer_context_t::ocio_transform()
 {
-    OCIO::DisplayTransformRcPtr transform = OCIO::DisplayTransform::Create();
-    transform->setInputColorSpaceName( OCIO::ROLE_SCENE_LINEAR);
+    OCIO::DisplayViewTransformRcPtr transform = OCIO::DisplayViewTransform::Create();
+    transform->setSrc( OCIO::ROLE_SCENE_LINEAR);
     transform->setDisplay( display_device().c_str());
     transform->setView( display_transform().c_str());
     return transform;
@@ -225,7 +225,7 @@ void viewer_context_t::gamma_changed()
     strategy().gamma_changed();
 }
 
-// QGLWidget
+// QOpenGLWidget
 void viewer_context_t::initializeGL()
 {
     clear_gl_errors();
@@ -317,10 +317,10 @@ void viewer_context_t::test_gl_extensions()
         app().fatal_error( "Video card not supported: Not fragment programs");
 
     // OCIO GPU path support
-    if( !GLEW_EXT_texture3D)
+    if( !GLEW_VERSION_1_2 && !GLEW_EXT_texture3D)
         app().fatal_error( "Video card not supported: No 3D textures");
 
-    if( !GLEW_ARB_multitexture)
+    if( !GLEW_VERSION_1_3 && !GLEW_ARB_multitexture)
         app().fatal_error( "Video card not supported: No multitexture");
 
     GLint tx_units;
@@ -354,7 +354,8 @@ void viewer_context_t::set_screen_projection()
 {
     gl_matrix_mode( GL_PROJECTION);
     gl_load_identity();
-    gl_viewport( 0, 0, width(), height());
+    // the framebuffer is in device pixels, everything else is in widget coordinates.
+    gl_viewport( 0, 0, width() * devicePixelRatioF(), height() * devicePixelRatioF());
     glu_ortho2d( 0, width(), height(), 0);
     gl_matrix_mode( GL_MODELVIEW);
 }

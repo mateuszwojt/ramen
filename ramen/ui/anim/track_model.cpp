@@ -93,7 +93,7 @@ QVariant track_model_t::data(const QModelIndex &index, int role) const
 Qt::ItemFlags track_model_t::flags(const QModelIndex &index) const
 {
     if( !index.isValid())
-        return 0;
+        return Qt::NoItemFlags;
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }

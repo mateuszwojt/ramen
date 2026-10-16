@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/base_blur_node.hpp>
 
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathMath.h>
 
 #include<ramen/gil/extension/border_algorithm.hpp>
 
@@ -31,8 +31,8 @@ Imath::V2f base_blur_node_t::adjust_blur_size( const Imath::V2f& size, int subsa
 
 Imath::V2i base_blur_node_t::round_blur_size( const Imath::V2f& size) const
 {
-	return Imath::V2i( Imath::Math<float>::ceil( size.x),
-					   Imath::Math<float>::ceil( size.y));
+	return Imath::V2i( std::ceil( size.x),
+					   std::ceil( size.y));
 }
 
 void base_blur_node_t::copy_src_image( int in, const Imath::Box2i& area, blur_border_mode bmode)

@@ -24,10 +24,9 @@
 #ifndef OPENEXR_EXT_DETAIL_CLIP_LIANG_BARSKY_INCLUDED
 #define OPENEXR_EXT_DETAIL_CLIP_LIANG_BARSKY_INCLUDED
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
-namespace Imath
-{
+IMATH_INTERNAL_NAMESPACE_HEADER_ENTER
 namespace detail
 {
 
@@ -332,6 +331,6 @@ namespace detail
 
 
 } // namespace
-} // namespace
+IMATH_INTERNAL_NAMESPACE_HEADER_EXIT
 
 #endif

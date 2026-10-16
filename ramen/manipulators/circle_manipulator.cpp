@@ -2,7 +2,7 @@
 // Licensed under the terms of the CDDL License.
 // See CDDL_LICENSE.txt for a copy of the license.
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/assert.hpp>
 
@@ -120,7 +120,8 @@ void circle_manipulator_t::do_mouse_drag_event( const ui::mouse_drag_event_t& ev
 		center_->update_widgets();
 	}
 
-	app().ui()->update_anim_editors();
+	if( app().ui())
+	    app().ui()->update_anim_editors();
 
 	if( radius_->track_mouse())
 		radius_->param_set()->notify_parent();

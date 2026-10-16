@@ -19,31 +19,31 @@ blur_node_t::blur_node_t() : base_blur_node_t() { set_name( "blur");}
 
 void blur_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> r( new popup_param_t( "Channels"));
+    std::unique_ptr<popup_param_t> r( new popup_param_t( "Channels"));
     r->set_id( "channels");
     r->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
-    add_param( r);
+    add_param( std::move( r));
 
-    std::auto_ptr<float2_param_t> q( new float2_param_t( "Radius"));
+    std::unique_ptr<float2_param_t> q( new float2_param_t( "Radius"));
     q->set_id( "radius");
     q->set_range( 0, 200);
     q->set_step( 0.25);
     q->set_default_value( Imath::V2f( 0, 0));
     q->set_proportional( true);
-    add_param( q);
+    add_param( std::move( q));
 
-    std::auto_ptr<float_param_t> p( new float_param_t( "Iters"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Iters"));
     p->set_id( "iters");
     p->set_range( 1, 5);
     p->set_default_value( 1);
     p->set_static( true);
     p->set_round_to_int( true);
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<popup_param_t> b( new popup_param_t( "Border Mode"));
+    std::unique_ptr<popup_param_t> b( new popup_param_t( "Border Mode"));
     b->set_id( "border");
     b->menu_items() = boost::assign::list_of( "Black")( "Repeat")( "Reflect");
-    add_param( b);
+    add_param( std::move( b));
 }
 
 bool blur_node_t::do_is_identity() const

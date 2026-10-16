@@ -133,7 +133,8 @@ void float2_param_t::do_format_changed( const Imath::Box2i& new_domain, float as
     curve( 0).set_offset( offset.x);
     curve( 1).set_scale( scale.y);
     curve( 1).set_offset( offset.y);
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 
     if( input0_)
     {
@@ -381,7 +382,8 @@ void float2_param_t::spinbox_dragged( double value)
     else
         parameterised()->update_overlay();
 
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 void float2_param_t::spinbox_released()

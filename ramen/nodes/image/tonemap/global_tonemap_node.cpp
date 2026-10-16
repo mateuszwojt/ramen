@@ -119,72 +119,72 @@ global_tonemap_node_t::global_tonemap_node_t() : pointop_node_t() { set_name( "g
 
 void global_tonemap_node_t::do_create_params()
 {
-    std::auto_ptr<combo_group_param_t> top( new combo_group_param_t( "Method"));
+    std::unique_ptr<combo_group_param_t> top( new combo_group_param_t( "Method"));
     top->set_id( "method");
 
 	// ExrDisplay
     {
-		std::auto_ptr<composite_param_t> group( new composite_param_t( "EXR"));
+		std::unique_ptr<composite_param_t> group( new composite_param_t( "EXR"));
 		group->set_id( "exr");
 
-		std::auto_ptr<float_param_t> p( new float_param_t( "Exposure"));
+		std::unique_ptr<float_param_t> p( new float_param_t( "Exposure"));
 		p->set_id( "exr_exposure");
 		p->set_range( -10.0f, 10.0f);
 		p->set_step( 0.05f);
 		p->set_default_value( 0.0f);
-		group->add_param( p);
+		group->add_param( std::move( p));
 
-		std::auto_ptr<color_param_t> q( new color_param_t( "Fog"));
+		std::unique_ptr<color_param_t> q( new color_param_t( "Fog"));
 		q->set_id( "exr_fog");
 		q->set_is_rgba( false);
-		group->add_param( q);
+		group->add_param( std::move( q));
 
 		p.reset( new float_param_t( "Defog"));
 		p->set_id( "exr_defog");
 		p->set_range( 0.0f, 0.01f);
 		p->set_step( 0.025f);
 		p->set_default_value( 0.0f);
-		group->add_param( p);
+		group->add_param( std::move( p));
 
 		p.reset( new float_param_t( "Knee Low"));
 		p->set_id( "exr_knee_low");
 		p->set_range( -3.0f, 3.0f);
 		p->set_step( 0.1f);
 		p->set_default_value( 0.0f);
-		group->add_param( p);
+		group->add_param( std::move( p));
 
 		p.reset( new float_param_t( "Knee High"));
 		p->set_id( "exr_knee_high");
 		p->set_range( 3.5f, 7.5f);
 		p->set_step( 0.1f);
 		p->set_default_value( 5.0f);
-		group->add_param( p);
+		group->add_param( std::move( p));
 
-		top->add_param( group);
+		top->add_param( std::move( group));
     }
 
 	// Rational
     {
-		std::auto_ptr<composite_param_t> group( new composite_param_t( "Rational"));
+		std::unique_ptr<composite_param_t> group( new composite_param_t( "Rational"));
 		group->set_id( "rational");
 
-        std::auto_ptr<color_param_t> q( new color_param_t( "High Value"));
+        std::unique_ptr<color_param_t> q( new color_param_t( "High Value"));
         q->set_id( "rat_high");
         q->set_is_rgba( false);
         q->set_default_value( Imath::Color4f( 1, 1, 1, 1));
-        group->add_param( q);
+        group->add_param( std::move( q));
 
-        std::auto_ptr<float_param_t> p( new float_param_t( "Response"));
+        std::unique_ptr<float_param_t> p( new float_param_t( "Response"));
         p->set_id( "rat_response");
         p->set_min( 1.0f);
         p->set_step( 0.05f);
         p->set_default_value( 1.0f);		
-		group->add_param( p);
+		group->add_param( std::move( p));
 
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
-    add_param( top);
+    add_param( std::move( top));
 }
 
 void global_tonemap_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

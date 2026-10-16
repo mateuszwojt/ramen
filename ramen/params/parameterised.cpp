@@ -141,7 +141,7 @@ void parameterised_t::for_each_param( const boost::function<void ( param_t*)>& f
 // anim & time
 void parameterised_t::create_tracks( anim::track_t *root)
 {
-    std::auto_ptr<anim::track_t> top( new anim::track_t( name()));
+    std::unique_ptr<anim::track_t> top( new anim::track_t( name()));
 
     BOOST_FOREACH( param_t& p, param_set())
     {
@@ -149,7 +149,7 @@ void parameterised_t::create_tracks( anim::track_t *root)
     }
 
     do_create_tracks( top.get());
-    root->add_child( top);
+    root->add_child( std::move( top));
 }
 
 void parameterised_t::set_frame( float f)

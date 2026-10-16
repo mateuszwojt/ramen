@@ -12,7 +12,7 @@
 #include<boost/ptr_container/ptr_vector.hpp>
 #include<boost/signals2/signal.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<ramen/nodes/node_fwd.hpp>
 
@@ -38,7 +38,7 @@ public:
 
     track_t *child( int i);
 
-    void add_child( std::auto_ptr<track_t> t);
+    void add_child( std::unique_ptr<track_t> t);
 
     void clear_children();
 

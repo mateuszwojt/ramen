@@ -4,7 +4,7 @@
 
 #include<ramen/nodes/image/roto/shape_transform_param.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/app/application.hpp>
 
@@ -24,28 +24,28 @@ shape_transform_param_t::shape_transform_param_t( const std::string& name, const
 {
     set_id( id);
 
-    std::auto_ptr<float2_param_t> p( new float2_param_t( "Center"));
+    std::unique_ptr<float2_param_t> p( new float2_param_t( "Center"));
     p->set_id( id + std::string( "_center"));
     p->set_default_value( Imath::V2f( 0, 0));
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float2_param_t( "Pos"));
     p->set_id( id + std::string( "_pos"));
     p->set_default_value( Imath::V2f( 0, 0));
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float2_param_t( "Scale"));
     p->set_id( id + std::string( "_scale"));
     p->set_default_value( Imath::V2f( 1, 1));
     p->set_step( 0.05);
     p->set_proportional( true);
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<float_param_t> q( new float_param_t( "Rotation"));
+    std::unique_ptr<float_param_t> q( new float_param_t( "Rotation"));
     q->set_id( id + std::string( "_rot"));
     q->set_default_value( 0);
     q->set_step( 0.5);
-    add_param( q);
+    add_param( std::move( q));
 	
 	set_create_track( false);
 }
@@ -131,7 +131,8 @@ void shape_transform_param_t::apply_track( float start_frame, float end_frame, c
 	param_set()->end_edit( true);
 
 	parameterised()->update_widgets();
-	app().ui()->update_anim_editors();
+	if( app().ui())
+	    app().ui()->update_anim_editors();
 }
 */
 

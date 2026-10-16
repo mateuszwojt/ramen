@@ -281,8 +281,8 @@ void anim_curves_view_t::paintEvent( QPaintEvent *event)
 
     // draw in world space
     Imath::M33f view_xform_ = viewport_.world_to_screen_matrix();
-    QMatrix qm( view_xform_[0][0], view_xform_[0][1], view_xform_[1][0], view_xform_[1][1], view_xform_[2][0], view_xform_[2][1]);
-    painter.setWorldTransform( QTransform( qm));
+    QTransform qm( view_xform_[0][0], view_xform_[0][1], view_xform_[1][0], view_xform_[1][1], view_xform_[2][0], view_xform_[2][1]);
+    painter.setWorldTransform( qm);
 
     QPen pen;
 

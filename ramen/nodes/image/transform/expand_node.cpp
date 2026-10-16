@@ -22,13 +22,13 @@ expand_node_t::expand_node_t() : image_node_t()
 
 void expand_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> p( new float_param_t( "Top"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Top"));
     p->set_id( "top");
     p->set_min( 0);
     p->set_numeric_type( numeric_param_t::relative_size_y, 0);
     p->set_default_value( 0);
     p->set_static( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Left"));
     p->set_id( "left");
@@ -36,7 +36,7 @@ void expand_node_t::do_create_params()
     p->set_numeric_type( numeric_param_t::relative_size_x, 0);
     p->set_default_value( 0);
     p->set_static( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Bottom"));
     p->set_id( "bottom");
@@ -44,7 +44,7 @@ void expand_node_t::do_create_params()
     p->set_numeric_type( numeric_param_t::relative_size_y, 0);
     p->set_default_value( 0);
     p->set_static( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Right"));
     p->set_id( "right");
@@ -52,7 +52,7 @@ void expand_node_t::do_create_params()
     p->set_numeric_type( numeric_param_t::relative_size_x, 0);
     p->set_default_value( 0);
     p->set_static( true);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void expand_node_t::do_calc_format( const render::context_t& context)

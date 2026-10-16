@@ -64,9 +64,9 @@ private:
     template<class T>
     bool get_value( const YAML::Node& doc, const std::string& key, T& value)
     {
-        if( const YAML::Node *n = doc.FindValue( key))
+        if( const YAML::Node n = find_value( doc, key))
         {
-            *n >> value;
+            n >> value;
             return true;
         }
 

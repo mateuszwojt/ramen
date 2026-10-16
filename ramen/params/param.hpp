@@ -18,7 +18,7 @@
 #include<boost/flyweight.hpp>
 #include<boost/filesystem/fstream.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<QObject>
 
@@ -171,7 +171,7 @@ public:
     void add_to_hash( hash::generator_t& hash_gen) const;
 
     // undo
-    std::auto_ptr<undo::command_t> create_command();
+    std::unique_ptr<undo::command_t> create_command();
 
     // paths
     void convert_relative_paths( const boost::filesystem::path& old_base, const boost::filesystem::path& new_base);
@@ -225,7 +225,7 @@ private:
     virtual void do_evaluate( float frame);
 
     // undo
-    virtual std::auto_ptr<undo::command_t> do_create_command();
+    virtual std::unique_ptr<undo::command_t> do_create_command();
 
     // hash
     virtual void do_add_to_hash( hash::generator_t& hash_gen) const;

@@ -4,7 +4,7 @@
 
 #include<ramen/anim/float_curve.hpp>
 
-#include<OpenEXR/halfFunction.h>
+#include<Imath/halfFunction.h>
 
 namespace ramen
 {
@@ -20,8 +20,6 @@ private:
 
 	const float_curve_t& c_;
 };
-
-void curve_to_half_lut( const float_curve_t& c, halfFunction<half>& lut);
 
 } // namespace
 } // namespace

@@ -8,7 +8,7 @@
 #include<ramen/anim/curve_fwd.hpp>
 #include<ramen/anim/curve.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/assert.hpp>
 

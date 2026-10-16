@@ -3,7 +3,7 @@
 #ifndef RAMEN_VIEWPORT_HPP
 #define	RAMEN_VIEWPORT_HPP
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ImathExt/ImathBoxAlgo.h>
 

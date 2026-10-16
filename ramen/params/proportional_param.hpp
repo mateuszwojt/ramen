@@ -7,7 +7,7 @@
 
 #include<ramen/params/numeric_param.hpp>
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 #include<QPointer>
 #include<QToolButton>

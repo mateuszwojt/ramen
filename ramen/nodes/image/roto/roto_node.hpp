@@ -28,7 +28,7 @@ public:
 
     roto_node_t();
 	
-    virtual std::auto_ptr<QWidget> create_toolbar();
+    virtual std::unique_ptr<QWidget> create_toolbar();
 
 	const roto::toolbar_t& toolbar() const;
 	roto::toolbar_t& toolbar();
@@ -36,12 +36,12 @@ public:
 	bool track_mouse() const;
 	
 	// shapes
-	std::auto_ptr<roto::shape_t> create_shape() const;
-	std::auto_ptr<roto::shape_t> create_shape( const Imath::Box2f& b) const;
-	std::auto_ptr<roto::shape_t> create_null() const;
+	std::unique_ptr<roto::shape_t> create_shape() const;
+	std::unique_ptr<roto::shape_t> create_shape( const Imath::Box2f& b) const;
+	std::unique_ptr<roto::shape_t> create_null() const;
 	
-	void add_shape( std::auto_ptr<roto::shape_t> s);
-	std::auto_ptr<roto::shape_t> release_shape( roto::shape_t *s);
+	void add_shape( std::unique_ptr<roto::shape_t> s);
+	std::unique_ptr<roto::shape_t> release_shape( roto::shape_t *s);
 
 	const roto::scene_t& scene() const	{ return scene_;}
 	roto::scene_t& scene()				{ return scene_;}

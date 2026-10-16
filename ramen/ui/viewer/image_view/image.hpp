@@ -53,7 +53,7 @@ private:
 	void gl_vertices_for_box( const Imath::Box2i& b) const;
 
 	GLenum texture_unit_;
-    std::auto_ptr<image_strategy_t> strategy_;	
+    std::unique_ptr<image_strategy_t> strategy_;	
 };
 
 } // viewer

@@ -53,7 +53,7 @@ std::string composition_t::make_name_unique( const std::string& s) const
 	return node_map().make_name_unique( s);
 }
 
-void composition_t::add_node( std::auto_ptr<node_t> n)
+void composition_t::add_node( std::unique_ptr<node_t> n)
 {
     node_map_.insert( n.get());
     n->set_composition( this);
@@ -66,11 +66,11 @@ void composition_t::add_node( std::auto_ptr<node_t> n)
         nn->format_changed();
     }
 
-    g_.add_node( n);
+    g_.add_node( std::move( n));
     added_( n.get());
 }
 
-std::auto_ptr<node_t> composition_t::release_node( node_t *n)
+std::unique_ptr<node_t> composition_t::release_node( node_t *n)
 {
     released_( n);
     node_map_.remove( n->name());
@@ -132,8 +132,8 @@ void composition_t::merge_composition( composition_t& other)
     while( !other.nodes().empty())
     {
 		node_t& n = other.nodes()[0];
-		std::auto_ptr<node_t> nn( other.release_node( &n));
-		add_node( nn);
+		std::unique_ptr<node_t> nn( other.release_node( &n));
+		add_node( std::move( nn));
     }
 
     BOOST_FOREACH( edge_t& e, other_edges)
@@ -309,7 +309,7 @@ void composition_t::load_from_file( const boost::filesystem::path& p)
     if( !ifs.is_open() || !ifs.good())
 		throw std::runtime_error( std::string( "Couldn't open input file ") + filesystem::file_string( p));
 
-	std::auto_ptr<serialization::yaml_iarchive_t> in( new serialization::yaml_iarchive_t( ifs));
+	std::unique_ptr<serialization::yaml_iarchive_t> in( new serialization::yaml_iarchive_t( ifs));
 		
 	if( !in->read_composition_header())
 		throw std::runtime_error( std::string( "Couldn't open input file ") + filesystem::file_string( p));
@@ -358,7 +358,7 @@ void composition_t::read_node( const serialization::yaml_node_t& node)
 		class_node[1] >> version.first;
 		class_node[2] >> version.second;
 	
-		std::auto_ptr<node_t> p( create_node( id, version));
+		std::unique_ptr<node_t> p( create_node( id, version));
 		
 		if( !p.get())
 		{
@@ -379,7 +379,7 @@ void composition_t::read_node( const serialization::yaml_node_t& node)
 	    }
 	
 	    node_map_.insert( p.get());
-	    g_.add_node( p);
+	    g_.add_node( std::move( p));
 	}
 	catch( YAML::Exception& e)
 	{	
@@ -391,12 +391,12 @@ void composition_t::read_node( const serialization::yaml_node_t& node)
 	}
 }
 
-std::auto_ptr<node_t> composition_t::create_node( const std::string& id, const std::pair<int,int>& version)
+std::unique_ptr<node_t> composition_t::create_node( const std::string& id, const std::pair<int,int>& version)
 {
 	RAMEN_ASSERT( !id.empty());
 	RAMEN_ASSERT( version.first >= 0 && version.second >= 0);
 	
-	std::auto_ptr<node_t> p( node_factory_t::instance().create_by_id_with_version( id, version));
+	std::unique_ptr<node_t> p( node_factory_t::instance().create_by_id_with_version( id, version));
 
 	// as a last resort, return an unknown node
     if( !p.get())
@@ -416,11 +416,11 @@ std::auto_ptr<node_t> composition_t::create_node( const std::string& id, const s
 	return p;
 }
 
-std::auto_ptr<node_t> composition_t::create_unknown_node( const std::string& id, const std::pair<int,int>& version)
+std::unique_ptr<node_t> composition_t::create_unknown_node( const std::string& id, const std::pair<int,int>& version)
 {
 	// TODO: implement this.
 	RAMEN_ASSERT( 0 && "Create unknown node not implemented yet");
-    return std::auto_ptr<node_t>();
+    return std::unique_ptr<node_t>();
 }
 
 void composition_t::read_edges( const serialization::yaml_iarchive_t& in)

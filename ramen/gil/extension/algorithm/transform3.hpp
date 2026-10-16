@@ -15,7 +15,7 @@ namespace gil
 
 // transform pixels for 3 inputs and one destination
 template <typename View1, typename View2, typename View3, typename View4, typename F>
-GIL_FORCEINLINE F transform_pixels(const View1& src1, const View2& src2, const View3& src3, const View4& dst, F fun)
+BOOST_FORCEINLINE F transform_pixels(const View1& src1, const View2& src2, const View3& src3, const View4& dst, F fun)
 {
 	for (std::ptrdiff_t y=0; y<dst.height(); ++y)
 	{
@@ -32,7 +32,7 @@ GIL_FORCEINLINE F transform_pixels(const View1& src1, const View2& src2, const V
 }
 
 template <typename View1, typename View2, typename View3, typename View4, typename F>
-GIL_FORCEINLINE F transform_pixel_positions(const View1& src1,const View2& src2,const View3& src3, const View4& dst, F fun)
+BOOST_FORCEINLINE F transform_pixel_positions(const View1& src1,const View2& src2,const View3& src3, const View4& dst, F fun)
 {
     assert(src1.dimensions()==dst.dimensions());
     assert(src2.dimensions()==dst.dimensions());

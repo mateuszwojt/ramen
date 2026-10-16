@@ -9,7 +9,7 @@
 
 #include<boost/foreach.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/anim/float_curve.hpp>
 

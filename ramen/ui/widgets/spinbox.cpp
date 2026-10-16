@@ -12,8 +12,8 @@ namespace ui
 {
 
 util::calculator_t spinbox_t::calc_;
-QChar spinbox_t::thousand_sep_ = 0;
-QChar spinbox_t::decimal_sep_ = 0;
+QChar spinbox_t::thousand_sep_;
+QChar spinbox_t::decimal_sep_;
 	
 spinbox_t::spinbox_t( QWidget *parent) : QLineEdit( parent)
 {
@@ -36,7 +36,7 @@ QSize spinbox_t::sizeHint() const
 {
     QSize s = QLineEdit::sizeHint();
     QFontMetrics fm( font());
-    s.setWidth( fm.width( QLatin1Char('0')) * 8);
+    s.setWidth( fm.horizontalAdvance( QLatin1Char('0')) * 8);
     return s;
 }
 

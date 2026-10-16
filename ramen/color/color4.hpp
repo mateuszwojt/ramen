@@ -11,7 +11,7 @@
 
 #include<boost/operators.hpp>
 
-#include<OpenEXR/half.h>
+#include<Imath/half.h>
 
 #include<ramen/assert.hpp>
 

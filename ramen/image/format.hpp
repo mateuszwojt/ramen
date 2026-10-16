@@ -9,7 +9,7 @@
 #include<string>
 #include<utility>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/filesystem/path.hpp>
 

@@ -103,40 +103,40 @@ glow_node_t::glow_node_t() : image_node_t()
 
 void glow_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> p( new float_param_t( "Intensity"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Intensity"));
     p->set_id( "intensity");
     p->set_range( 0, 100);
     p->set_default_value( 1);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Thereshold"));
     p->set_id( "theresh");
     p->set_min( 0);
     p->set_default_value( 0.5f);
 	p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 	
-    std::auto_ptr<color_param_t> c( new color_param_t( "Color"));
+    std::unique_ptr<color_param_t> c( new color_param_t( "Color"));
     c->set_id( "color");
     c->set_is_rgba( false);
     c->set_default_value( Imath::Color4f( 1, 1, 1, 0));
-    add_param( c);
+    add_param( std::move( c));
 	
-    std::auto_ptr<float2_param_t> p2( new float2_param_t( "Radius"));
+    std::unique_ptr<float2_param_t> p2( new float2_param_t( "Radius"));
     p2->set_id( "radius");
     p2->set_range( 0, 200);
     p2->set_step( 0.25);
     p2->set_default_value( Imath::V2f( 5, 5));
     p2->set_proportional( true);
-    add_param( p2);
+    add_param( std::move( p2));
 	
-    std::auto_ptr<float3_param_t> p3( new float3_param_t( "Channels"));
+    std::unique_ptr<float3_param_t> p3( new float3_param_t( "Channels"));
     p3->set_id( "channels");
     p3->set_range( 0, 100);
     p3->set_step( 0.25);
     p3->set_default_value( Imath::V3f( 1, 1, 1));
     p3->set_proportional( true);
-    add_param( p3);
+    add_param( std::move( p3));
 
     p.reset( new float_param_t( "Blur Iters"));
     p->set_id( "iters");
@@ -144,19 +144,19 @@ void glow_node_t::do_create_params()
     p->set_default_value( 2);
     p->set_static( true);
     p->set_round_to_int( true);
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<popup_param_t> pop( new popup_param_t( "Layer Mode"));
+    std::unique_ptr<popup_param_t> pop( new popup_param_t( "Layer Mode"));
     pop->set_id( "layer_mode");
     pop->menu_items() = boost::assign::list_of( "Add")( "Screen");
-    add_param( pop);
+    add_param( std::move( pop));
 	
     p.reset( new float_param_t( "Background"));
     p->set_id( "bg");
     p->set_range( 0, 1);
     p->set_default_value( 1);
 	p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 bool glow_node_t::do_is_identity() const

@@ -13,8 +13,8 @@
 
 #include<ramen/algorithm/clamp.hpp>
 
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/math/fast_float.hpp>
 
@@ -77,8 +77,8 @@ private:
 		Imath::V2i size( s_.src_area().size());
 
 		base_type ix, iy;
-		base_type x = Imath::Math<base_type>::modf( ( p.x - s_.src_area().min.x) / size.x, &ix);
-		base_type y = Imath::Math<base_type>::modf( ( p.y - s_.src_area().min.y) / size.y, &iy);
+		base_type x = std::modf( ( p.x - s_.src_area().min.x) / size.x, &ix);
+		base_type y = std::modf( ( p.y - s_.src_area().min.y) / size.y, &iy);
 
 		if( x < 0) x = base_type( 1.0) + x;
 		if( y < 0) y = base_type( 1.0) + y;
@@ -135,8 +135,8 @@ private:
 		Imath::V2i size( s_.src_area().size());
 
 		base_type ix, iy;
-		base_type x = Imath::Math<base_type>::modf( Imath::Math<base_type>::fabs( ( p.x - s_.src_area().min.x) / size.x), &ix);
-		base_type y = Imath::Math<base_type>::modf( Imath::Math<base_type>::fabs( ( p.y - s_.src_area().min.y) / size.y), &iy);
+		base_type x = std::modf( std::fabs( ( p.x - s_.src_area().min.x) / size.x), &ix);
+		base_type y = std::modf( std::fabs( ( p.y - s_.src_area().min.y) / size.y), &iy);
 
 		if( (int) ix & 1) x = base_type( 1.0) - x;
 		if( (int) iy & 1) y = base_type( 1.0) - y;

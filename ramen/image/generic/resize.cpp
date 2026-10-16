@@ -6,9 +6,9 @@
 
 #include<algorithm>
 
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathMath.h>
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathMath.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/assert.hpp>
 
@@ -33,17 +33,17 @@ float resize_coord( float x, float center, float scale)
 // util
 Imath::V2i resize_point( const Imath::V2i& p, const Imath::V2i& center, float sx, float sy)
 {
-	return Imath::V2i(	Imath::Math<float>::floor( resize_coord( p.x, center.x, sx)),
-						Imath::Math<float>::floor( resize_coord( p.y, center.y, sy)));
+	return Imath::V2i(	std::floor( resize_coord( p.x, center.x, sx)),
+						std::floor( resize_coord( p.y, center.y, sy)));
 }
 
 Imath::Box2i resize_box( const Imath::Box2i& box, const Imath::V2i& center, float sx, float sy)
 {
-	Imath::V2i p(	Imath::Math<float>::floor( ( box.min.x - center.x) / sx) + center.x,
-					Imath::Math<float>::floor( ( box.min.y - center.y) / sy) + center.y);
+	Imath::V2i p(	std::floor( ( box.min.x - center.x) / sx) + center.x,
+					std::floor( ( box.min.y - center.y) / sy) + center.y);
 
-	Imath::V2i q(	Imath::Math<float>::floor( ( box.max.x - center.x) / sx) + center.x,
-					Imath::Math<float>::floor( ( box.max.y - center.y) / sy) + center.y);
+	Imath::V2i q(	std::floor( ( box.max.x - center.x) / sx) + center.x,
+					std::floor( ( box.max.y - center.y) / sy) + center.y);
 
 	return Imath::Box2i( p, q);
 }

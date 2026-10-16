@@ -43,7 +43,7 @@ void exposure_picker_t::paintEvent( QPaintEvent *event)
     QPainter painter( this);
 
     if( event->rect().intersects(contentsRect()))
-        painter.setClipRegion( event->region().intersect(contentsRect()));
+        painter.setClipRegion( event->region().intersected(contentsRect()));
     
     if( !valid_background_)
     {

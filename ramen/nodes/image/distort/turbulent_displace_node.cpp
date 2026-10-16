@@ -4,7 +4,7 @@
 
 #include<ramen/nodes/image/distort/turbulent_displace_node.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/image/processing.hpp>
 
@@ -125,13 +125,13 @@ turbulent_displace_node_t::turbulent_displace_node_t() : distort_node_t()
 
 void turbulent_displace_node_t::do_create_params()
 {
-	std::auto_ptr<float2_param_t> q( new float2_param_t( "Amplitude"));
+	std::unique_ptr<float2_param_t> q( new float2_param_t( "Amplitude"));
 	q->set_id( "amplitude");
 	q->set_proportional( true);
 	q->set_min( 0);
 	q->set_default_value( Imath::V2f( 0, 0));
 	q->set_step( 0.05f);
-	add_param( q);
+	add_param( std::move( q));
 	
 	q.reset( new float2_param_t( "Size"));
 	q->set_id( "size");
@@ -139,20 +139,20 @@ void turbulent_displace_node_t::do_create_params()
 	q->set_default_value( Imath::V2f( 100, 100));
 	q->set_min( 0.01);
 	q->set_step( 0.05);
-	add_param( q);
+	add_param( std::move( q));
 	
 	q.reset( new float2_param_t( "Shift"));
 	q->set_id( "shift");
 	q->set_default_value( Imath::V2f( 0, 0));
 	q->set_step( 0.05);
-	add_param( q);
+	add_param( std::move( q));
 	
-	std::auto_ptr<float_param_t> p( new float_param_t( "Time"));
+	std::unique_ptr<float_param_t> p( new float_param_t( "Time"));
 	p->set_id( "time");
 	p->set_default_value( 0);
 	p->set_min( 0);
 	p->set_step( 0.05);
-	add_param( p);
+	add_param( std::move( p));
 	
 	p.reset( new float_param_t( "Octaves"));
 	p->set_id( "octaves");
@@ -160,26 +160,26 @@ void turbulent_displace_node_t::do_create_params()
 	p->set_round_to_int( true);
 	p->set_default_value( 1);
 	p->set_min( 1);
-	add_param( p);
+	add_param( std::move( p));
 	
 	p.reset( new float_param_t( "Gain"));
 	p->set_id( "gain");
 	p->set_default_value( 0.5);
 	p->set_range( 0.1f, 1.0f);
 	p->set_step( 0.05f);
-	add_param( p);
+	add_param( std::move( p));
 	
 	p.reset( new float_param_t( "Lacunarity"));
 	p->set_id( "lacunarity");
 	p->set_default_value( 1.9997);
 	p->set_range( 1, 10);
 	p->set_step( 0.25f);
-	add_param( p);
+	add_param( std::move( p));
 
-    std::auto_ptr<popup_param_t> r( new popup_param_t( "Borders"));
+    std::unique_ptr<popup_param_t> r( new popup_param_t( "Borders"));
     r->set_id( "borders");
     r->menu_items() = boost::assign::list_of( "Black")( "Tile")( "Mirror");
-    add_param( r);	
+    add_param( std::move( r));	
 }
 
 bool turbulent_displace_node_t::do_is_identity() const

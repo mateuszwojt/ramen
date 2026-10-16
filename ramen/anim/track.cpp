@@ -40,10 +40,10 @@ track_t *track_t::child( int i)
     return &children_[i];
 }
 
-void track_t::add_child( std::auto_ptr<track_t> t)
+void track_t::add_child( std::unique_ptr<track_t> t)
 {
     t->set_parent( this);
-    children_.push_back( t);
+    children_.push_back( std::move( t));
 }
 
 void track_t::clear_children() { children_.clear();}

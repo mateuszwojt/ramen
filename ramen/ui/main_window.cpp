@@ -19,7 +19,7 @@
 #include<QFileDialog>
 #include<QDesktopServices>
 #include<QDockWidget>
-#include<QDesktopWidget>
+#include<QScreen>
 #include<QUrl>
 #include<QStatusBar>
 #include<QSettings>
@@ -134,7 +134,7 @@ main_window_t::main_window_t() : QMainWindow()
     // create the status bar
     statusBar()->showMessage( RAMEN_NAME_FULL_VERSION_STR);
 
-    QRect screen_size = qApp->desktop()->availableGeometry();
+    QRect screen_size = QGuiApplication::primaryScreen()->availableGeometry();
     move( screen_size.left(), screen_size.top());
     resize( screen_size.width(), screen_size.height() - 40);
     setWindowTitle( "Ramen");
@@ -449,7 +449,7 @@ void main_window_t::open_document()
 {
     if( can_close_document())
     {
-        QString fname = QFileDialog::getOpenFileName( 0, "Open Composition", QString::null, file_dialog_extension(),
+        QString fname = QFileDialog::getOpenFileName( 0, "Open Composition", QString(), file_dialog_extension(),
                                                       0, QFileDialog::DontUseNativeDialog);
 
         if( !( fname.isEmpty()))
@@ -488,7 +488,7 @@ void main_window_t::save_document()
 
 void main_window_t::save_document_as()
 {
-    QString fname = QFileDialog::getSaveFileName( 0, "Save Composition As", QString::null, file_dialog_extension(),
+    QString fname = QFileDialog::getSaveFileName( 0, "Save Composition As", QString(), file_dialog_extension(),
                                                   0, QFileDialog::DontUseNativeDialog);
 
     if( !(fname.isEmpty()))
@@ -520,7 +520,7 @@ void main_window_t::save_document_as()
 
 void main_window_t::import_composition()
 {
-    QString fname = QFileDialog::getOpenFileName( 0, "Open Composition", QString::null, file_dialog_extension(),
+    QString fname = QFileDialog::getOpenFileName( 0, "Open Composition", QString(), file_dialog_extension(),
                                                   0, QFileDialog::DontUseNativeDialog);
 
     if( !( fname.isEmpty()))
@@ -529,7 +529,7 @@ void main_window_t::import_composition()
         {
             /*
             boost::filesystem::path p( fname.toStdString());
-            std::auto_ptr<serialization::yaml_iarchive_t> in( ramen::import_composition( p));
+            std::unique_ptr<serialization::yaml_iarchive_t> in( ramen::import_composition( p));
             app().document().set_dirty( true);
             app().document().undo_stack().clear_all();
 
@@ -552,7 +552,7 @@ void main_window_t::import_composition()
 void main_window_t::export_selection()
 {
     /*
-    QString fname = QFileDialog::getSaveFileName( 0, "Save Composition As", QString::null, file_dialog_extension(),
+    QString fname = QFileDialog::getSaveFileName( 0, "Save Composition As", QString(), file_dialog_extension(),
                                                   0, QFileDialog::DontUseNativeDialog);
 
     if( !(fname.isEmpty()))
@@ -618,7 +618,7 @@ void main_window_t::redo()
 
 void main_window_t::ignore_nodes()
 {
-    std::auto_ptr<undo::ignore_nodes_command_t> c( new undo::ignore_nodes_command_t());
+    std::unique_ptr<undo::ignore_nodes_command_t> c( new undo::ignore_nodes_command_t());
 
     BOOST_FOREACH( node_t& n, app().document().composition().nodes())
     {
@@ -627,7 +627,7 @@ void main_window_t::ignore_nodes()
     }
 
     c->redo();
-    app().document().undo_stack().push_back( c);
+    app().document().undo_stack().push_back( std::move( c));
     app().ui()->update();
 }
 
@@ -638,7 +638,7 @@ void main_window_t::delete_nodes()
     if( !app().document().composition().any_selected())
         return;
 
-    std::auto_ptr<undo::delete_command_t> c( new undo::delete_command_t());
+    std::unique_ptr<undo::delete_command_t> c( new undo::delete_command_t());
 
     BOOST_FOREACH( edge_t& e, app().document().composition().edges())
     {
@@ -702,23 +702,23 @@ void main_window_t::delete_nodes()
     }
 
     c->redo();
-    app().document().undo_stack().push_back( c);
+    app().document().undo_stack().push_back( std::move( c));
     app().ui()->update();
 }
 
 void main_window_t::duplicate_nodes()
 {
     std::map<node_t*, node_t*> relation;
-    std::auto_ptr<undo::duplicate_command_t> c( new undo::duplicate_command_t());
+    std::unique_ptr<undo::duplicate_command_t> c( new undo::duplicate_command_t());
 
     BOOST_FOREACH( node_t& n, app().document().composition().nodes())
     {
         if( n.selected())
         {
-            std::auto_ptr<node_t> nclone( new_clone( n));
+            std::unique_ptr<node_t> nclone( new_clone( n));
             nclone->offset_location( Imath::V2f( 20, 20));
             relation[ &n] = nclone.get();
-            c->add_node( nclone);
+            c->add_node( std::move( nclone));
         }
     }
 
@@ -730,7 +730,7 @@ void main_window_t::duplicate_nodes()
 
     app().document().composition().deselect_all();
     c->redo();
-    app().document().undo_stack().push_back( c);
+    app().document().undo_stack().push_back( std::move( c));
     app().ui()->update();
 }
 
@@ -741,7 +741,7 @@ void main_window_t::extract_nodes()
     if( !app().document().composition().any_selected())
         return;
 
-    std::auto_ptr<undo::extract_command_t> c( new undo::extract_command_t());
+    std::unique_ptr<undo::extract_command_t> c( new undo::extract_command_t());
 
     BOOST_FOREACH( edge_t& e, app().document().composition().edges())
     {
@@ -798,7 +798,7 @@ void main_window_t::extract_nodes()
     }
 
     c->redo();
-    app().document().undo_stack().push_back( c);
+    app().document().undo_stack().push_back( std::move( c));
     app().ui()->update();
 }
 
@@ -886,7 +886,7 @@ void main_window_t::create_node()
     QAction *action = dynamic_cast<QAction*>( sender());
 
     std::string id( create_node_actions_[action]);
-    std::auto_ptr<node_t> p( node_factory_t::instance().create_by_id( id, true));
+    std::unique_ptr<node_t> p( node_factory_t::instance().create_by_id( id, true));
 
     if( !p.get())
     {
@@ -924,11 +924,11 @@ void main_window_t::create_node()
         composition_view().place_node( p.get());
 
     node_t *n = p.get(); // save for later use
-    std::auto_ptr<undo::command_t> c( new undo::add_node_command_t( p, src));
+    std::unique_ptr<undo::command_t> c( new undo::add_node_command_t( std::move( p), src));
     app().document().composition().deselect_all();
     n->select( true);
     c->redo();
-    app().document().undo_stack().push_back( c);
+    app().document().undo_stack().push_back( std::move( c));
     app().ui()->update();
 }
 
@@ -981,7 +981,7 @@ void main_window_t::update_recent_files_menu( const boost::filesystem::path& p)
 
     settings.setValue("recent_file_list", files);
 
-    int num_recent_files = std::min( files.size(), (int) max_recently_opened_files);
+    int num_recent_files = std::min( (int) files.size(), (int) max_recently_opened_files);
 
     for( int i = 0; i < num_recent_files; ++i)
     {
@@ -1001,7 +1001,7 @@ void main_window_t::init_recent_files_menu()
     QSettings settings( "com.ramen.qt", "Ramen Recent Files");
     QStringList files = settings.value( "recent_file_list").toStringList();
 
-    int num_recent_files = std::min( files.size(), (int) max_recently_opened_files);
+    int num_recent_files = std::min( (int) files.size(), (int) max_recently_opened_files);
 
     for( int i = 0; i < num_recent_files; ++i)
     {

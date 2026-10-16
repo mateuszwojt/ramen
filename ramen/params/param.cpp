@@ -189,11 +189,11 @@ void param_t::evaluate( float frame)	{ do_evaluate( frame);}
 void param_t::do_evaluate( float frame)	{}
 
 // undo
-std::auto_ptr<undo::command_t> param_t::create_command() { return do_create_command();}
+std::unique_ptr<undo::command_t> param_t::create_command() { return do_create_command();}
 
-std::auto_ptr<undo::command_t> param_t::do_create_command()
+std::unique_ptr<undo::command_t> param_t::do_create_command()
 {
-    return std::auto_ptr<undo::command_t>();
+    return std::unique_ptr<undo::command_t>();
 }
 
 // paths

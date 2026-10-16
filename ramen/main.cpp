@@ -20,15 +20,9 @@ void ramen_terminate( void)
     ramen::app().fatal_error( "Ramen has encountered a fatal error");
 }
 
-void ramen_unexpected( void)
-{
-    ramen::app().fatal_error( "Ramen has encountered an unexpected exception");
-}
-
 int main( int argc, char **argv)
 {
     std::set_terminate( &ramen_terminate);
-    std::set_unexpected( &ramen_unexpected);
 
     try
     {

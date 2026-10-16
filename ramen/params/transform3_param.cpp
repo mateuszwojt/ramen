@@ -4,7 +4,7 @@
 
 #include<ramen/params/transform3_param.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/assert.hpp>
 
@@ -26,42 +26,42 @@ transform3_param_t::transform3_param_t( const std::string& name, const std::stri
 
 	if( image_mode)
 	{
-	    std::auto_ptr<float2_param_t> p( new float2_param_t( "Center"));
+	    std::unique_ptr<float2_param_t> p( new float2_param_t( "Center"));
 	    p->set_id( id + std::string( "_center_xy"));
 	    p->set_default_value( Imath::V2f( 0.5, 0.5));
 	    p->set_numeric_type( numeric_param_t::relative_xy);
-	    add_param( p);
+	    add_param( std::move( p));
 		
-		std::auto_ptr<float_param_t> q( new float_param_t( "Center Z"));
+		std::unique_ptr<float_param_t> q( new float_param_t( "Center Z"));
 	    q->set_id( id + std::string( "_center_z"));
 	    q->set_default_value( 0);
-	    add_param( q);
+	    add_param( std::move( q));
 	}
 	else
 	{
-	    std::auto_ptr<float3_param_t> p( new float3_param_t( "Center"));
+	    std::unique_ptr<float3_param_t> p( new float3_param_t( "Center"));
 	    p->set_id( id + std::string( "_center"));
 	    p->set_default_value( Imath::V3f( 0, 0, 0));
-	    add_param( p);
+	    add_param( std::move( p));
 	}
 
-    std::auto_ptr<float3_param_t> p( new float3_param_t( "Pos"));
+    std::unique_ptr<float3_param_t> p( new float3_param_t( "Pos"));
     p->set_id( id + std::string( "_pos"));
     p->set_default_value( Imath::V3f( 0, 0, 0));
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float3_param_t( "Scale"));
     p->set_id( id + std::string( "_scale"));
     p->set_default_value( Imath::V3f( 1, 1, 1));
     p->set_step( 0.05);
     p->set_proportional( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float3_param_t( "Rotation"));
     p->set_id( id + std::string( "_rot"));
     p->set_default_value( Imath::V3f( 0, 0, 0));
     p->set_step( 0.5);
-    add_param( p);
+    add_param( std::move( p));
 	
 	set_create_track( false);
 }

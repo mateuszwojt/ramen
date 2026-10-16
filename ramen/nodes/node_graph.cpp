@@ -19,9 +19,9 @@ node_graph_t::node_graph_t( const node_graph_t& other)
     RAMEN_ASSERT( false);
 }
 
-void node_graph_t::add_node( std::auto_ptr<node_t> n) { nodes_.push_back( n);}
+void node_graph_t::add_node( std::unique_ptr<node_t> n) { nodes_.push_back( std::move( n));}
 
-std::auto_ptr<node_t> node_graph_t::release_node( node_t *n)
+std::unique_ptr<node_t> node_graph_t::release_node( node_t *n)
 {
     return container::release_ptr( n, nodes_);
 }

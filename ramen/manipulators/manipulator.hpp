@@ -11,7 +11,7 @@
 
 #include<boost/noncopyable.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<ramen/assert.hpp>
 

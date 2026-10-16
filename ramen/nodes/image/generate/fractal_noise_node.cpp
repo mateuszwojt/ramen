@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/generate/fractal_noise_node.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/algorithm/clamp.hpp>
 
@@ -81,35 +81,35 @@ void fractal_noise_node_t::do_create_params()
 {
     generator_node_t::do_create_params();
 
-    std::auto_ptr<popup_param_t> type( new popup_param_t( "Noise"));
+    std::unique_ptr<popup_param_t> type( new popup_param_t( "Noise"));
     type->set_id( "noise_type");
     type->menu_items() = boost::assign::list_of( "Classic")( "Simplex");
-    add_param( type);
+    add_param( std::move( type));
 
     type.reset( new popup_param_t( "Type"));
     type->set_id( "type");
     type->menu_items() = boost::assign::list_of( "Fbm")( "Turbulence");
-    add_param( type);
+    add_param( std::move( type));
 
-    std::auto_ptr<float2_param_t> p2( new float2_param_t( "Size"));
+    std::unique_ptr<float2_param_t> p2( new float2_param_t( "Size"));
     p2->set_id( "size");
 	p2->set_numeric_type( numeric_param_t::relative_size_xy);
     p2->set_proportional( true);
     p2->set_default_value( Imath::V2f( 0.05f, 0.05f));
-    add_param( p2);
+    add_param( std::move( p2));
 
     p2.reset( new float2_param_t( "Translate"));
     p2->set_id( "translate");
     p2->set_default_value( Imath::V2f( 0, 0));
     p2->set_numeric_type( numeric_param_t::relative_xy);
-    add_param( p2);
+    add_param( std::move( p2));
 	
-    std::auto_ptr<float_param_t> p( new float_param_t( "Time"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Time"));
     p->set_id( "time");
     p->set_default_value( 0);
     p->set_min( 0);
     p->set_step( 0.05);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Octaves"));
     p->set_id( "octaves");
@@ -117,40 +117,40 @@ void fractal_noise_node_t::do_create_params()
     p->set_round_to_int( true);
     p->set_default_value( 4);
     p->set_min( 1);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Gain"));
     p->set_id( "gain");
     p->set_default_value( 0.5);
     p->set_range( 0.1f, 1.0f);
     p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Lacunarity"));
     p->set_id( "lacunarity");
     p->set_default_value( 2);
     p->set_range( 1, 10);
     p->set_step( 0.25f);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Contrast"));
     p->set_id( "contrast");
     p->set_default_value( 1);
     p->set_range( 0, 10);
     p->set_step( 0.1f);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Brightness"));
     p->set_id( "brightness");
     p->set_default_value( 1);
     p->set_range( 0, 10);
     p->set_step( 0.1f);
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<bool_param_t>b( new bool_param_t( "Invert"));
+    std::unique_ptr<bool_param_t>b( new bool_param_t( "Invert"));
     b->set_id( "invert");
     b->set_default_value( false);
-    add_param( b);
+    add_param( std::move( b));
 }
 
 void fractal_noise_node_t::do_process( const render::context_t& context)

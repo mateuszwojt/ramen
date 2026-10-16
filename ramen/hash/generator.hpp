@@ -39,7 +39,7 @@ public:
 
     bool finalized() const
     {
-        return digest_;
+        return digest_.is_initialized();
     }
 
     const digest_type& digest() const;

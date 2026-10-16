@@ -5,7 +5,7 @@
 #ifndef RAMEN_UI_VIEWER_IMAGE_STRATEGY_HPP
 #define	RAMEN_UI_VIEWER_IMAGE_STRATEGY_HPP
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<boost/noncopyable.hpp>
 #include<boost/optional.hpp>

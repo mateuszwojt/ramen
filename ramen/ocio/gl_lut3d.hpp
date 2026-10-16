@@ -23,18 +23,22 @@ public:
 
     gl_lut3d_t( int lut_size = 32, GLenum texture_unit = GL_TEXTURE1);
 
-    void recreate( OCIO::ConstConfigRcPtr config, OCIO::DisplayTransformRcPtr transform, const std::string& fun_name);
+    void recreate( OCIO::ConstConfigRcPtr config, OCIO::DisplayViewTransformRcPtr transform, const std::string& fun_name);
 
-    void recreate( OCIO::ConstConfigRcPtr config, OCIO::DisplayTransformRcPtr transform,
+    void recreate( OCIO::ConstConfigRcPtr config, OCIO::DisplayViewTransformRcPtr transform,
 				OCIO::ConstProcessorRcPtr processor, const std::string& fun_name);
 
     const std::string& lookup_function() const { return lut_fun_;}
+
+    /// Name of the sampler3D uniform used by the lookup function. Empty if the function does not use a lut.
+    const std::string& sampler_name() const { return sampler_name_;}
 
 	const Imath::Color3f& black() const;
 	
 private:
 
     std::string lut_fun_;
+    std::string sampler_name_;
     std::string lut_cache_id_;
 	Imath::Color3f black_;
 };

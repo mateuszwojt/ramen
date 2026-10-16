@@ -362,7 +362,7 @@ void anim_editor_t::push_command()
 	{
 		if( !command_->empty())
 		{
-			app().document().undo_stack().push_back( command_);
+			app().document().undo_stack().push_back( std::move( command_));
 			app().ui()->update();
 		}
 		else

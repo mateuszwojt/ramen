@@ -7,7 +7,7 @@
 
 #include<boost/noncopyable.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/nodes/node_fwd.hpp>
 

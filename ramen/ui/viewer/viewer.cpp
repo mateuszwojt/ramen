@@ -248,7 +248,7 @@ void viewer_t::set_active_node( node_t *n)
 
         if( it == node_toolbars_.end())
         {
-            std::auto_ptr<QWidget> toolbar = n->create_toolbar();
+            std::unique_ptr<QWidget> toolbar = n->create_toolbar();
             node_toolbars_[ n] = toolbar.release();
         }
 

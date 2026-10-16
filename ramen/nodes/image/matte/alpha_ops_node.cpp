@@ -99,43 +99,43 @@ alpha_ops_node_t::alpha_ops_node_t() : areaop_node_t() { set_name( "alpha_ops");
 
 void alpha_ops_node_t::do_create_params()
 {
-    std::auto_ptr<bool_param_t> b( new bool_param_t( "Edge detect"));
+    std::unique_ptr<bool_param_t> b( new bool_param_t( "Edge detect"));
     b->set_id( "edetect");
     b->set_default_value( false);
-    add_param( b);
+    add_param( std::move( b));
     
-    std::auto_ptr<float_param_t> p( new float_param_t( "Edge Theresh"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Edge Theresh"));
     p->set_id( "etheresh");
     p->set_default_value( 0);
     p->set_range( 0, 1);
     p->set_step( 0.05);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Grow/Shrink"));
     p->set_id( "shrink");
     p->set_default_value( 0);
     p->set_range( -100, 100);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Blur"));
     p->set_id( "blur");
     p->set_default_value( 0);
     p->set_range( 0, 200);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Alpha Low"));
     p->set_id( "alpha_low");
     p->set_default_value( 0);
     p->set_range( 0, 1);
     p->set_step( 0.05);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Alpha High"));
     p->set_id( "alpha_high");
     p->set_default_value( 1);
     p->set_range( 0, 1);
     p->set_step( 0.05);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void alpha_ops_node_t::get_expand_radius( int& hradius, int& vradius) const

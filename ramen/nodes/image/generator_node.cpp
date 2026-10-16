@@ -17,9 +17,9 @@ generator_node_t::generator_node_t( const generator_node_t& other) : image_node_
 
 void generator_node_t::do_create_params()
 {
-    std::auto_ptr<image_format_param_t> p( new image_format_param_t( "Format"));
+    std::unique_ptr<image_format_param_t> p( new image_format_param_t( "Format"));
     p->set_id( "format");
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void generator_node_t::do_calc_format( const render::context_t& context)

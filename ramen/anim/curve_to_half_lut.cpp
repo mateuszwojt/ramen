@@ -12,10 +12,5 @@ namespace anim
 eval_float_curve::eval_float_curve( const float_curve_t& c) : c_( c) {}
 half eval_float_curve::operator()( half x) const { return c_.evaluate( x);}
 
-void curve_to_half_lut( const float_curve_t& c, halfFunction<half>& lut)
-{
-    lut = halfFunction<half>( eval_float_curve( c));
-}
-
 } // namespace
 } // namespace

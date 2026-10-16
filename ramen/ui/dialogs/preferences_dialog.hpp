@@ -7,7 +7,7 @@
 
 #include<QDialog>
 
-#include"ui_preferences.h"
+#include "ui_preferences.h"
 
 namespace ramen
 {

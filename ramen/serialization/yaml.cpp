@@ -24,14 +24,17 @@ void check_yaml_errors( const YAML::Emitter& out)
 	#endif
 }
 
-const YAML::Node& get_node( const YAML::Node& node, const std::string& key)
+YAML::Node find_value( const YAML::Node& node, const std::string& key)
 {
-	return node[key];
+	if( node.IsMap())
+		return node[key];
+
+	return YAML::Node( YAML::NodeType::Undefined);
 }
 
-const YAML::Node *get_optional_node( const YAML::Node& node, const std::string& key)
+YAML::Node get_node( const YAML::Node& node, const std::string& key)
 {
-	return node.FindValue( key);
+	return node[key];
 }
 
 void operator>>( const YAML::Node& in, core::empty_t& x)

@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/color/tint_node.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/params/color_param.hpp>
 #include<ramen/params/float_param.hpp>
@@ -67,24 +67,24 @@ tint_node_t::tint_node_t() : pointop_node_t() { set_name("tint");}
 
 void tint_node_t::do_create_params()
 {
-    std::auto_ptr<color_param_t> q( new color_param_t( "Black"));
+    std::unique_ptr<color_param_t> q( new color_param_t( "Black"));
     q->set_id( "black");
     q->set_is_rgba( true);
     q->set_default_value( Imath::Color4f( 0, 0, 0, 0));
-    add_param( q);
+    add_param( std::move( q));
     
     q.reset( new color_param_t( "White"));
     q->set_id( "white");
     q->set_is_rgba( true);
     q->set_default_value( Imath::Color4f( 1, 1, 1, 1));
-    add_param( q);
+    add_param( std::move( q));
 	
-    std::auto_ptr<float_param_t> p( new float_param_t( "Tint"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Tint"));
     p->set_id( "tint");
     p->set_default_value( 1);
 	p->set_range( 0, 1);
     p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void tint_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

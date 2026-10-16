@@ -6,7 +6,7 @@
 
 #include<stdexcept>
 
-#include<boost/filesystem/convenience.hpp>
+#include<boost/filesystem/operations.hpp>
 
 #include<ramen/config/os.hpp>
 

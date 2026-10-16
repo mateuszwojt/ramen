@@ -4,7 +4,7 @@
 
 #include<ramen/manipulators/pick.hpp>
 
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathMath.h>
 
 #include<ramen/math/constants.hpp>
 
@@ -55,8 +55,8 @@ pick_axes_result pick_xy_axes( const Imath::V2f& p, const Imath::V2f& c, const I
 
 pick_axes_result pick_xy_axes( const Imath::V2f& p, const Imath::V2f& c, float xsize, float ysize, float angle, float xscale, float pixel_scale)
 {
-    float cs = Imath::Math<float>::cos( (double) angle * math::constants<double>::deg2rad());
-    float ss = Imath::Math<float>::sin( (double) angle * math::constants<double>::deg2rad());
+    float cs = std::cos( (double) angle * math::constants<double>::deg2rad());
+    float ss = std::sin( (double) angle * math::constants<double>::deg2rad());
 	return pick_xy_axes( p, c, Imath::V2f( cs, ss) * xsize, Imath::V2f( ss, -cs) * ysize, xscale, pixel_scale);
 }
 

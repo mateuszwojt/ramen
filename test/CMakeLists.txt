@@ -4,24 +4,13 @@
 # See CDDL_LICENSE.txt for a copy of the license.                    #
 ######################################################################
 
-ENABLE_TESTING()
+function( add_ramen_test sourcefile)
+    add_executable( ${sourcefile} ${sourcefile}.cpp)
+    target_link_libraries( ${sourcefile} PRIVATE ramen GTest::gmock)
+    add_test( NAME ${sourcefile} COMMAND ${sourcefile})
+endfunction()
 
-INCLUDE_DIRECTORIES(	../
-                        ../google_testing_libs/google
-                        ../google_testing_libs/google/gtest
-                        ../google_testing_libs/google/gmock
-                        )
-
-MACRO( ADD_RAMEN_TEST sourcefile)
-    ADD_EXECUTABLE( ${sourcefile} ${sourcefile}.cpp)
-    TARGET_LINK_LIBRARIES( ${sourcefile}    ramen
-                                            ${RAMEN_ALL_LIBS}
-                                            gmock
-                                            )
-
-    ADD_TEST( ${sourcefile} ${CMAKE_CURRENT_BINARY_DIR}/${sourcefile})
-ENDMACRO()
-
-ADD_SUBDIRECTORY( color)
-ADD_SUBDIRECTORY( core)
-ADD_SUBDIRECTORY( math)
+add_subdirectory( color)
+add_subdirectory( core)
+add_subdirectory( math)
+add_subdirectory( render)

@@ -59,7 +59,7 @@ class splash_screen_widget_t : public QSplashScreen
 {
 public:
 	
-	splash_screen_widget_t( const QPixmap& pixmap, Qt::WindowFlags f = 0) : QSplashScreen( pixmap, f)
+	splash_screen_widget_t( const QPixmap& pixmap, Qt::WindowFlags f = Qt::WindowFlags()) : QSplashScreen( pixmap, f)
 	{
 	}
 };

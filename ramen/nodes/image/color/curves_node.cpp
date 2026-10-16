@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/color/curves_node.hpp>
 
-#include<halfLimits.h>
+#include<Imath/half.h>
 
 #include<ramen/gil/extension/algorithm/tbb/tbb_transform.hpp>
 
@@ -56,7 +56,7 @@ curves_node_t::curves_node_t() : pointop_node_t() { set_name("curves");}
 
 void curves_node_t::add_curve_param( const std::string& name, const std::string& id, const Imath::Color3c col)
 {
-    std::auto_ptr<curve_param_t> p( new curve_param_t( name));
+    std::unique_ptr<curve_param_t> p( new curve_param_t( name));
     p->set_id( id);
     p->set_min( 0.0f);
     p->set_max( std::numeric_limits<half>::max());
@@ -67,7 +67,7 @@ void curves_node_t::add_curve_param( const std::string& name, const std::string&
     p->curve().insert( 1, 1, false);
     p->curve().set_extrapolation( anim::extrapolate_linear);
     p->curve().recalc_tangents_and_coefficients();
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void curves_node_t::do_create_params()

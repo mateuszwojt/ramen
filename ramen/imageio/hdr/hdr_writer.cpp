@@ -13,7 +13,7 @@ void hdr_writer_t::do_write_image( const boost::filesystem::path& p,
 				const image::const_image_view_t& view,
                 const core::dictionary_t& params) const
 {
-    std::auto_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
+    std::unique_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
 
     if( !out.get())
 		throw exception( "Write HDR: Can't open output file");

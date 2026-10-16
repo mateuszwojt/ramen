@@ -5,7 +5,7 @@
 #ifndef RAMEN_ANIM_CURVE_FWD_HPP
 #define RAMEN_ANIM_CURVE_FWD_HPP
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 namespace ramen
 {

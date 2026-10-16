@@ -55,9 +55,8 @@ private:
 
 	void init( std::istream& is);
 	
-	YAML::Parser parser_;
 	YAML::Node doc_;
-	std::auto_ptr<yaml_node_t> root_;
+	std::unique_ptr<yaml_node_t> root_;
 	
 	int version_;
 	bool header_read_;

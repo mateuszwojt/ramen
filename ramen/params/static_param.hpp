@@ -21,7 +21,7 @@ protected:
     static_param_t( const static_param_t& other);
     void operator=( const static_param_t& other);
 
-    virtual std::auto_ptr<undo::command_t> do_create_command();
+    virtual std::unique_ptr<undo::command_t> do_create_command();
 };
 
 } // namespace

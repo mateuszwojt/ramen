@@ -26,13 +26,13 @@ composite_parameterised_t::~composite_parameterised_t()
     // Do not remove.
 }
 
-void composite_parameterised_t::add_parameterised( std::auto_ptr<parameterised_t> p)
+void composite_parameterised_t::add_parameterised( std::unique_ptr<parameterised_t> p)
 {
     p->set_parent( this);
-    children().push_back( p);
+    children().push_back( std::move( p));
 }
 
-std::auto_ptr<parameterised_t> composite_parameterised_t::remove_parameterised( parameterised_t *p)
+std::unique_ptr<parameterised_t> composite_parameterised_t::remove_parameterised( parameterised_t *p)
 {
     p->set_parent( 0);
     return container::release_ptr( p, children_);

@@ -56,7 +56,7 @@ void manager_t::init()
 OCIO::ConstConfigRcPtr manager_t::config() const
 {
 	OCIO::ConstConfigRcPtr config = OCIO::GetCurrentConfig();
-	config->sanityCheck();
+	config->validate();
 	return config;
 }
 

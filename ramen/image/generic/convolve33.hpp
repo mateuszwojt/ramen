@@ -5,7 +5,7 @@
 #ifndef RAMEN_IMAGE_GENERIC_CONVOLVE33_HPP
 #define	RAMEN_IMAGE_GENERIC_CONVOLVE33_HPP
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ramen/image/typedefs.hpp>
 

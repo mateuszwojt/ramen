@@ -14,7 +14,7 @@
 
 #include<boost/thread.hpp>
 #include<boost/filesystem/operations.hpp>
-#include<boost/filesystem/convenience.hpp>
+#include<boost/filesystem/operations.hpp>
 #include<boost/lexical_cast.hpp>
 
 #include<OpenEXR/ImfThreading.h>
@@ -85,7 +85,7 @@ application_t::application_t( int argc, char **argv) : system_(), preferences_()
     if( max_threads_ == 0)
         max_threads_ = boost::thread::hardware_concurrency();
 
-    task_scheduler_.initialize( max_threads_);
+    task_scheduler_.reset( new tbb::global_control( tbb::global_control::max_allowed_parallelism, max_threads_));
     Imf::setGlobalThreadCount( max_threads_);
 
     if( !command_line_)

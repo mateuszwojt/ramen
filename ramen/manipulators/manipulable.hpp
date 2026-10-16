@@ -32,7 +32,7 @@ public:
     void create_manipulators();
 
     template<class T>
-    void add_manipulator( std::auto_ptr<T> p)
+    void add_manipulator( std::unique_ptr<T> p)
     {
         p->set_parent( this);
         manipulators_.push_back( p.release());

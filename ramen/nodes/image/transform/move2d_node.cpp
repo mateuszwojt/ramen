@@ -219,25 +219,25 @@ move2d_node_t::move2d_node_t( const move2d_node_t& other) : xform2d_node_t( othe
 
 void move2d_node_t::do_create_params()
 {
-    std::auto_ptr<transform2_param_t> xp( new transform2_param_t( "xform", "xf"));
-    add_param( xp);
+    std::unique_ptr<transform2_param_t> xp( new transform2_param_t( "xform", "xf"));
+    add_param( std::move( xp));
 
 	create_default_filter_param();
 
-    std::auto_ptr<button_param_t> b( new button_param_t( "Apply Track..."));
+    std::unique_ptr<button_param_t> b( new button_param_t( "Apply Track..."));
     b->set_id( "apply_track");
-    add_param( b);
+    add_param( std::move( b));
 
-    std::auto_ptr<separator_param_t> sep( new separator_param_t());
-    add_param( sep);
+    std::unique_ptr<separator_param_t> sep( new separator_param_t());
+    add_param( std::move( sep));
 
 	create_motion_blur_param();
 }
 
 void move2d_node_t::do_create_manipulators()
 {	
-    std::auto_ptr<move2d_manipulator_t> m( new move2d_manipulator_t( &param( "xf")));
-    add_manipulator( m);
+    std::unique_ptr<move2d_manipulator_t> m( new move2d_manipulator_t( &param( "xf")));
+    add_manipulator( std::move( m));
 }
 
 move2d_node_t::matrix3_type move2d_node_t::do_calc_transform_matrix_at_frame( float frame, int subsample) const

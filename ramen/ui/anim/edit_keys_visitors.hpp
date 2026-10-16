@@ -10,7 +10,7 @@
 
 #include<boost/optional.hpp>
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 #include<ramen/assert.hpp>
 

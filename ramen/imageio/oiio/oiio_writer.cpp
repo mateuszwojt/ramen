@@ -17,7 +17,7 @@ void oiio_writer_t::do_write( const boost::filesystem::path& p,
                               const OIIO::ImageSpec& spec,
                               const image::const_image_view_t& view)
 {
-    std::auto_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
+    std::unique_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
 
     if( !out.get())
 		throw exception( "OIIO, write image: Can't find a format");

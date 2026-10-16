@@ -4,7 +4,7 @@
 
 #include<boost/lexical_cast.hpp>
 
-#include<OpenEXR/ImathRandom.h>
+#include<Imath/ImathRandom.h>
 
 #include<ramen/assert.hpp>
 
@@ -28,56 +28,56 @@ camera_shake_node_t::camera_shake_node_t( const camera_shake_node_t& other) : xf
 
 void camera_shake_node_t::do_create_params()
 {
-    std::auto_ptr<float2_param_t> p2( new float2_param_t( "Center"));
+    std::unique_ptr<float2_param_t> p2( new float2_param_t( "Center"));
     p2->set_id( "center");
     p2->set_default_value( Imath::V2f( 0.5, 0.5));
     p2->set_numeric_type( numeric_param_t::relative_xy);
-    add_param( p2);
+    add_param( std::move( p2));
 
-    std::auto_ptr<float_param_t> p( new float_param_t( "Frequency"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Frequency"));
     p->set_id( "freq");
 	p->set_range( 0.001, 1000);
     p->set_default_value( 1.0f);
 	p->set_step( 0.05);
-    add_param( p);
+    add_param( std::move( p));
 	
     p2.reset( new float2_param_t( "Translate"));
     p2->set_id( "t_amp");
 	p2->set_min( 0);
     p2->set_default_value( Imath::V2f( 0, 0));
 	p2->set_proportional( true);
-    add_param( p2);
+    add_param( std::move( p2));
 
     p.reset( new float_param_t( "Scale"));
     p->set_id( "s_amp");
 	p->set_min( 0);
     p->set_default_value( 0.0f);
 	p->set_step( 0.05);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Extra Scale"));
     p->set_id( "extra_s");
     p->set_default_value( 0.0f);
 	p->set_step( 0.05);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Rotate"));
     p->set_id( "r_amp");
 	p->set_min( 0);
     p->set_default_value( 0.0f);
 	p->set_step( 0.1);
-    add_param( p);
+    add_param( std::move( p));
 	
 	p.reset( new float_param_t( "Seed"));
 	p->set_id( "seed");
 	p->set_round_to_int( true);
 	p->set_default_value( 17467);
-	add_param( p);
+	add_param( std::move( p));
 
 	create_default_filter_param();
 
-    std::auto_ptr<separator_param_t> sep( new separator_param_t());
-    add_param( sep);
+    std::unique_ptr<separator_param_t> sep( new separator_param_t());
+    add_param( std::move( sep));
 
 	create_motion_blur_param();
 }

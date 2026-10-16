@@ -7,7 +7,7 @@
 
 #include<ramen/ui/events_fwd.hpp>
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 #include<ramen/ui/viewer/viewer_strategy_fwd.hpp>
 

@@ -19,7 +19,6 @@ namespace
 static const char *ocio_display_shader_source =
 {
 "uniform sampler2D tex;"
-"uniform sampler3D lut3d;"
 "uniform float exposure;"
 "uniform float gamma;"
 "uniform vec4 channel_mask;"
@@ -30,10 +29,10 @@ static const char *ocio_display_shader_source =
 	"vec4 acol = vec4( col.a, col.a, col.a, col.a);"
 	"vec4 expv = vec4( exposure, exposure, exposure, 1);"
 	"col *= expv;"
-	"col = apply_lut( col, lut3d) * channel_mask;"
+	"col = apply_lut( col) * channel_mask;"
     "vec4 gammav = vec4( gamma, gamma, gamma, 1);"
     "col = pow( col, gammav);"
-	"col = (col * ( 1 - alpha)) + ( alpha * acol);"
+	"col = (col * ( 1.0 - alpha)) + ( alpha * acol);"
 	"gl_FragColor = max( col, vec4( 0, 0, 0, 0));"
 "}"
 };
@@ -65,19 +64,22 @@ void gl_display_manager_t::set_context_callback( const get_context_callback_t& f
 	get_ctx_fun_ = f;
 }
 
-void gl_display_manager_t::set_display_transform( OCIO::ConstConfigRcPtr config, OCIO::DisplayTransformRcPtr transform)
+void gl_display_manager_t::set_display_transform( OCIO::ConstConfigRcPtr config, OCIO::DisplayViewTransformRcPtr transform)
 {
 	OCIO::ConstContextRcPtr context = get_local_context();
     processor_ = config->getProcessor( context, transform, OCIO::TRANSFORM_DIR_FORWARD);
     lut_->recreate( config, transform, processor_, "apply_lut");
-	program_.compile( lut_->lookup_function().c_str(), ocio_display_shader_source);
+	// without a version directive, strict drivers compile the shaders as GLSL 1.10.
+	std::string lut_fun( "#version 120\n");
+	lut_fun += lut_->lookup_function();
+	program_.compile( lut_fun.c_str(), ocio_display_shader_source);
 }
 
 Imath::Color3f gl_display_manager_t::transform( const Imath::Color3f& c) const
 {
 	RAMEN_ASSERT( processor_);
 	Imath::Color3f result( c);
-	processor_->applyRGB( ( float*) &( result.x));
+	processor_->getDefaultCPUProcessor()->applyRGB( ( float*) &( result.x));
 	return result;
 }
 
@@ -85,7 +87,7 @@ Imath::Color4f gl_display_manager_t::transform( const Imath::Color4f& c) const
 {
 	RAMEN_ASSERT( processor_);
 	Imath::Color4f result( c);
-	processor_->applyRGBA( ( float*) &( result.r));
+	processor_->getDefaultCPUProcessor()->applyRGBA( ( float*) &( result.r));
 	return result;
 }
 
@@ -98,7 +100,8 @@ void gl_display_manager_t::activate()
 
 	// TODO: don't hardcode the texture unit numbers
 	program_.uniform_1i( "tex", 0);
-	program_.uniform_1i( "lut3d", 1);
+	if( !lut_->sampler_name().empty())
+		program_.uniform_1i( lut_->sampler_name().c_str(), 1);
 	program_.uniform_1f( "exposure", std::pow( 2.0, ( double) exposure()));
 	program_.uniform_1f( "gamma", 1.0 / std::max( 1e-4, ( double) gamma()));
 

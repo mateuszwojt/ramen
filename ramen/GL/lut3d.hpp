@@ -8,7 +8,7 @@
 #include<boost/noncopyable.hpp>
 #include<boost/scoped_array.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<ramen/GL/gl.hpp>
 

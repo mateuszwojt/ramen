@@ -8,7 +8,7 @@
 #include<tbb/blocked_range.h>
 #include<tbb/parallel_for.h>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/image/typedefs.hpp>
 

@@ -6,7 +6,7 @@
 
 #include<boost/scoped_array.hpp>
 
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathMath.h>
 
 #include<ramen/GL/Imath_gl.hpp>
 
@@ -31,14 +31,14 @@ void draw_arrow( const Imath::V2f& p, const Imath::V2f& q, float offset = 0)
 		d.normalize();
 		d *= l;
 	
-		float cs = Imath::Math<float>::cos( 30.0f * math::constants<double>::deg2rad());
-		float ss = Imath::Math<float>::sin( 30.0f * math::constants<double>::deg2rad());
+		float cs = std::cos( 30.0f * math::constants<double>::deg2rad());
+		float ss = std::sin( 30.0f * math::constants<double>::deg2rad());
 	
 		gl_vertex2f( q.x + offset, q.y + offset);
 		gl_vertex2f( q.x + ( d.x * cs - d.y * ss) + offset, q.y + ( d.x * ss + d.y * cs) + offset);
 	
-		cs = Imath::Math<float>::cos( -30.0 * math::constants<double>::deg2rad());
-		ss = Imath::Math<float>::sin( -30.0 * math::constants<double>::deg2rad());
+		cs = std::cos( -30.0 * math::constants<double>::deg2rad());
+		ss = std::sin( -30.0 * math::constants<double>::deg2rad());
 	
 		gl_vertex2f( q.x + offset, q.y + offset);
 		gl_vertex2f( q.x + ( d.x * cs - d.y * ss) + offset, q.y + ( d.x * ss + d.y * cs) + offset);
@@ -94,15 +94,15 @@ void draw_ellipse( const Imath::V2f& center, float xradius, float yradius, const
 	gl_color3ub( 0, 0, 0);
     gl_begin( GL_LINE_LOOP);
     for( float i = 0; i < steps; ++i)
-		gl_vertex2f( center.x + off + Imath::Math<float>::cos( i * ang_inc) * xradius, 
-					 center.y + off + Imath::Math<float>::sin( i * ang_inc) * yradius);
+		gl_vertex2f( center.x + off + std::cos( i * ang_inc) * xradius, 
+					 center.y + off + std::sin( i * ang_inc) * yradius);
 	gl_end();
 
 	gl_color( color);
     gl_begin( GL_LINE_LOOP);
     for( float i = 0; i < steps; ++i)
-		gl_vertex2f( center.x + Imath::Math<float>::cos( i * ang_inc) * xradius, 
-					 center.y + Imath::Math<float>::sin( i * ang_inc) * yradius);
+		gl_vertex2f( center.x + std::cos( i * ang_inc) * xradius, 
+					 center.y + std::sin( i * ang_inc) * yradius);
 	gl_end();
 }
 
@@ -201,8 +201,8 @@ void draw_xy_axes( const Imath::V2f& c, const Imath::V2f& x, const Imath::V2f& y
 void draw_xy_axes( const Imath::V2f& c, float xsize, float ysize, float angle, float xscale,
 				   const Imath::Color3c& xcol, const Imath::Color3c& ycol, float pixel_scale)
 {
-    float cs = Imath::Math<float>::cos( (double) angle * math::constants<double>::deg2rad());
-    float ss = Imath::Math<float>::sin( (double) angle * math::constants<double>::deg2rad());
+    float cs = std::cos( (double) angle * math::constants<double>::deg2rad());
+    float ss = std::sin( (double) angle * math::constants<double>::deg2rad());
 	draw_xy_axes( c, Imath::V2f( cs, ss) * xsize, Imath::V2f( ss, -cs) * ysize, xscale,
 					xcol, ycol, pixel_scale);
 }

@@ -4,7 +4,7 @@
 
 #include<ramen/image/sse2/resize.hpp>
 
-#include<emmintrin.h>
+#include<ramen/image/sse2/intrinsics.hpp>
 
 #include<algorithm>
 
@@ -63,7 +63,7 @@ struct resize_x_fun
 			for (int x = 0, xe = dst_.width(); x < xe; ++x)
 			{
 				float old_x = resize_coord( x + dst_area_.min.x, xcenter_, scale_);
-				int old_xi = Imath::Math<float>::floor( old_x);
+				int old_xi = std::floor( old_x);
 
 				int min_x = std::max( src_area_.min.x, old_xi - filter_area / 2 + 1);
 				int max_x = std::min( old_xi + filter_area / 2, src_area_.max.x);
@@ -143,7 +143,7 @@ struct resize_y_fun
 			for (int y = 0, ye = dst_.height(); y < ye; ++y)
 			{
 				float old_y = resize_coord( y + dst_min_, ycenter_, scale_);
-				int old_yi = Imath::Math<float>::floor( old_y);
+				int old_yi = std::floor( old_y);
 
 				int min_y = std::max( src_min_, old_yi - filter_area / 2 + 1);
 				int max_y = std::min( old_yi + filter_area / 2, src_max_);

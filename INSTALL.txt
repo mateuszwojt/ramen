@@ -1,3 +1,23 @@
 
 	Ramen Install
 	-------------
+
+	Requirements: CMake 3.24+, Ninja, a C++20 compiler and Qt 6, Boost, oneTBB,
+	yaml-cpp 0.8+, Imath 3, OpenEXR 3, OpenImageIO, OpenColorIO 2, AGG, GLEW,
+	libjpeg, libpng, libtiff, zlib and GoogleTest. On arm64, also sse2neon.
+
+	macOS ( Homebrew):
+
+		brew install cmake ninja qt boost tbb yaml-cpp imath openexr openimageio \
+			opencolorio libagg glew googletest sse2neon
+
+	Build and test:
+
+		cmake --preset release
+		cmake --build --preset release
+		ctest --preset release
+
+	The executable is build/release/bin/ramen.
+
+	The vcpkg-debug and vcpkg-release presets use the vcpkg.json manifest
+	( set VCPKG_ROOT). AGG is not in vcpkg and has to be installed separately.

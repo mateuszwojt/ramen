@@ -79,10 +79,10 @@ void composition_settings_dialog_t::exec_dialog()
         if( ui_.format_->value() != app().document().composition().default_format() ||
             ui_.rate_->value() != app().document().composition().frame_rate())
         {
-            std::auto_ptr<comp_settings_command_t> cmd( new comp_settings_command_t( ui_.format_->value(),
+            std::unique_ptr<comp_settings_command_t> cmd( new comp_settings_command_t( ui_.format_->value(),
                                                                                      ui_.rate_->value()));
             cmd->redo();
-            app().document().undo_stack().push_back( cmd);
+            app().document().undo_stack().push_back( std::move( cmd));
             app().ui()->update();
         }
     }

@@ -87,38 +87,38 @@ roto_node_t::roto_node_t( const roto_node_t& other) : image_node_t( other), scen
 
 void roto_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> pop( new popup_param_t( "Output"));
+    std::unique_ptr<popup_param_t> pop( new popup_param_t( "Output"));
     pop->set_id( "output");
     pop->menu_items() = boost::assign::list_of( "Premultiplied")( "Unpremultiplied");
     pop->set_default_value( 1);
-    add_param( pop);
+    add_param( std::move( pop));
 
     pop.reset( new popup_param_t( "Input Alpha"));
     pop->set_id( "alpha");
     pop->menu_items() = boost::assign::list_of( "Replace")( "Use");
-    add_param( pop);
+    add_param( std::move( pop));
 
     pop.reset( new popup_param_t( "Update"));
     pop->set_id( "update");
     pop->menu_items() = boost::assign::list_of( "Mouse Drag")( "Mouse Up");
 	pop->set_include_in_hash( false);
-    add_param( pop);
+    add_param( std::move( pop));
 	
-    std::auto_ptr<motion_blur_param_t> mb( new motion_blur_param_t( "Motion Blur"));
+    std::unique_ptr<motion_blur_param_t> mb( new motion_blur_param_t( "Motion Blur"));
     mb->set_id( "motion_blur");
-    add_param( mb);
+    add_param( std::move( mb));
 	
-	std::auto_ptr<separator_param_t> sep( new separator_param_t());
-	add_param( sep);
+	std::unique_ptr<separator_param_t> sep( new separator_param_t());
+	add_param( std::move( sep));
 	
 	{
-		std::auto_ptr<roto_shape_param_t> rs( new roto_shape_param_t( "shape_panel"));
+		std::unique_ptr<roto_shape_param_t> rs( new roto_shape_param_t( "shape_panel"));
 		shape_param_ = rs.get();
-		add_param( rs);
+		add_param( std::move( rs));
 		
-		std::auto_ptr<inspector_param_t> ip( new inspector_param_t( "inspector"));
+		std::unique_ptr<inspector_param_t> ip( new inspector_param_t( "inspector"));
 		inspector_ = ip.get();
-		add_param( ip);	
+		add_param( std::move( ip));	
 	}
 	
 	// test.
@@ -133,15 +133,15 @@ void roto_node_t::for_each_param( const boost::function<void ( param_t*)>& f)
 
 void roto_node_t::do_create_manipulators()
 {
-	std::auto_ptr<manipulator_t> m( new roto::manipulator_t());
-	add_manipulator( m);
+	std::unique_ptr<manipulator_t> m( new roto::manipulator_t());
+	add_manipulator( std::move( m));
 }
 
-std::auto_ptr<QWidget> roto_node_t::create_toolbar()
+std::unique_ptr<QWidget> roto_node_t::create_toolbar()
 {
 	RAMEN_ASSERT( !toolbar_);
 	toolbar_ = new roto::toolbar_t( *this);
-	return std::auto_ptr<QWidget>( toolbar_);
+	return std::unique_ptr<QWidget>( toolbar_);
 }
 
 const roto::toolbar_t& roto_node_t::toolbar() const
@@ -162,24 +162,24 @@ bool roto_node_t::track_mouse() const
 }
 
 // shapes
-std::auto_ptr<roto::shape_t> roto_node_t::create_shape() const
+std::unique_ptr<roto::shape_t> roto_node_t::create_shape() const
 {
-	std::auto_ptr<roto::shape_t> new_shape( new roto::shape_t());
+	std::unique_ptr<roto::shape_t> new_shape( new roto::shape_t());
 	init_shape( *new_shape);
 	return new_shape;
 }
 
-std::auto_ptr<roto::shape_t> roto_node_t::create_shape( const Imath::Box2f& b) const
+std::unique_ptr<roto::shape_t> roto_node_t::create_shape( const Imath::Box2f& b) const
 {
-	std::auto_ptr<roto::shape_t> new_shape( new roto::shape_t( b));
+	std::unique_ptr<roto::shape_t> new_shape( new roto::shape_t( b));
 	init_shape( *new_shape);
 	new_shape->set_name( "box");
 	return new_shape;	
 }
 
-std::auto_ptr<roto::shape_t> roto_node_t::create_null() const
+std::unique_ptr<roto::shape_t> roto_node_t::create_null() const
 {
-	std::auto_ptr<roto::shape_t> new_shape( new roto::shape_t());
+	std::unique_ptr<roto::shape_t> new_shape( new roto::shape_t());
 	new_shape->set_is_null( true);
 	init_shape( *new_shape);
 	new_shape->set_name( "null");
@@ -193,17 +193,17 @@ void roto_node_t::init_shape( roto::shape_t &s) const
 	s.set_track_mouse( track_mouse());
 }
 
-void roto_node_t::add_shape( std::auto_ptr<roto::shape_t> s)
+void roto_node_t::add_shape( std::unique_ptr<roto::shape_t> s)
 {
-	scene_.add_shape( s);
+	scene_.add_shape( std::move( s));
 	
 	if( shape_param_)
 		shape_param_->shape_list_changed();
 }
 
-std::auto_ptr<roto::shape_t> roto_node_t::release_shape( roto::shape_t *s)
+std::unique_ptr<roto::shape_t> roto_node_t::release_shape( roto::shape_t *s)
 {
-	std::auto_ptr<roto::shape_t> shape( scene_.release_shape( s));
+	std::unique_ptr<roto::shape_t> shape( scene_.release_shape( s));
 
 	if( shape_param_)
 		shape_param_->shape_list_changed();

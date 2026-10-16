@@ -3,7 +3,7 @@
 #ifndef RAMEN_COLOR_BARS_HPP
 #define RAMEN_COLOR_BARS_HPP
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/image/typedefs.hpp>
 

@@ -91,23 +91,23 @@ clamp_colors_node_t::clamp_colors_node_t() : pointop_node_t() { set_name("clamp"
 
 void clamp_colors_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> r( new popup_param_t( "Channels"));
+    std::unique_ptr<popup_param_t> r( new popup_param_t( "Channels"));
     r->set_id( "channels");
     r->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
 	r->set_default_value( 1);
-    add_param( r);
+    add_param( std::move( r));
 	
-    std::auto_ptr<float_param_t> p( new float_param_t( "Min"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Min"));
     p->set_id( "min");
     p->set_default_value( 0.0f);
     p->set_step( 0.01f);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Max"));
     p->set_id( "max");
     p->set_default_value( 1.0f);
     p->set_step( 0.01f);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void clamp_colors_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

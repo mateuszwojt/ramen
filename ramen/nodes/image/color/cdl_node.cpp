@@ -37,18 +37,18 @@ cdl_node_t::cdl_node_t( const cdl_node_t& other) : pointop_node_t( other) {}
 
 void cdl_node_t::do_create_params()
 {
-	std::auto_ptr<string_param_t> cccid( new string_param_t( "CCC Id"));
+	std::unique_ptr<string_param_t> cccid( new string_param_t( "CCC Id"));
 	cccid->set_id( "cccid");
-	add_param( cccid);
+	add_param( std::move( cccid));
 	
-	std::auto_ptr<float3_param_t> f3( new float3_param_t( "Slope"));
+	std::unique_ptr<float3_param_t> f3( new float3_param_t( "Slope"));
 	f3->set_id( "slope");
 	f3->set_default_value( Imath::V3f( 1, 1, 1));
 	f3->set_min( 0);
 	f3->set_step( 0.025);
 	f3->set_static( true);
 	f3->set_proportional( true);
-	add_param( f3);
+	add_param( std::move( f3));
 
 	f3.reset( new float3_param_t( "Offset"));
 	f3->set_id( "offset");
@@ -56,7 +56,7 @@ void cdl_node_t::do_create_params()
 	f3->set_step( 0.025);
 	f3->set_static( true);
 	f3->set_proportional( true);
-	add_param( f3);
+	add_param( std::move( f3));
 
 	f3.reset( new float3_param_t( "Power"));
 	f3->set_id( "power");
@@ -65,19 +65,19 @@ void cdl_node_t::do_create_params()
 	f3->set_min( 0.025);
 	f3->set_static( true);
 	f3->set_proportional( true);
-	add_param( f3);
+	add_param( std::move( f3));
 
-	std::auto_ptr<float_param_t> f( new float_param_t( "Saturation"));
+	std::unique_ptr<float_param_t> f( new float_param_t( "Saturation"));
 	f->set_id( "saturation");
 	f->set_default_value( 1);
 	f->set_min( 0);
 	f->set_step( 0.025);
 	f->set_static( true);
-	add_param( f);
+	add_param( std::move( f));
 
-	std::auto_ptr<bool_param_t> b( new bool_param_t( "Reverse"));
+	std::unique_ptr<bool_param_t> b( new bool_param_t( "Reverse"));
 	b->set_id( "reverse");
-	add_param( b);
+	add_param( std::move( b));
 }
 
 void cdl_node_t::do_process( const image::const_image_view_t& src,
@@ -113,10 +113,14 @@ OCIO::CDLTransformRcPtr cdl_node_t::cdl_transform() const
 	Imath::V3f offset = get_value<Imath::V3f>( param( "offset"));
 	Imath::V3f power = get_value<Imath::V3f>( param( "power"));
 
+	const double slope_d[3] = { slope.x, slope.y, slope.z};
+	const double offset_d[3] = { offset.x, offset.y, offset.z};
+	const double power_d[3] = { power.x, power.y, power.z};
+
 	OCIO::CDLTransformRcPtr transform = OCIO::CDLTransform::Create();
-	transform->setSlope( reinterpret_cast<const float*>( &slope));
-	transform->setOffset( reinterpret_cast<const float*>( &offset));
-	transform->setPower( reinterpret_cast<const float*>( &power));
+	transform->setSlope( slope_d);
+	transform->setOffset( offset_d);
+	transform->setPower( power_d);
 	transform->setSat( get_value<float>( param( "saturation")));
 	transform->setID( get_value<std::string>( param( "cccid")).c_str());
 	return transform;
@@ -124,29 +128,18 @@ OCIO::CDLTransformRcPtr cdl_node_t::cdl_transform() const
 
 void cdl_node_t::read_from_file( const boost::filesystem::path& p)
 {
-	boost::filesystem::ifstream ifs( p);
+	OCIO::CDLTransformRcPtr transform = OCIO::CDLTransform::CreateFromFile( filesystem::file_cstring( p), "");
 
-	if( !ifs.is_open() || !ifs.good())
-		throw std::runtime_error( "Can't read file " + filesystem::file_string( p));
-	
-	ifs >> std::noskipws;
-	
-	std::string contents;
-    std::copy( std::istream_iterator<char>( ifs),
-               std::istream_iterator<char>(),
-               std::back_inserter( contents));
-	
-	OCIO::CDLTransformRcPtr transform = OCIO::CDLTransform::Create();
-	transform->setXML( contents.c_str());
-	
-	Imath::V3f slope;
-	transform->getSlope( reinterpret_cast<float*>( &slope));
-	
-	Imath::V3f offset;
-	transform->getOffset( reinterpret_cast<float*>( &offset));
+	double rgb[3];
 
-	Imath::V3f power;
-	transform->getPower( reinterpret_cast<float*>( &power));
+	transform->getSlope( rgb);
+	Imath::V3f slope( rgb[0], rgb[1], rgb[2]);
+
+	transform->getOffset( rgb);
+	Imath::V3f offset( rgb[0], rgb[1], rgb[2]);
+
+	transform->getPower( rgb);
+	Imath::V3f power( rgb[0], rgb[1], rgb[2]);
 
 	float sat = transform->getSat();
 	std::string id( transform->getID());
@@ -181,7 +174,9 @@ void cdl_node_t::write_to_file( const boost::filesystem::path& p) const
 	if( !ofs.is_open() || !ofs.good())
         throw core::runtime_error( "Can't write to file");
 
-	ofs << transform->getXML();
+	OCIO::GroupTransformRcPtr group = OCIO::GroupTransform::Create();
+	group->appendTransform( transform);
+	group->write( OCIO::GetCurrentConfig(), "ColorCorrection", ofs);
 	std::flush( ofs);
 	ofs.close();
 }

@@ -266,9 +266,9 @@ void inspector_t::rename_node()
 
         if( util::is_string_valid_identifier( new_name))
 		{
-			std::auto_ptr<rename_node_command_t> c( new rename_node_command_t( n, new_name, name_edit_));
+			std::unique_ptr<rename_node_command_t> c( new rename_node_command_t( n, new_name, name_edit_));
 			c->redo();
-			app().document().undo_stack().push_back( c);
+			app().document().undo_stack().push_back( std::move( c));
 		    app().ui()->update();
 		}
 		else

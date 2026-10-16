@@ -48,7 +48,7 @@ public:
 
     explicit copy_on_write_t( BOOST_RV_REF( T) x)
     {
-        object_.reset( new implementation_t( x), capture_deleter_t());
+        object_.reset( new implementation_t( boost::move( x)), capture_deleter_t());
     }
 
     const value_type& read() const

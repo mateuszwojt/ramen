@@ -17,12 +17,12 @@ gamma_node_t::gamma_node_t() : pointop_node_t()
 
 void gamma_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> p( new float_param_t( "Gamma"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Gamma"));
     p->set_id( "gamma");
     p->set_default_value( 1.0f);
     p->set_range( 0.1f, 20);
     p->set_step( 0.05);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 bool gamma_node_t::do_is_identity() const

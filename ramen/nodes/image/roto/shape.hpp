@@ -17,9 +17,9 @@
 #include<boost/intrusive/list.hpp>
 #include<boost/optional.hpp>
 
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathMatrix.h>
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathMatrix.h>
+#include<Imath/ImathColor.h>
 
 #include<ramen/anim/any_curve.hpp>
 #include<ramen/anim/shape_curve.hpp>

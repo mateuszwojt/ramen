@@ -7,7 +7,7 @@
 
 #include<boost/scoped_array.hpp>
 
-#include<OpenEXR/half.h>
+#include<Imath/half.h>
 
 class half_lut_t
 {

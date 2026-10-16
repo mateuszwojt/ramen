@@ -103,31 +103,31 @@ hsv_colorize_node_t::hsv_colorize_node_t() : pointop_node_t() { set_name("hsv_co
 
 void hsv_colorize_node_t::do_create_params()
 {
-    std::auto_ptr<color_param_t> q( new color_param_t( "Color"));
+    std::unique_ptr<color_param_t> q( new color_param_t( "Color"));
     q->set_id( "color");
     q->set_is_rgba( false);
     q->set_default_value( Imath::Color4f( 1, 0, 0, 1));
-    add_param( q);
+    add_param( std::move( q));
 
-    std::auto_ptr<float_param_t> p( new float_param_t( "Strength"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Strength"));
     p->set_id( "strength");
     p->set_range( 0, 1);
     p->set_default_value( 1);
     p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Saturation"));
     p->set_id( "sat");
     p->set_default_value( 1);
     p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Value"));
     p->set_id( "value");
     p->set_min( 0);
     p->set_default_value( 1);
     p->set_step( 0.05f);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void hsv_colorize_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

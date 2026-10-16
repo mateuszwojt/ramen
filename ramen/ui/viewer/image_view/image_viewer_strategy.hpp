@@ -148,12 +148,12 @@ private:
     boost::signals2::connection context_connection_;
     boost::signals2::connection context_overlay_connection_;
 
-	std::auto_ptr<ocio::gl_display_manager_t> display_;
+	std::unique_ptr<ocio::gl_display_manager_t> display_;
 	image_t image_;
 	
 	bool pending_update_;
 	
-	std::auto_ptr<image_view_toolbar_t> toolbar_;
+	std::unique_ptr<image_view_toolbar_t> toolbar_;
 	
 	int subsample_;
 	int proxy_level_;

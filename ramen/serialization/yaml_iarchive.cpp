@@ -27,21 +27,8 @@ void yaml_iarchive_t::init( std::istream& is)
 	version_ = 0;
 	header_read_ = false;
 
-	if( 1)
-		parser_.Load( is);
-	else
-	{
-		is.seekg( 0, std::ios_base::end);
-		std::size_t length = is.tellg();
-		std::string buffer;
-		buffer.reserve( length);
-		is.read( &buffer[0], length);
-		std::stringstream iis( buffer, std::ios_base::in);
-		parser_.Load( iis);
-	}
-
-	parser_.GetNextDocument( doc_);	
-	root_.reset( new yaml_node_t( this, &doc_, version_));
+	doc_ = YAML::Load( is);
+	root_.reset( new yaml_node_t( this, doc_, version_));
 }
 
 const yaml_node_t& yaml_iarchive_t::root() const

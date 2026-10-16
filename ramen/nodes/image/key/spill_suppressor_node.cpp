@@ -159,73 +159,73 @@ spill_suppressor_node_t::spill_suppressor_node_t() : pointop_node_t() { set_name
 
 void spill_suppressor_node_t::do_create_params()
 {
-    std::auto_ptr<combo_group_param_t> top( new combo_group_param_t( "Method"));
+    std::unique_ptr<combo_group_param_t> top( new combo_group_param_t( "Method"));
     top->set_id( "method");
 
     {
-		std::auto_ptr<composite_param_t> group( new composite_param_t( "Basic"));
+		std::unique_ptr<composite_param_t> group( new composite_param_t( "Basic"));
 		group->set_id( "basic");
 
-		std::auto_ptr<popup_param_t> p( new popup_param_t( "Color"));
+		std::unique_ptr<popup_param_t> p( new popup_param_t( "Color"));
 		p->set_id( "bcolor");
 		p->menu_items() = boost::assign::list_of( "Blue")( "Green");
-		group->add_param( p);
+		group->add_param( std::move( p));
 
-		std::auto_ptr<float_param_t> q( new float_param_t( "Amount"));
+		std::unique_ptr<float_param_t> q( new float_param_t( "Amount"));
 		q->set_id( "bamount");
 		q->set_default_value( 1.0f);
 		q->set_range( 0, 5);
 		q->set_step( 0.05);
-		group->add_param( q);
+		group->add_param( std::move( q));
 
-		top->add_param( group);
+		top->add_param( std::move( group));
     }
 
     {
-		std::auto_ptr<composite_param_t> group( new composite_param_t( "RGB-CMY"));
+		std::unique_ptr<composite_param_t> group( new composite_param_t( "RGB-CMY"));
 		group->set_id( "rgb_cmy");
 
-		std::auto_ptr<bool_param_t> p( new bool_param_t( "Red"));
+		std::unique_ptr<bool_param_t> p( new bool_param_t( "Red"));
 		p->set_id( "dred");
 		p->set_default_value( false);
-		group->add_param( p);
+		group->add_param( std::move( p));
 
 		p.reset( new bool_param_t( "Green"));
 		p->set_id( "dgreen");
 		p->set_default_value( false);
-		group->add_param( p);
+		group->add_param( std::move( p));
 	
 		p.reset( new bool_param_t( "Blue"));
 		p->set_id( "dblue");
 		p->set_default_value( true);
-		group->add_param( p);
+		group->add_param( std::move( p));
 	
 		p.reset( new bool_param_t( "Cyan"));
 		p->set_id( "dcyan");
 		p->set_default_value( false);
-		group->add_param( p);
+		group->add_param( std::move( p));
 	
 		p.reset( new bool_param_t( "Magenta"));
 		p->set_id( "dmagenta");
 		p->set_default_value( false);
-		group->add_param( p);
+		group->add_param( std::move( p));
 	
 		p.reset( new bool_param_t( "Yellow"));
 		p->set_id( "dyellow");
 		p->set_default_value( false);
-		group->add_param( p);
+		group->add_param( std::move( p));
 
-		std::auto_ptr<float_param_t> q( new float_param_t( "Amount"));
+		std::unique_ptr<float_param_t> q( new float_param_t( "Amount"));
 		q->set_id( "damount");
 		q->set_default_value( 1.0f);
 		q->set_range( 0, 5);
 		q->set_step( 0.05);
-		group->add_param( q);
+		group->add_param( std::move( q));
 
-		top->add_param( group);
+		top->add_param( std::move( group));
 	}
 
-    add_param( top);
+    add_param( std::move( top));
 }
 
 void spill_suppressor_node_t::do_process( const image::const_image_view_t& src,

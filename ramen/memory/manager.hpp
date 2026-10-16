@@ -55,8 +55,8 @@ private:
 
     image_cache_t& image_cache() { return *img_cache_;}
 	
-    std::auto_ptr<image_allocator_type> img_alloc_;
-    std::auto_ptr<image_cache_t> img_cache_;
+    std::unique_ptr<image_allocator_type> img_alloc_;
+    std::unique_ptr<image_cache_t> img_cache_;
 };
 
 } // memory

@@ -27,10 +27,10 @@ void curve_param_t::private_init()
 
 void curve_param_t::do_create_tracks( anim::track_t *parent)
 {
-    std::auto_ptr<anim::track_t> t( new anim::track_t( name(), &( curve( 0))));
+    std::unique_ptr<anim::track_t> t( new anim::track_t( name(), &( curve( 0))));
     t->set_color( color_);
     t->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
-    parent->add_child( t);
+    parent->add_child( std::move( t));
 }
 
 void curve_param_t::do_add_to_hash( hash::generator_t& hash_gen) const { hash_gen << curve().str();}

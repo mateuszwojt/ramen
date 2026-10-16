@@ -8,7 +8,7 @@
 #include<vector>
 #include<algorithm>
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 #include<ramen/assert.hpp>
 

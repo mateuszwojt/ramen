@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/color/color_replace_node.hpp>
 
-#include <OpenEXR/ImathFun.h>
+#include <Imath/ImathFun.h>
 
 #include<ramen/params/popup_param.hpp>
 #include<ramen/params/float_param.hpp>
@@ -160,46 +160,46 @@ color_replace_node_t::color_replace_node_t() : pointop_node_t() { set_name("col_
 
 void color_replace_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> cs( new popup_param_t( "Colorspace"));
+    std::unique_ptr<popup_param_t> cs( new popup_param_t( "Colorspace"));
     cs->set_id( "colorspace");
     cs->menu_items() = boost::assign::list_of( "HSV")( "RGB");
-	add_param( cs);
+	add_param( std::move( cs));
 	
-    std::auto_ptr<color_param_t> source( new color_param_t( "Source Color"));
+    std::unique_ptr<color_param_t> source( new color_param_t( "Source Color"));
     source->set_id( "src_color");
     source->set_is_rgba( false);
     source->set_default_value( Imath::Color4f( 0, 0, 0, 1));
-    add_param( source);
+    add_param( std::move( source));
 
-    std::auto_ptr<color_param_t> replace(new color_param_t( "Replace Color"));
+    std::unique_ptr<color_param_t> replace(new color_param_t( "Replace Color"));
     replace->set_id( "dst_color");
     replace->set_is_rgba( false);
     replace->set_default_value( Imath::Color4f( 0, 0, 0, 1));
-    add_param( replace);
+    add_param( std::move( replace));
 
-    std::auto_ptr<float_param_t> tolerance( new float_param_t( "Tolerance"));
+    std::unique_ptr<float_param_t> tolerance( new float_param_t( "Tolerance"));
     tolerance->set_id( "tolerance");
     tolerance->set_default_value( 0);
     tolerance->set_min( 0);
     tolerance->set_step( 0.01);
-    add_param( tolerance);
+    add_param( std::move( tolerance));
 
-    std::auto_ptr<float_param_t> softness( new float_param_t( "Softness"));
+    std::unique_ptr<float_param_t> softness( new float_param_t( "Softness"));
     softness->set_id( "softness");
     softness->set_default_value( 0);
     softness->set_min( 0);
     softness->set_step( 0.01);
-    add_param( softness);
+    add_param( std::move( softness));
 
-    std::auto_ptr<bool_param_t> keep_lum( new bool_param_t( "Keep Luminance"));
+    std::unique_ptr<bool_param_t> keep_lum( new bool_param_t( "Keep Luminance"));
     keep_lum->set_id( "keep_lum");
     keep_lum->set_default_value( true);
-    add_param( keep_lum);
+    add_param( std::move( keep_lum));
 	
-    std::auto_ptr<bool_param_t> output_alpha( new bool_param_t( "Output Alpha"));
+    std::unique_ptr<bool_param_t> output_alpha( new bool_param_t( "Output Alpha"));
     output_alpha->set_id( "alpha_out");
     output_alpha->set_default_value( false);
-    add_param( output_alpha);
+    add_param( std::move( output_alpha));
 }
 
 void color_replace_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

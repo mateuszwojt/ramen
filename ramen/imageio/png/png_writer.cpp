@@ -18,7 +18,7 @@ void png_writer_t::do_write_image( const boost::filesystem::path& p,
 {
     int channels = core::get<int>( params, core::name_t( "channels"));
 
-    std::auto_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
+    std::unique_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
 
     if( !out.get())
 		throw exception( "Write PNG: Can't open output file");

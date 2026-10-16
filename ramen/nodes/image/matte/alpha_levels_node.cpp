@@ -89,24 +89,24 @@ alpha_levels_node_t::alpha_levels_node_t() : pointop_node_t() { set_name("alpha_
 
 void alpha_levels_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> q( new float_param_t( "Alpha Low"));
+    std::unique_ptr<float_param_t> q( new float_param_t( "Alpha Low"));
     q->set_id( "alpha_low");
     q->set_default_value( 0);
     q->set_range( 0, 1);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new float_param_t( "Alpha High"));
     q->set_id( "alpha_high");
     q->set_default_value( 1);
     q->set_range( 0, 1);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
 
-    std::auto_ptr<bool_param_t> p( new bool_param_t( "Premultiplied"));
+    std::unique_ptr<bool_param_t> p( new bool_param_t( "Premultiplied"));
     p->set_id( "premult");
     p->set_default_value( true);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void alpha_levels_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

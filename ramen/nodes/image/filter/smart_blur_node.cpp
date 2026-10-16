@@ -17,30 +17,30 @@ smart_blur_node_t::smart_blur_node_t() : base_blur_node_t() { set_name( "smart_b
 
 void smart_blur_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> r( new popup_param_t( "Channels"));
+    std::unique_ptr<popup_param_t> r( new popup_param_t( "Channels"));
     r->set_id( "channels");
     r->menu_items() = boost::assign::list_of( "RGBA")( "RGB");
-    add_param( r);
+    add_param( std::move( r));
 	
-    std::auto_ptr<float2_param_t> q( new float2_param_t( "Deviation"));
+    std::unique_ptr<float2_param_t> q( new float2_param_t( "Deviation"));
     q->set_id( "stddev");
     q->set_range( 0, 100);
     q->set_step( 0.25);
     q->set_default_value( Imath::V2f( 0, 0));
     q->set_proportional( true);
-    add_param( q);
+    add_param( std::move( q));
 
-	std::auto_ptr<float_param_t> f( new float_param_t( "Thereshold"));
+	std::unique_ptr<float_param_t> f( new float_param_t( "Thereshold"));
 	f->set_id( "theresh");
 	f->set_min( 0);
 	f->set_default_value( 0.05);
 	f->set_step( 0.025);
-	add_param( f);
+	add_param( std::move( f));
 	
-    std::auto_ptr<popup_param_t> b( new popup_param_t( "Border Mode"));
+    std::unique_ptr<popup_param_t> b( new popup_param_t( "Border Mode"));
     b->set_id( "border");
     b->menu_items() = boost::assign::list_of( "Black")( "Repeat")( "Reflect");
-    add_param( b);
+    add_param( std::move( b));
 }
 
 bool smart_blur_node_t::do_is_identity() const

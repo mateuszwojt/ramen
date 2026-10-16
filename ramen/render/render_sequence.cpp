@@ -6,7 +6,7 @@
 #include<iostream>
 
 #include<boost/bind.hpp>
-#include<boost/timer.hpp>
+#include<chrono>
 
 #include<ramen/app/composition.hpp>
 #include<ramen/app/application.hpp>
@@ -44,7 +44,7 @@ int count_output_nodes( composition_t& comp, bool selected_only)
 
 void get_output_nodes( composition_t& comp, std::vector<node_output_interface*> outputs, bool selected_only)
 {
-	for_each_output( comp, selected_only, boost::bind( &std::vector<node_output_interface*>::push_back, boost::ref( outputs), _1));
+	for_each_output( comp, selected_only, [&outputs]( node_output_interface *o) { outputs.push_back( o);});
 	std::sort( outputs.begin(), outputs.end(), compare_outputs());
 }
 
@@ -74,7 +74,9 @@ void render_sequence( composition_t& comp, int start, int end, int proxy_level,
     for_each_output( comp, false, boost::bind( &node_output_interface::begin_output, _1, start, end));
 
     int rendered_frames = 0;
-	boost::timer frame_timer, total_timer;
+	typedef std::chrono::steady_clock clock_type;
+	clock_type::time_point frame_start = clock_type::now();
+	const clock_type::time_point total_start = frame_start;
 	
     for( int i = start; i <= end; ++i, ++rendered_frames)
     {
@@ -90,10 +92,10 @@ void render_sequence( composition_t& comp, int start, int end, int proxy_level,
 
                 try
                 {
-					frame_timer.restart();
+					frame_start = clock_type::now();
                     new_context.result_node = &n;
 					out->process_and_write( new_context);
-					std::cout << "Render: " << n.name() << ", frame = " << i << ". elapsed = " << frame_timer.elapsed() << " seconds.";
+					std::cout << "Render: " << n.name() << ", frame = " << i << ". elapsed = " << std::chrono::duration<double>( clock_type::now() - frame_start).count() << " seconds.";
                 }
                 catch( std::exception& e)
                 {
@@ -104,7 +106,7 @@ void render_sequence( composition_t& comp, int start, int end, int proxy_level,
     }
 	
     for_each_output( comp, false, boost::bind( &node_output_interface::end_output, _1, true));
-	std::cout << "\nRender done. Frames renderered = " << rendered_frames << ". Total time = " << total_timer.elapsed() << " seconds.\n";
+	std::cout << "\nRender done. Frames renderered = " << rendered_frames << ". Total time = " << std::chrono::duration<double>( clock_type::now() - total_start).count() << " seconds.\n";
 }
 
 } // namespace

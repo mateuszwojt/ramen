@@ -302,7 +302,8 @@ void anim_editor_toolbar_t::spinbox_dragged( double value)
 	drag_command_->start_drag( offset, false);
 	drag_command_->drag_curve( selected_track_);
 	drag_command_->end_drag();
-	app().ui()->update_anim_editors();
+	if( app().ui())
+	    app().ui()->update_anim_editors();
 }
 
 void anim_editor_toolbar_t::spinbox_released()

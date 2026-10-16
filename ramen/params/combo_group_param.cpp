@@ -53,9 +53,9 @@ void combo_group_param_t::set_value( int x, change_reason reason)
     emit_param_changed( reason);
 }
 
-std::auto_ptr<undo::command_t> combo_group_param_t::do_create_command()
+std::unique_ptr<undo::command_t> combo_group_param_t::do_create_command()
 {
-    return std::auto_ptr<undo::command_t>( new static_param_command_t( *param_set(), id()));
+    return std::unique_ptr<undo::command_t>( new static_param_command_t( *param_set(), id()));
 }
 
 void combo_group_param_t::do_add_to_hash( hash::generator_t& hash_gen) const
@@ -100,7 +100,7 @@ void combo_group_param_t::do_update_widgets()
         menu_->setCurrentIndex( get_value<int>( *this));
         stack_->setCurrentIndex( get_value<int>( *this));
         menu_->blockSignals( false);
-        boost::range::for_each( params(), boost::bind( &param_t::update_widgets, _1));
+        boost::range::for_each( params(), boost::bind( &param_t::update_widgets, boost::placeholders::_1));
     }
 }
 

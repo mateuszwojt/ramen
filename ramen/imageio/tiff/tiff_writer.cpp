@@ -23,7 +23,7 @@ void tiff_writer_t::do_write_image( const boost::filesystem::path& p,
     int type	    = core::get<int>( params, core::name_t( "type"));
     int compress    = core::get<int>( params, core::name_t( "compress"));
 
-    std::auto_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
+    std::unique_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
 
     if( !out.get())
 		throw exception( "Write TIFF: Can't open output file");

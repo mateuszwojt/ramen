@@ -15,8 +15,8 @@
 #ifndef QT_MOC_RUN
     #include<boost/function.hpp>
 
-    #include<OpenEXR/ImathBox.h>
-    #include<OpenEXR/ImathColor.h>
+    #include<Imath/ImathBox.h>
+    #include<Imath/ImathColor.h>
 
     #include<ramen/assert.hpp>
 

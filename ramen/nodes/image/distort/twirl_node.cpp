@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/distort/twirl_node.hpp>
 
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathMath.h>
 
 #include<ramen/math/constants.hpp>
 
@@ -52,7 +52,7 @@ struct twirl_fun
 		if( d2 == 0 || d2 >= radius2_)
 			return p;
 		
-		float d = Imath::Math<float>::sqrt( d2);
+		float d = std::sqrt( d2);
 		float a = angle_ * ( 1.0f - ( d / radius_));
 		q = rotate_point( q, a);
 		q.x /= aspect_;
@@ -63,8 +63,8 @@ private:
 
 	Imath::V2f rotate_point( const Imath::V2f& p, float angle) const
 	{
-		float cs = Imath::Math<float>::cos( math::constants<float>::deg2rad() * angle);
-		float ss = Imath::Math<float>::sin( math::constants<float>::deg2rad() * angle);
+		float cs = std::cos( math::constants<float>::deg2rad() * angle);
+		float ss = std::sin( math::constants<float>::deg2rad() * angle);
 		
 		Imath::V2f q( p - center_);
 		Imath::V2f r;
@@ -86,35 +86,35 @@ twirl_node_t::twirl_node_t() : distort_node_t() { set_name( "twirl");}
 
 void twirl_node_t::do_create_params()
 {
-    std::auto_ptr<float2_param_t> p( new float2_param_t( "Center"));
+    std::unique_ptr<float2_param_t> p( new float2_param_t( "Center"));
     p->set_id( "center");
     p->set_default_value( Imath::V2f( 0.5, 0.5));
     p->set_numeric_type( numeric_param_t::relative_xy);
-    add_param( p);
+    add_param( std::move( p));
 
-	std::auto_ptr<float_param_t> r( new float_param_t( "Radius"));
+	std::unique_ptr<float_param_t> r( new float_param_t( "Radius"));
 	r->set_id( "radius");
 	r->set_default_value( 0.25);
     r->set_numeric_type( numeric_param_t::relative_size_x);
-    add_param( r);
+    add_param( std::move( r));
 	
 	r.reset( new float_param_t( "Angle"));
 	r->set_id( "angle");
 	r->set_default_value( 0);
-	add_param( r);
+	add_param( std::move( r));
 	
-    std::auto_ptr<popup_param_t> q( new popup_param_t( "Borders"));
+    std::unique_ptr<popup_param_t> q( new popup_param_t( "Borders"));
     q->set_id( "borders");
     q->menu_items() = boost::assign::list_of( "Black")( "Tile")( "Mirror");
-    add_param( q);	
+    add_param( std::move( q));	
 }
 
 void twirl_node_t::do_create_manipulators()
 {
 	float_param_t *radius = dynamic_cast<float_param_t*>( &param( "radius"));
 	float2_param_t *center = dynamic_cast<float2_param_t*>( &param( "center"));
-	std::auto_ptr<circle_manipulator_t> m( new circle_manipulator_t( radius, center));
-	add_manipulator( m);
+	std::unique_ptr<circle_manipulator_t> m( new circle_manipulator_t( radius, center));
+	add_manipulator( std::move( m));
 }
 
 bool twirl_node_t::do_is_identity() const

@@ -10,9 +10,9 @@
 #include<boost/type_traits/has_nothrow_assign.hpp>
 #include<boost/type_traits/has_nothrow_destructor.hpp>
 
-#include<OpenEXR/ImathColor.h>
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathColor.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathMatrix.h>
 
 #define RAMEN_IMATH_SPECIALIZE_TYPE_TRAITS( Type) \
 template<class T> struct has_nothrow_constructor<Imath::Type<T> > : public true_type {}; \

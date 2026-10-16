@@ -14,7 +14,7 @@
 #include<boost/noncopyable.hpp>
 #include<boost/tuple/tuple.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<ramen/assert.hpp>
 

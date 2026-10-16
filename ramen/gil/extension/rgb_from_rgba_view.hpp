@@ -6,7 +6,7 @@
 #ifndef GIL_EXTENSION_RGB_FROM_RGBA_VIEW_HPP
 #define GIL_EXTENSION_RGB_FROM_RGBA_VIEW_HPP
 
-#include<boost/gil/gil_all.hpp>
+#include<boost/gil.hpp>
 
 namespace boost
 {

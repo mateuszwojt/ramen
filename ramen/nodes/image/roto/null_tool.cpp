@@ -53,16 +53,16 @@ void null_tool_t::mouse_release_event( const ui::mouse_release_event_t& event)
 	if( creating_)
 	{
 		creating_ = false;
-		std::auto_ptr<roto::shape_t> s = parent().create_null();
+		std::unique_ptr<roto::shape_t> s = parent().create_null();
 		
 		p_ = event.wpos;
 		p_.x /= event.aspect_ratio;
 		s->set_center( p_, false);
 		s->set_translation( Imath::V2f( 0, 0));
 
-		std::auto_ptr<undo::add_roto_command_t> cmd( new undo::add_roto_command_t( parent(), s));
+		std::unique_ptr<undo::add_roto_command_t> cmd( new undo::add_roto_command_t( parent(), std::move( s)));
 		cmd->redo();
-		app().document().undo_stack().push_back( cmd);
+		app().document().undo_stack().push_back( std::move( cmd));
 		app().ui()->update();
 	}
 }

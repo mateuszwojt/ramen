@@ -21,6 +21,7 @@
 #include<boost/mpl/bool.hpp>
 #include<boost/type_traits/has_nothrow_constructor.hpp>
 #include<boost/move/move.hpp>
+#include<boost/type_traits/is_lvalue_reference.hpp>
 #include<boost/swap.hpp>
 
 #include<ramen/core/exceptions.hpp>
@@ -71,7 +72,7 @@ public:
     {
     }
 
-    explicit poly_state_remote( BOOST_RV_REF( value_type) x) : value_ptr_m( new value_type( x))
+    explicit poly_state_remote( BOOST_RV_REF( value_type) x) : value_ptr_m( new value_type( boost::move( x)))
     {
     }
 
@@ -141,7 +142,7 @@ public:
 
     explicit poly_state_local( const value_type& x) : value_m( x) {}
 
-    explicit poly_state_local( BOOST_RV_REF( value_type) x) : value_m( x) {}
+    explicit poly_state_local( BOOST_RV_REF( value_type) x) : value_m( boost::move( x)) {}
 
     poly_state_local( BOOST_RV_REF( poly_state_local) x) : value_m( boost::move( x.value_m)) {}
 
@@ -201,7 +202,7 @@ public:
     typedef typename F::interface_type interface_type;
 
     explicit poly_instance( const value_type& x): F( x) {}
-    explicit poly_instance( BOOST_RV_REF( value_type) x) : F( x) {}
+    explicit poly_instance( BOOST_RV_REF( value_type) x) : F( boost::move( x)) {}
 
     explicit poly_instance( BOOST_RV_REF( poly_instance) x) : F( boost::move( static_cast<F&>( x))) {}
 
@@ -265,9 +266,9 @@ public:
     }
 
     template <typename T>
-    explicit poly_base( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_base_of<poly_base, T> >::type* = 0)
+    explicit poly_base( BOOST_RV_REF( T) x, typename boost::disable_if<boost::mpl::or_<boost::is_lvalue_reference<T>, boost::is_base_of<poly_base, T> > >::type* = 0)
     {
-        ::new ( storage()) implementation::poly_instance<Instance<T> >( x);
+        ::new ( storage()) implementation::poly_instance<Instance<T> >( boost::move( x));
     }
 
     // Construct from related interface (might throw on downcast)
@@ -446,7 +447,7 @@ public:
     explicit poly( const T& x) : F( x) {}
 
     template <typename T>
-    explicit poly( BOOST_RV_REF( T) x) : F( x) {}
+    explicit poly( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : F( boost::move( x)) {}
 
     poly( const poly& x) : F( x) {}
 

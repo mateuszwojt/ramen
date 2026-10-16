@@ -48,8 +48,8 @@ public:
     bool is_latest_version( const std::string& id) const;
 
     // creation
-    std::auto_ptr<node_t> create_by_id( const std::string& id, bool ui = false);
-    std::auto_ptr<node_t> create_by_id_with_version( const std::string& id, const std::pair<int, int>& version);
+    std::unique_ptr<node_t> create_by_id( const std::string& id, bool ui = false);
+    std::unique_ptr<node_t> create_by_id_with_version( const std::string& id, const std::pair<int, int>& version);
 
 private:
 

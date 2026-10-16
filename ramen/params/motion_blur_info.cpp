@@ -4,7 +4,7 @@
 
 #include<ramen/params/motion_blur_info.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/assert.hpp>
 

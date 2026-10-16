@@ -4,7 +4,7 @@
 #ifndef RAMEN_NOISE_VECTOR_NOISE_ADAPTOR_HPP
 #define RAMEN_NOISE_VECTOR_NOISE_ADAPTOR_HPP
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 namespace ramen
 {

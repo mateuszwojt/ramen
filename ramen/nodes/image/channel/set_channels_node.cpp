@@ -49,29 +49,29 @@ set_channels_node_t::set_channels_node_t() : pointop_node_t() { set_name( "set c
 
 void set_channels_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Red"));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Red"));
     p->set_id( "red");
     p->set_default_value( (int) copy_red);
     p->menu_items() = boost::assign::list_of( "Red")( "Green")( "Blue")( "Alpha")( "Luminance")( "One")( "Zero");
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new popup_param_t( "Green"));
     p->set_id( "green");
     p->set_default_value( (int) copy_green);
     p->menu_items() = boost::assign::list_of( "Red")( "Green")( "Blue")( "Alpha")( "Luminance")( "One")( "Zero");
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new popup_param_t( "Blue"));
     p->set_id( "blue");
     p->set_default_value( (int) copy_blue);
     p->menu_items() = boost::assign::list_of( "Red")( "Green")( "Blue")( "Alpha")( "Luminance")( "One")( "Zero");
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new popup_param_t( "Alpha"));
     p->set_id( "alpha");
     p->set_default_value( (int) copy_alpha);
     p->menu_items() = boost::assign::list_of( "Red")( "Green")( "Blue")( "Alpha")( "Luminance")( "One")( "Zero");
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void set_channels_node_t::do_calc_bounds( const render::context_t& context)

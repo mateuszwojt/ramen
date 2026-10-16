@@ -150,7 +150,7 @@ void xform2d_node_t::do_calc_inputs_interest( const render::context_t& context)
 			Imath::Box2i box( transform_box( interest(), inv_m, 50));
 			roi.extendBy( box);
 		}
-		catch( Iex::MathExc& e) {}
+		catch( std::exception& e) {}
 
         t += d.time_step;
     }
@@ -268,7 +268,7 @@ void xform2d_node_t::do_process( const render::context_t& context, const image_n
             }
         }
     }
-    catch( Iex::MathExc)
+    catch( const std::exception&)
     {
     }
 }
@@ -353,7 +353,7 @@ void xform2d_node_t::do_process_mipmap( const render::context_t& context, const 
             }
         }
     }
-    catch( Iex::MathExc)
+    catch( const std::exception&)
     {
     }
 }

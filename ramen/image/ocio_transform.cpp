@@ -22,7 +22,7 @@ namespace detail
 struct ocio_transform_fun
 {
     ocio_transform_fun( const image::image_view_t& img,
-                        OCIO::ConstProcessorRcPtr proc) : img_( img), proc_( proc)
+                        OCIO::ConstCPUProcessorRcPtr proc) : img_( img), proc_( proc)
     {
     }
 
@@ -42,7 +42,7 @@ struct ocio_transform_fun
 private:
 
     const image::image_view_t& img_;
-    OCIO::ConstProcessorRcPtr proc_;
+    OCIO::ConstCPUProcessorRcPtr proc_;
 };
 
 } // detail
@@ -53,7 +53,7 @@ void ocio_transform( const image_view_t& img, OCIO::ConstProcessorRcPtr proc)
 	
     if( !proc->isNoOp())
         tbb::parallel_for( tbb::blocked_range<int>( 0, img.height()),
-                           detail::ocio_transform_fun( img, proc),
+                           detail::ocio_transform_fun( img, proc->getDefaultCPUProcessor()),
                            tbb::auto_partitioner());
 }
 

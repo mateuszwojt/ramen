@@ -137,51 +137,51 @@ color_diff_keyer_node_t::color_diff_keyer_node_t() : keyer_node_t()
 
 void color_diff_keyer_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> r( new popup_param_t( "Output"));
+    std::unique_ptr<popup_param_t> r( new popup_param_t( "Output"));
     r->set_id( "output");
     r->menu_items() = boost::assign::list_of( "Premultiplied")( "Unpremultiplied")( "Alpha")( "Status");
-    add_param( r);
+    add_param( std::move( r));
 
-    std::auto_ptr<color_param_t> p( new color_param_t( "Color"));
+    std::unique_ptr<color_param_t> p( new color_param_t( "Color"));
     p->set_id( "color");
     p->set_is_rgba( false);
     p->set_default_value( Imath::Color4f( 0, 0, 1, 0));
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<float_param_t> q( new float_param_t( "Screen"));
+    std::unique_ptr<float_param_t> q( new float_param_t( "Screen"));
     q->set_id( "screen_mult");
     q->set_default_value( 1);
     q->set_range( 0, 50);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new float_param_t( "Complement"));
     q->set_id( "comp_mult");
     q->set_default_value( 1);
     q->set_range( 0, 30);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
     
     q.reset( new float_param_t( "Shadows"));
     q->set_id( "shd_mult");
     q->set_default_value( 0.0);
     q->set_range( 0, 20);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new float_param_t( "Alpha Low"));
     q->set_id( "alpha_low");
     q->set_default_value( 0);
     q->set_range( 0, 1);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new float_param_t( "Alpha High"));
     q->set_id( "alpha_high");
     q->set_default_value( 1);
     q->set_range( 0, 1);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
 }
 
 void color_diff_keyer_node_t::do_process( const render::context_t& context)

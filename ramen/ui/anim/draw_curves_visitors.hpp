@@ -5,7 +5,7 @@
 #ifndef RAMEN_UI_ANIM_DRAW_CURVE_VISITORS_HPP
 #define	RAMEN_UI_ANIM_DRAW_CURVE_VISITORS_HPP
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/anim/any_curve.hpp>
 

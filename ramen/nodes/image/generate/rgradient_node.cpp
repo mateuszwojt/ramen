@@ -5,7 +5,7 @@
 #include<algorithm>
 #include<cmath>
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ramen/algorithm/clamp.hpp>
 #include<ramen/math/constants.hpp>
@@ -100,72 +100,72 @@ void rgradient_node_t::do_create_params()
 {
     generator_node_t::do_create_params();
 
-    std::auto_ptr<float2_param_t> p( new float2_param_t( "Center"));
+    std::unique_ptr<float2_param_t> p( new float2_param_t( "Center"));
     p->set_id( "center");
     p->set_default_value( Imath::V2f( 0.5, 0.5));
     p->set_numeric_type( numeric_param_t::relative_xy);
-    add_param( p);
+    add_param( std::move( p));
 
-	std::auto_ptr<float_param_t> r( new float_param_t( "R0"));
+	std::unique_ptr<float_param_t> r( new float_param_t( "R0"));
 	r->set_id( "r0");
 	r->set_default_value( 0.05);
     r->set_numeric_type( numeric_param_t::relative_size_x);
-    add_param( r);
+    add_param( std::move( r));
 	
 	r.reset( new float_param_t( "R1"));
 	r->set_id( "r1");
 	r->set_default_value( 0.25);
     r->set_numeric_type( numeric_param_t::relative_size_x);
-    add_param( r);
+    add_param( std::move( r));
 
 	r.reset( new float_param_t( "Gamma"));
 	r->set_id( "gamma");
 	r->set_default_value( 1);
     r->set_range( 0.1f, 20);
     r->set_step( 0.05);
-    add_param( r);
+    add_param( std::move( r));
 	
-    std::auto_ptr<color_param_t> q( new color_param_t( "Start Color"));
+    std::unique_ptr<color_param_t> q( new color_param_t( "Start Color"));
     q->set_id( "startcol");
     q->set_is_rgba( true);
     q->set_default_value( Imath::Color4f( 1, 1, 1, 1));
-    add_param( q);
+    add_param( std::move( q));
     
     q.reset( new color_param_t( "End Color"));
     q->set_id( "endcol");
     q->set_is_rgba( true);
     q->set_default_value( Imath::Color4f( 0, 0, 0, 0));
-    add_param( q);
+    add_param( std::move( q));
 
     p.reset( new float2_param_t( "Scale"));
     p->set_id( "scale");
     p->set_default_value( Imath::V2f( 1.0, 1.0));
     p->set_step( 0.05);
 	p->set_proportional( true);
-    add_param( p);
+    add_param( std::move( p));
 
 	r.reset( new float_param_t( "angle"));
 	r->set_id( "angle");
 	r->set_default_value( 0);
     r->set_step( 0.05);
-    add_param( r);
+    add_param( std::move( r));
 	
-	std::auto_ptr<bool_param_t> b( new bool_param_t( "Premultiply"));
+	std::unique_ptr<bool_param_t> b( new bool_param_t( "Premultiply"));
 	b->set_id( "premult");
 	b->set_default_value( false);
-	add_param( b);
+	add_param( std::move( b));
 	
 	b.reset( new bool_param_t( "Crop"));
 	b->set_id( "crop");
 	b->set_default_value( false);
 	b->set_include_in_hash( false);
-	add_param( b);	
+	add_param( std::move( b));	
 }
 
 void rgradient_node_t::do_create_manipulators()
 {
-    std::auto_ptr<point2_manipulator_t> m( new point2_manipulator_t( dynamic_cast<float2_param_t*>( &param( "center"))));
-    add_manipulator( m);
+    std::unique_ptr<point2_manipulator_t> m( new point2_manipulator_t( dynamic_cast<float2_param_t*>( &param( "center"))));
+    add_manipulator( std::move( m));
 }
 
 void rgradient_node_t::do_calc_bounds( const render::context_t& context)
@@ -231,7 +231,7 @@ void rgradient_node_t::do_process( const render::context_t& context)
 
 		generate_pixels( grad);
 	}
-	catch( Iex::MathExc& e)
+	catch( std::exception& e)
 	{
 		Imath::Color4f end_col = get_value<Imath::Color4f>( param( "endcol"));
 		boost::gil::fill_pixels( image_view(), image::pixel_t( end_col.r, end_col.g, end_col.b, end_col.a));

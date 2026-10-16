@@ -12,7 +12,7 @@
 #include<boost/noncopyable.hpp>
 #include<boost/signals2/signal.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/params/param_set.hpp>
 
@@ -98,7 +98,7 @@ public:
 
     /// Adds a param to this parameterised.
     template<class T>
-    void add_param( std::auto_ptr<T> p) { param_set().add_param( p);}
+    void add_param( std::unique_ptr<T> p) { param_set().add_param( std::move( p));}
 
     /// Called after editing of params finished.
     virtual void param_edit_finished() = 0;

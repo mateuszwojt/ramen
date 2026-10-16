@@ -7,7 +7,7 @@
 
 #include<ramen/params/proportional_param.hpp>
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 #include<QPointer>
 

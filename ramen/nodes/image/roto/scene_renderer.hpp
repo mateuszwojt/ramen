@@ -9,7 +9,7 @@
 
 #include<boost/noncopyable.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<agg2/agg_renderer_scanline.h>
 #include<agg2/agg_rasterizer_scanline_aa.h>

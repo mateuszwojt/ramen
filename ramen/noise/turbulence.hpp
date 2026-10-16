@@ -3,7 +3,7 @@
 #ifndef RAMEN_NOISE_TURBULENCE_HPP
 #define RAMEN_NOISE_TURBULENCE_HPP
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 namespace ramen
 {

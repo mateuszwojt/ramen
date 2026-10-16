@@ -157,66 +157,66 @@ bool shape_t::find_in_children( const shape_t *shape) const
 
 void shape_t::do_create_params()
 {
-    std::auto_ptr<shape_transform_param_t> xf( new shape_transform_param_t( "Transform", "xform"));
+    std::unique_ptr<shape_transform_param_t> xf( new shape_transform_param_t( "Transform", "xform"));
     xform_param_ = xf.get();
-    add_param( xf);
+    add_param( std::move( xf));
 
     if( !is_null())
     {
-        std::auto_ptr<float2_param_t> p( new float2_param_t( "Shape Offset"));
+        std::unique_ptr<float2_param_t> p( new float2_param_t( "Shape Offset"));
         p->set_id( "offset");
         p->set_default_value( Imath::V2f( 0, 0));
-        add_param( p);
+        add_param( std::move( p));
     }
 
-    std::auto_ptr<button_param_t> but( new button_param_t( "Apply Track..."));
+    std::unique_ptr<button_param_t> but( new button_param_t( "Apply Track..."));
     but->set_id( "apply_track");
-    add_param( but);
+    add_param( std::move( but));
 
     if( !is_null())
     {
-        std::auto_ptr<bool_param_t> b( new bool_param_t( "Active"));
+        std::unique_ptr<bool_param_t> b( new bool_param_t( "Active"));
         b->set_id( "active");
         b->set_default_value( true);
-        add_param( b);
+        add_param( std::move( b));
 
         b.reset( new bool_param_t( "Motion blur"));
         b->set_id( "mblur");
         b->set_default_value( true);
-        add_param( b);
+        add_param( std::move( b));
 
-        std::auto_ptr<float_param_t> f( new float_param_t( "Color"));
+        std::unique_ptr<float_param_t> f( new float_param_t( "Color"));
         f->set_id( "color");
         f->set_default_value( 1);
         f->set_range( 0, 1);
         f->set_step( 0.025);
         f->set_enabled( !is_null());
-        add_param( f);
+        add_param( std::move( f));
 
         f.reset( new float_param_t( "Opacity"));
         f->set_id( "opacity");
         f->set_default_value( 1);
         f->set_range( 0, 1);
         f->set_step( 0.025);
-        add_param( f);
+        add_param( std::move( f));
 
         f.reset( new float_param_t( "Grow"));
         f->set_id( "grow");
         f->set_default_value( 0);
-        add_param( f);
+        add_param( std::move( f));
 
-        std::auto_ptr<float2_param_t> f2( new float2_param_t( "Blur"));
+        std::unique_ptr<float2_param_t> f2( new float2_param_t( "Blur"));
         f2->set_id( "blur");
         f2->set_min( 0);
         f2->set_default_value( Imath::V2f( 0, 0));
         f2->set_proportional( true);
-        add_param( f2);
+        add_param( std::move( f2));
 
         /*
-        std::auto_ptr<button_param_t> but( new button_param_t( "Apply Track to Points..."));
+        std::unique_ptr<button_param_t> but( new button_param_t( "Apply Track to Points..."));
         but->set_id( "apply_track_pts");
         but->set_enabled( false);
-        add_param( but);
+        add_param( std::move( but));
         */
     }
 }
@@ -779,9 +779,9 @@ void shape_t::do_create_tracks( anim::track_t *parent)
 {
     if( !is_null())
     {
-        std::auto_ptr<anim::track_t> t( new anim::track_t( "Points", &curve_));
+        std::unique_ptr<anim::track_t> t( new anim::track_t( "Points", &curve_));
         t->changed.connect( boost::bind( &shape_t::shape_curve_changed, this, _1));
-        parent->add_child( t);
+        parent->add_child( std::move( t));
     }
 }
 

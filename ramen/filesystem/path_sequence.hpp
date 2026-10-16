@@ -7,6 +7,7 @@
 
 #include<boost/tuple/tuple.hpp>
 #include<boost/filesystem/operations.hpp>
+#include<boost/filesystem/directory.hpp>
 
 #include<ramen/filesystem/path.hpp>
 

@@ -15,7 +15,7 @@
 #include<boost/noncopyable.hpp>
 #include<boost/cstdint.hpp>
 
-#include<tbb/task_scheduler_init.h>
+#include<tbb/global_control.h>
 
 #include<ramen/core/memory.hpp>
 
@@ -119,7 +119,7 @@ private:
 	boost::filesystem::path infile_;
 	bool render_mode_;
 
-	tbb::task_scheduler_init task_scheduler_;
+	std::unique_ptr<tbb::global_control> task_scheduler_;
 	system::system_t system_;
     core::auto_ptr_t<preferences_t> preferences_;
     core::auto_ptr_t<memory::manager_t> mem_manager_;

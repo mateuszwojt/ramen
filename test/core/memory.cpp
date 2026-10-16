@@ -12,7 +12,7 @@ using namespace ramen::core;
 
 void sink_function( BOOST_RV_REF( auto_ptr_t<int>) x)
 {
-    auto_ptr_t<int> z( x);
+    auto_ptr_t<int> z( boost::move( x));
 }
 
 auto_ptr_t<int> source_function()

@@ -7,7 +7,7 @@
 
 #include<ramen/params/animated_param.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<QPointer>
 #include<QToolButton>

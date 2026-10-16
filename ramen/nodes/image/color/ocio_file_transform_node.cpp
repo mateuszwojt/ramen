@@ -28,24 +28,24 @@ ocio_file_transform_node_t::ocio_file_transform_node_t() : pointop_node_t()
 
 void ocio_file_transform_node_t::do_create_params()
 {
-	std::auto_ptr<file_param_t> file( new file_param_t( "File"));
+	std::unique_ptr<file_param_t> file( new file_param_t( "File"));
 	file->set_id( "file");
 	file->set_extension_list_string( "Transform files (*.3dl *.cc *.ccc *.csp *.cub *.cube *.lut *.spi1d *.spi3d *.spimtx)");
-	add_param( file);
+	add_param( std::move( file));
 	
-	std::auto_ptr<string_param_t> cccid( new string_param_t( "CCC Id"));
+	std::unique_ptr<string_param_t> cccid( new string_param_t( "CCC Id"));
 	cccid->set_id( "cccid");
-	add_param( cccid);
+	add_param( std::move( cccid));
 	
-	std::auto_ptr<popup_param_t> pop( new popup_param_t( "Direction"));
+	std::unique_ptr<popup_param_t> pop( new popup_param_t( "Direction"));
 	pop->set_id( "direction");
 	pop->menu_items() = boost::assign::list_of( "Forward")( "Inverse");
-	add_param( pop);
+	add_param( std::move( pop));
 
 	pop.reset( new popup_param_t( "Interpolation"));
 	pop->set_id( "interpolation");
 	pop->menu_items() = boost::assign::list_of( "Nearest")( "Linear");
-	add_param( pop);
+	add_param( std::move( pop));
 }
 
 bool ocio_file_transform_node_t::do_is_valid() const

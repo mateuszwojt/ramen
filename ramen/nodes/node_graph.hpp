@@ -52,8 +52,8 @@ public:
     node_graph_t();
     node_graph_t( const node_graph_t& other);
 
-    void add_node( std::auto_ptr<node_t> n);
-    std::auto_ptr<node_t> release_node( node_t *n);
+    void add_node( std::unique_ptr<node_t> n);
+    std::unique_ptr<node_t> release_node( node_t *n);
 
     void add_edge( const edge_t& e);
     void remove_edge( const edge_t& e);

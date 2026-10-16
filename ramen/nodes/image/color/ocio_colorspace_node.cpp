@@ -27,13 +27,13 @@ ocio_colorspace_node_t::ocio_colorspace_node_t() : pointop_node_t()
 
 void ocio_colorspace_node_t::do_create_params()
 {
-    std::auto_ptr<ocio_colorspace_param_t> p( new ocio_colorspace_param_t( "In Colorspace"));
+    std::unique_ptr<ocio_colorspace_param_t> p( new ocio_colorspace_param_t( "In Colorspace"));
     p->set_id( "in_colorspace");
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new ocio_colorspace_param_t( "Out Colorspace"));
     p->set_id( "out_colorspace");
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void ocio_colorspace_node_t::do_process( const image::const_image_view_t& src,

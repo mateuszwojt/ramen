@@ -26,7 +26,7 @@ struct poly_copyable_instance : optimized_storage_type<T, poly_copyable_interfac
 
     explicit poly_copyable_instance( const T& x) : base_type( x) {}
 
-    explicit poly_copyable_instance( BOOST_RV_REF( T) x) : base_type( x) {}
+    explicit poly_copyable_instance( BOOST_RV_REF( T) x) : base_type( boost::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( poly_copyable_instance, base_type)
 };
@@ -39,7 +39,7 @@ struct copyable : poly_base<poly_copyable_interface, poly_copyable_instance>
     explicit copyable( const T& x) : base_type( x)  {}
 
     template <typename T>
-    explicit copyable( BOOST_RV_REF( T) x) : base_type( x) {}
+    explicit copyable( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : base_type( boost::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( copyable, base_type)
 };

@@ -34,7 +34,7 @@ public:
 
     explicit poly_regular_instance( const T& x) : base_type( x) {}
 
-    explicit poly_regular_instance( BOOST_RV_REF( T) x) : base_type( x) {}
+    explicit poly_regular_instance( BOOST_RV_REF( T) x) : base_type( boost::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( poly_regular_instance, base_type)
 
@@ -56,7 +56,7 @@ public:
     explicit regular( const T& x) : base_type( x) {}
 
     template<typename T>
-    explicit regular( BOOST_RV_REF( T) x) : base_type( x) {}
+    explicit regular( BOOST_RV_REF( T) x, typename boost::disable_if<boost::is_lvalue_reference<T> >::type* = 0) : base_type( boost::move( x)) {}
 
     RAMEN_POLY_INLINE_COPY_AND_ASSIGN( regular, base_type)
 

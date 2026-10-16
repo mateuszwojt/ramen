@@ -5,7 +5,7 @@
 #ifndef RAMEN_MANIPULATORS_UTIL_HPP
 #define RAMEN_MANIPULATORS_UTIL_HPP
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 namespace ramen
 {

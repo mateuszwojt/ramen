@@ -19,7 +19,7 @@ void tga_writer_t::do_write_image( const boost::filesystem::path& p,
     int channels    = core::get<int>( params, core::name_t( "channels"));
     int compress    = core::get<int>( params, core::name_t( "compress"));
     
-    std::auto_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
+    std::unique_ptr<OIIO::ImageOutput> out( OIIO::ImageOutput::create( filesystem::file_string( p)));
 
     if( !out.get())
 		throw exception( "Write TGA: Can't open output file");

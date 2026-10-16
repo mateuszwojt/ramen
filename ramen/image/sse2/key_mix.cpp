@@ -4,7 +4,7 @@
 
 #include<ramen/image/sse2/key_mix.hpp>
 
-#include<emmintrin.h>
+#include<ramen/image/sse2/intrinsics.hpp>
 
 #include<ramen/gil/extension/algorithm/tbb/tbb_transform3.hpp>
 

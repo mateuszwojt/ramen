@@ -8,7 +8,7 @@
 #include<cmath>
 #include<vector>
 
-#include<emmintrin.h>
+#include<ramen/image/sse2/intrinsics.hpp>
 
 #include<ramen/algorithm/clamp.hpp>
 

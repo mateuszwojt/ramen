@@ -7,7 +7,7 @@
 
 #include<ramen/params/composite_param.hpp>
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 namespace ramen
 {

@@ -7,7 +7,7 @@
 #include<algorithm>
 #include<cmath>
 
-#include<emmintrin.h>
+#include<ramen/image/sse2/intrinsics.hpp>
 
 #include<tbb/blocked_range.h>
 #include<tbb/parallel_for.h>

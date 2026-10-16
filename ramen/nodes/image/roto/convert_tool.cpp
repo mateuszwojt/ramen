@@ -69,17 +69,18 @@ void convert_tool_t::mouse_press_event( const ui::mouse_press_event_t& event)
 				return;
 		}
 
-		std::auto_ptr<undo::command_t> cmd( new undo::modify_shape_command_t( parent(), selected));
+		std::unique_ptr<undo::command_t> cmd( new undo::modify_shape_command_t( parent(), selected));
 		selected->toggle_corner_curve_selected_points();
 		parent().notify();
 		
 		if( selected->autokey() || !selected->anim_curve().empty())
 		{
 			selected->set_shape_key();
-			app().ui()->update_anim_editors();
+			if( app().ui())
+			    app().ui()->update_anim_editors();
 		}
 		
-		app().document().undo_stack().push_back( cmd);
+		app().document().undo_stack().push_back( std::move( cmd));
 		app().ui()->update();
     }
 	else

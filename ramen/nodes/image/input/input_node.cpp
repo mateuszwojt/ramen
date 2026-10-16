@@ -10,7 +10,7 @@
 
 #include<boost/bind.hpp>
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<QGridLayout>
 #include<QHBoxLayout>
@@ -178,12 +178,12 @@ void input_node_t::do_create_params()
 
 void input_node_t::create_image_params( const boost::filesystem::path& p)
 {
-	std::auto_ptr<image_seq_param_t> seq( new image_seq_param_t( "Path", 0));
+	std::unique_ptr<image_seq_param_t> seq( new image_seq_param_t( "Path", 0));
 	seq->set_id( "path");
 	seq->set_include_in_hash( false);
 	seq->set_persist( false);
 	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
-	add_param( seq);
+	add_param( std::move( seq));
 
 	seq.reset( new image_seq_param_t( "Proxy 1", 1));
 	seq->set_id( "proxy1");
@@ -191,7 +191,7 @@ void input_node_t::create_image_params( const boost::filesystem::path& p)
 	seq->set_persist( false);
 	seq->set_enabled( false);
 	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
-	add_param( seq);
+	add_param( std::move( seq));
 
 	seq.reset( new image_seq_param_t( "Proxy 2", 2));
 	seq->set_id( "proxy2");
@@ -199,55 +199,55 @@ void input_node_t::create_image_params( const boost::filesystem::path& p)
 	seq->set_persist( false);
 	seq->set_enabled( false);
 	seq->file_picked.connect( boost::bind( &input_node_t::file_picked, this, _1, _2, _3, _4));
-	add_param( seq);
+	add_param( std::move( seq));
 	
-	std::auto_ptr<string_param_t> info( new string_param_t( "Info", true));
+	std::unique_ptr<string_param_t> info( new string_param_t( "Info", true));
 	info->set_id( "info");
 	info->set_include_in_hash( false);
 	info->set_persist( false);
 	info->set_default_value( "no sequence");
-	add_param( info);
+	add_param( std::move( info));
 }
 
 void input_node_t::create_more_params()
 {
-	std::auto_ptr<image_channels_param_t> ch( new image_channels_param_t());
+	std::unique_ptr<image_channels_param_t> ch( new image_channels_param_t());
 	ch->set_id( "channels");
 	ch->set_include_in_hash( false);
 	ch->set_persist( false);
-	add_param( ch);
+	add_param( std::move( ch));
 
-	std::auto_ptr<aspect_ratio_param_t> r( new aspect_ratio_param_t( "Aspect Ratio"));
+	std::unique_ptr<aspect_ratio_param_t> r( new aspect_ratio_param_t( "Aspect Ratio"));
 	r->set_id( "aspect");
 	r->set_default_value( 1.0f);
-	add_param( r);
+	add_param( std::move( r));
 	
-	std::auto_ptr<ocio_colorspace_param_t> q( new ocio_colorspace_param_t( "Colorspace"));
+	std::unique_ptr<ocio_colorspace_param_t> q( new ocio_colorspace_param_t( "Colorspace"));
 	q->set_id( "colorspace");
-	add_param( q);	
+	add_param( std::move( q));	
 
-	std::auto_ptr<separator_param_t> sep( new separator_param_t());
-	add_param( sep);
+	std::unique_ptr<separator_param_t> sep( new separator_param_t());
+	add_param( std::move( sep));
 
-	std::auto_ptr<popup_param_t> pop( new popup_param_t( "Out of Range"));
+	std::unique_ptr<popup_param_t> pop( new popup_param_t( "Out of Range"));
 	pop->set_id( "out_range");
 	pop->menu_items() = boost::assign::list_of( "Hold")( "Loop")( "Black");
 	pop->set_include_in_hash( false);
-	add_param( pop);
+	add_param( std::move( pop));
 	
-	std::auto_ptr<float_param_t> f( new float_param_t( "Slip"));
+	std::unique_ptr<float_param_t> f( new float_param_t( "Slip"));
 	f->set_id( "slip");
 	f->set_default_value( 0);
 	f->set_static( true);
 	f->set_round_to_int( true);
 	f->set_include_in_hash( false);
-	add_param( f);
+	add_param( std::move( f));
 
-	std::auto_ptr<bool_param_t> b( new bool_param_t( "Lock"));
+	std::unique_ptr<bool_param_t> b( new bool_param_t( "Lock"));
 	b->set_id( "lock");
 	b->set_default_value( false);
 	b->set_include_in_hash( false);
-	add_param( b);
+	add_param( std::move( b));
 }
 
 void input_node_t::param_changed( param_t *p, param_t::change_reason reason)
@@ -259,7 +259,7 @@ void input_node_t::param_changed( param_t *p, param_t::change_reason reason)
 	}
 }
 
-bool input_node_t::do_is_valid() const { return readers_[0];}
+bool input_node_t::do_is_valid() const { return readers_[0].get() != 0;}
 
 void input_node_t::do_set_frame( float t)
 {
@@ -595,7 +595,7 @@ void input_node_t::file_picked( const boost::filesystem::path& p,
                                 bool sequence,
                                 bool relative)
 {
-	std::auto_ptr<undo::image_input_command_t> c( new undo::image_input_command_t( *this, level));
+	std::unique_ptr<undo::image_input_command_t> c( new undo::image_input_command_t( *this, level));
 	
 	if( level != 0)
 	{
@@ -624,7 +624,7 @@ void input_node_t::file_picked( const boost::filesystem::path& p,
 	set_frame( composition()->frame());
 
 	notify();
-	app().document().undo_stack().push_back( c);
+	app().document().undo_stack().push_back( std::move( c));
 	app().ui()->update();
 }
 

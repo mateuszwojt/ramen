@@ -24,23 +24,23 @@ class RAMEN_API yaml_node_t
 {
 public:
 
-	yaml_node_t( yaml_iarchive_t *parent, const YAML::Node *node, int version = 1);
-	yaml_node_t( const yaml_node_t& parent, const YAML::Node *node);
+	yaml_node_t( yaml_iarchive_t *parent, const YAML::Node& node, int version = 1);
+	yaml_node_t( const yaml_node_t& parent, const YAML::Node& node);
 	
 	int version() const	{ return version_;}
 
 	// iterators	
-	typedef YAML::Iterator const_iterator;	
-	const_iterator begin() const	{ return node_->begin();}
-	const_iterator end() const		{ return node_->end();}
+	typedef YAML::const_iterator const_iterator;	
+	const_iterator begin() const	{ return node_.begin();}
+	const_iterator end() const		{ return node_.end();}
 
 	// indexing
-	std::size_t size() const { return node_->size();}
+	std::size_t size() const { return node_.size();}
 
 	yaml_node_t operator [] ( int index) const
 	{
 		RAMEN_ASSERT( index >= 0 && index < size());
-		return yaml_node_t( parent_, &(*node_)[index], version());
+		return yaml_node_t( parent_, node_[index], version());
 	}
 
 	// stream
@@ -48,24 +48,24 @@ public:
 	void operator>>( T& value) const
 	{
 		// TODO: check for errors here!
-		(*node_) >> value;
+		node_ >> value;
 	}
 	
 	// values
     template<class T>
     void get_value( const std::string& key, T& value) const
     {
-		(*node_)[key] >> value;
+		node_[key] >> value;
     }
 
     template<class T>
     bool get_optional_value( const std::string& key, T& value) const
     {
-        if( const YAML::Node *n = node_->FindValue( key))
+        if( const YAML::Node n = find_value( node_, key))
         {
 			try
 			{
-	            *n >> value;
+	            n >> value;
 	            return true;
 			}
 			catch( YAML::Exception& e) {}
@@ -78,7 +78,7 @@ public:
 	yaml_node_t get_node( const std::string& key) const;
 	boost::optional<yaml_node_t> get_optional_node( const std::string& key) const;
 	
-	const YAML::Node *yaml_node() const { return node_;}
+	const YAML::Node& yaml_node() const { return node_;}
 	
 	// errors
 	std::stringstream& error_stream() const;
@@ -90,7 +90,7 @@ private:
 	void set_version( int v) const;
 	
 	yaml_iarchive_t *parent_;
-	const YAML::Node *node_;
+	const YAML::Node node_;
 	mutable int version_;
 };
 

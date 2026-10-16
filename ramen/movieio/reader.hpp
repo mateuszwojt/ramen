@@ -12,7 +12,7 @@
 
 #include<boost/tuple/tuple.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/assert.hpp>
 

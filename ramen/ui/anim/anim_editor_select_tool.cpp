@@ -6,8 +6,8 @@
 
 #include<boost/foreach.hpp>
 
-#include<OpenEXR/ImathFun.h>
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathFun.h>
+#include<Imath/ImathVec.h>
 
 #include<QKeyEvent>
 #include<QMouseEvent>

@@ -38,17 +38,17 @@ alpha_layer_node_t::alpha_layer_node_t() : base_layer_node_t()
 
 void alpha_layer_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Layer Mode"));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Layer Mode"));
     p->set_id( "layer_mode");
     p->menu_items() = boost::assign::list_of( "Add")( "Mult")( "Sub")( "Mix")( "Max")( "Min");
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<float_param_t> q( new float_param_t( "Opacity"));
+    std::unique_ptr<float_param_t> q( new float_param_t( "Opacity"));
     q->set_id( "opacity");
     q->set_range( 0, 1);
     q->set_default_value( 1);
     q->set_step( 0.01);
-    add_param( q);
+    add_param( std::move( q));
 }
 
 void alpha_layer_node_t::do_calc_format( const render::context_t& context)

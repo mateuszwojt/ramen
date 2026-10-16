@@ -5,13 +5,12 @@
 #ifndef RAMEN_IMATHEXT_LINE_SEGMENT_ALGO_HPP
 #define RAMEN_IMATHEXT_LINE_SEGMENT_ALGO_HPP
 
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/ImathExt/detail/clipLiangBarsky.hpp>
 
-namespace Imath
-{
+IMATH_INTERNAL_NAMESPACE_HEADER_ENTER
 
 template<class Vec>
 Vec closestPointTo( const Vec& p0, const Vec& p1, const Vec& point, typename Vec::BaseType& t)
@@ -53,6 +52,6 @@ bool intersects( const Imath::Vec2<T>& p0, const Imath::Vec2<T>& p1, const Imath
     return clipLineSegment( p0, p1, box);
 }
 
-} // namespace
+IMATH_INTERNAL_NAMESPACE_HEADER_EXIT
 
 #endif

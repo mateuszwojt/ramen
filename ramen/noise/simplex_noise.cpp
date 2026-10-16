@@ -90,7 +90,9 @@ simplex_noise_t::simplex_noise_t( int seed)
 		perm[i] = i;
 
 	imath_rand_adapter<Imath::Rand32> random( seed);
-	std::random_shuffle( perm, perm + 256, random);
+	// same algorithm as libstdc++'s std::random_shuffle, to keep the noise pattern.
+	for( int i = 1; i < 256; ++i)
+		std::swap( perm[i], perm[random( i + 1)]);
 	std::copy( perm, perm + 256, perm + 256 );
 }
 

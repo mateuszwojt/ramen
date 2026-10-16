@@ -5,9 +5,9 @@
 #ifndef RAMEN_MANIPULATORS_DRAW_HPP
 #define RAMEN_MANIPULATORS_DRAW_HPP
 
-#include<OpenEXR/ImathMatrix.h>
-#include<OpenEXR/ImathColor.h>
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathMatrix.h>
+#include<Imath/ImathColor.h>
+#include<Imath/ImathBox.h>
 
 namespace ramen
 {

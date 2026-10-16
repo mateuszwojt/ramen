@@ -4,7 +4,7 @@
 
 #include<ramen/nodes/image/layer/add_mix_layer_node.hpp>
 
-#include<OpenEXR/halfFunction.h>
+#include<Imath/halfFunction.h>
 
 #include<ramen/algorithm/clamp.hpp>
 
@@ -76,17 +76,17 @@ add_mix_layer_node_t::add_mix_layer_node_t() : base_layer_node_t()
 
 void add_mix_layer_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Mode"));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Mode"));
     p->set_id( "mode");
     p->menu_items() = boost::assign::list_of( "Background")( "Foreground");
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<bool_param_t> b( new bool_param_t( "Premultiplied"));
+    std::unique_ptr<bool_param_t> b( new bool_param_t( "Premultiplied"));
     b->set_id( "premult");
     b->set_default_value( true);
-    add_param( b);
+    add_param( std::move( b));
 	
-    std::auto_ptr<curve_param_t> c( new curve_param_t( "Fg"));
+    std::unique_ptr<curve_param_t> c( new curve_param_t( "Fg"));
     c->set_id( "fg");
     c->set_min( 0.0f);
     c->set_max( 1.0f);
@@ -96,7 +96,7 @@ void add_mix_layer_node_t::do_create_params()
     c->curve().insert( 0, 0, false);
     c->curve().insert( 1, 1, false);
     c->curve().recalc_tangents_and_coefficients();
-    add_param( c);
+    add_param( std::move( c));
 
     c.reset( new curve_param_t( "Bg"));
     c->set_id( "bg");
@@ -108,7 +108,7 @@ void add_mix_layer_node_t::do_create_params()
     c->curve().insert( 0, 1, false);
     c->curve().insert( 1, 0, false);
     c->curve().recalc_tangents_and_coefficients();
-    add_param( c);
+    add_param( std::move( c));
 }
 
 void add_mix_layer_node_t::do_calc_bounds( const render::context_t& context)

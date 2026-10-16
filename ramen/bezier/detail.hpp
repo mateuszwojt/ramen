@@ -5,7 +5,7 @@
 #ifndef RAMEN_BEZIER_DETAIL_HPP
 #define	RAMEN_BEZIER_DETAIL_HPP
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 namespace ramen
 {

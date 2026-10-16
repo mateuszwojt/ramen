@@ -41,8 +41,8 @@ public:
         parent_ = p;
     }
 
-    void add_shape( std::auto_ptr<shape_t> s);
-    std::auto_ptr<shape_t> release_shape( shape_t *s);
+    void add_shape( std::unique_ptr<shape_t> s);
+    std::unique_ptr<shape_t> release_shape( shape_t *s);
 
     const boost::ptr_vector<shape_t>& shapes() const	{ return shapes_;}
     boost::ptr_vector<shape_t>& shapes()				{ return shapes_;}

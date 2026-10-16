@@ -63,7 +63,7 @@ struct duplicate_command_t : public command_t
 {
     duplicate_command_t();
 
-    void add_node( std::auto_ptr<node_t> n);
+    void add_node( std::unique_ptr<node_t> n);
     void add_edge( const edge_t& e);
 
     virtual void undo();

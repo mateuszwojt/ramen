@@ -56,7 +56,7 @@ make_tbb_transform3_pixels_fun( const View1& src1, const View2& src2, const View
 } // detail
 
 template<class View1, class View2, class View3, class View4, class Fun>
-GIL_FORCEINLINE void tbb_transform3_pixels( const View1& src1, const View2& src2,
+BOOST_FORCEINLINE void tbb_transform3_pixels( const View1& src1, const View2& src2,
                                             const View3& src3, const View4& dst, Fun f)
 {
     tbb::parallel_for( tbb::blocked_range<std::size_t>( 0, src1.height()), 

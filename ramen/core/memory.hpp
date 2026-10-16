@@ -47,7 +47,7 @@ struct pointer_traits<T(*)[]>
 
 /*!
 \ingroup core
-\brief An improved std::auto_ptr like smart pointer.
+\brief An improved std::unique_ptr like smart pointer.
 */
 template<class T>
 class auto_ptr_t

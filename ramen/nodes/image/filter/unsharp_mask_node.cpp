@@ -56,26 +56,26 @@ unsharp_mask_node_t::unsharp_mask_node_t() : areaop_node_t() { set_name( "unshar
 
 void unsharp_mask_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> p( new float_param_t( "Radius"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Radius"));
     p->set_id( "radius");
     p->set_default_value( 3.0f);
     p->set_range( 0, 20);
     p->set_step( 0.5);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Amount"));
     p->set_id( "amount");
     p->set_default_value( 0.5f);
     p->set_range( 0, 3);
     p->set_step( 0.1);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float_param_t( "Thereshold"));
     p->set_id( "theresh");
     p->set_default_value( 0.0f);
     p->set_range( 0, 3);
     p->set_step( 0.1);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void unsharp_mask_node_t::get_expand_radius( int& hradius, int& vradius) const

@@ -25,12 +25,12 @@ base_warp_node_t::base_warp_node_t( const base_warp_node_t& other) : image_node_
 
 void base_warp_node_t::create_default_filter_param()
 {
-    std::auto_ptr<popup_param_t> r( new popup_param_t( "Filter"));
+    std::unique_ptr<popup_param_t> r( new popup_param_t( "Filter"));
     r->set_id( "filter");
     r->menu_items() = boost::assign::list_of( "Point")( "Bilinear")( "Catrom")( "Mipmap");
     r->set_default_value( 2);
     r->set_include_in_hash( false);
-    add_param( r);
+    add_param( std::move( r));
 }
 
 base_warp_node_t::filter_type base_warp_node_t::get_filter_type() const

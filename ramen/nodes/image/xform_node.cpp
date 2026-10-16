@@ -37,10 +37,10 @@ motion_blur_info_t::loop_data_t xform_node_t::motion_blur_loop_data( float frame
 
 void xform_node_t::create_motion_blur_param()
 {
-    std::auto_ptr<motion_blur_param_t> mb( new motion_blur_param_t( "Motion Blur"));
+    std::unique_ptr<motion_blur_param_t> mb( new motion_blur_param_t( "Motion Blur"));
     mb->set_id( "motion_blur");
 	mb->set_include_in_hash( false);
-    add_param( mb);
+    add_param( std::move( mb));
 }
 
 void xform_node_t::do_calc_hash_str( const render::context_t& context)

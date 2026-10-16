@@ -7,7 +7,7 @@
 
 #include<ramen/image/typedefs.hpp>
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 namespace ramen
 {

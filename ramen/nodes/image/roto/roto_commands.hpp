@@ -21,7 +21,7 @@ class add_roto_command_t : public command_t
 {
 public:
 
-    add_roto_command_t( image::roto_node_t& node, std::auto_ptr<roto::shape_t> shape);
+    add_roto_command_t( image::roto_node_t& node, std::unique_ptr<roto::shape_t> shape);
 
     virtual void undo();
     virtual void redo();
@@ -30,7 +30,7 @@ private:
 
     image::roto_node_t& node_;
     roto::shape_t *shape_;
-    std::auto_ptr<roto::shape_t> storage_;
+    std::unique_ptr<roto::shape_t> storage_;
 };
 
 class delete_roto_command_t : public command_t
@@ -46,7 +46,7 @@ private:
 
     image::roto_node_t& node_;
     roto::shape_t *shape_, *parent_;
-    std::auto_ptr<roto::shape_t> storage_;
+    std::unique_ptr<roto::shape_t> storage_;
 	std::vector<roto::shape_t*> children_;
 };
 

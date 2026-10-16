@@ -15,11 +15,11 @@ premult_node_t::premult_node_t() : pointop_node_t() { set_name("premult");}
 
 void premult_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Mode"));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Mode"));
     p->set_id( "mode");
     p->add_menu_item( "Premult");
     p->add_menu_item( "Unpremult");
-    add_param( std::auto_ptr<param_t>( p.release()));
+    add_param( std::unique_ptr<param_t>( p.release()));
 }
 
 void premult_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

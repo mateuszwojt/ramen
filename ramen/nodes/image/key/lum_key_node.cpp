@@ -80,19 +80,19 @@ lum_key_node_t::lum_key_node_t() : pointop_node_t() { set_name("lum_key");}
 
 void lum_key_node_t::do_create_params()
 {
-    std::auto_ptr<color_param_t> c( new color_param_t( "Luminance"));
+    std::unique_ptr<color_param_t> c( new color_param_t( "Luminance"));
     c->set_id( "luminance");
     c->set_is_rgba( false);
     c->set_default_value( Imath::Color4f( 1, 1, 1, 1));
-    add_param( c);
+    add_param( std::move( c));
 
-    std::auto_ptr<float2_param_t> p( new float2_param_t( "Tolerance"));
+    std::unique_ptr<float2_param_t> p( new float2_param_t( "Tolerance"));
     p->set_id( "tolerance");
     p->set_default_value( Imath::V2f( 0.1, 0.1));
     p->set_min( 0);
     p->set_step( 0.05f);
     p->set_proportional( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float2_param_t( "Softness"));
     p->set_id( "softness");
@@ -100,31 +100,31 @@ void lum_key_node_t::do_create_params()
     p->set_min( 0);
     p->set_step( 0.05f);
     p->set_proportional( true);
-    add_param( p);
+    add_param( std::move( p));
 
-    std::auto_ptr<float_param_t> q( new float_param_t( "Alpha Low"));
+    std::unique_ptr<float_param_t> q( new float_param_t( "Alpha Low"));
     q->set_id( "alpha_low");
     q->set_default_value( 0);
     q->set_range( 0, 1);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
 
     q.reset( new float_param_t( "Alpha High"));
     q->set_id( "alpha_high");
     q->set_default_value( 1);
     q->set_range( 0, 1);
     q->set_step( 0.05);
-    add_param( q);
+    add_param( std::move( q));
 
-    std::auto_ptr<bool_param_t> b( new bool_param_t( "Invert"));
+    std::unique_ptr<bool_param_t> b( new bool_param_t( "Invert"));
     b->set_id( "invert");
     b->set_default_value( false);
-    add_param( b);
+    add_param( std::move( b));
 
     b.reset( new bool_param_t( "Premultiply"));
     b->set_id( "premult");
     b->set_default_value( false);
-    add_param( b);
+    add_param( std::move( b));
 }
 
 void lum_key_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

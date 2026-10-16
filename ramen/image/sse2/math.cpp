@@ -4,7 +4,7 @@
 
 #include<ramen/image/sse2/math.hpp>
 
-#include<emmintrin.h>
+#include<ramen/image/sse2/intrinsics.hpp>
 
 #include<ramen/gil/extension/algorithm/tbb/tbb.hpp>
 

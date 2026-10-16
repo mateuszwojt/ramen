@@ -122,28 +122,28 @@ void color_param_t::set_value_at_frame( const Imath::Color4f& x, float frame, ch
 
 void color_param_t::do_create_tracks( anim::track_t *parent)
 {
-    std::auto_ptr<anim::track_t> t( new anim::track_t( name()));
+    std::unique_ptr<anim::track_t> t( new anim::track_t( name()));
 
-    std::auto_ptr<anim::track_t> tr( new anim::track_t( "R", &( curve( 0))));
+    std::unique_ptr<anim::track_t> tr( new anim::track_t( "R", &( curve( 0))));
     tr->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
-    t->add_child( tr);
+    t->add_child( std::move( tr));
 
-    std::auto_ptr<anim::track_t> tg( new anim::track_t( "G", &( curve( 1))));
+    std::unique_ptr<anim::track_t> tg( new anim::track_t( "G", &( curve( 1))));
     tg->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
-    t->add_child( tg);
+    t->add_child( std::move( tg));
 
-    std::auto_ptr<anim::track_t> tb( new anim::track_t( "B", &( curve( 2))));
+    std::unique_ptr<anim::track_t> tb( new anim::track_t( "B", &( curve( 2))));
     tb->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
-    t->add_child( tb);
+    t->add_child( std::move( tb));
 
     if( is_rgba())
     {
-        std::auto_ptr<anim::track_t> ta( new anim::track_t( "A", &( curve( 3))));
+        std::unique_ptr<anim::track_t> ta( new anim::track_t( "A", &( curve( 3))));
         ta->changed.connect( boost::bind( &animated_param_t::anim_curve_changed, this, _1));
-        t->add_child( ta);
+        t->add_child( std::move( ta));
     }
 
-    parent->add_child( t);
+    parent->add_child( std::move( t));
 }
 
 void color_param_t::do_add_to_hash( hash::generator_t& hash_gen) const
@@ -402,7 +402,8 @@ void color_param_t::spinbox_dragged( double value)
     if( track_mouse())
         param_set()->notify_parent();
 
-    app().ui()->update_anim_editors();
+    if( app().ui())
+        app().ui()->update_anim_editors();
 }
 
 void color_param_t::spinbox_released()

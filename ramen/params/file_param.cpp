@@ -217,7 +217,7 @@ void file_param_t::select_pushed()
 
     if( is_input_)
     {
-        QFileDialog dialog( 0, "Select file", QString::null, ext_list_string_.c_str());
+        QFileDialog dialog( 0, "Select file", QString(), ext_list_string_.c_str());
         dialog.setOption( QFileDialog::DontUseNativeDialog, true);
         dialog.setFileMode( QFileDialog::ExistingFile);
 
@@ -246,7 +246,7 @@ void file_param_t::select_pushed()
         }
     }
     else
-        fname = QFileDialog::getSaveFileName( 0, "Select file", QString::null, ext_list_string_.c_str(),
+        fname = QFileDialog::getSaveFileName( 0, "Select file", QString(), ext_list_string_.c_str(),
                                               0, QFileDialog::DontUseNativeDialog);
 
     if( !fname.isEmpty())

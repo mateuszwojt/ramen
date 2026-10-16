@@ -15,10 +15,10 @@ void color_node_t::do_create_params()
 {
     generator_node_t::do_create_params();
 
-    std::auto_ptr<color_param_t> c( new color_param_t( "Color"));
+    std::unique_ptr<color_param_t> c( new color_param_t( "Color"));
     c->set_id( "color");
     c->set_default_value( Imath::Color4f( 0, 0, 0, 0));
-    add_param( c);
+    add_param( std::move( c));
 }
 
 void color_node_t::do_process( const render::context_t& context)

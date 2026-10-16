@@ -5,8 +5,8 @@
 #ifndef RAMEN_ANIM_SHAPE_CURVE_HPP
 #define	RAMEN_ANIM_SHAPE_CURVE_HPP
 
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathFun.h>
 
 #include<boost/range/algorithm/copy.hpp>
 

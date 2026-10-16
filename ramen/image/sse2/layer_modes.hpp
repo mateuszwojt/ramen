@@ -7,7 +7,7 @@
 
 #include<limits>
 
-#include<emmintrin.h>
+#include<ramen/image/sse2/intrinsics.hpp>
 
 #include<ramen/image/typedefs.hpp>
 

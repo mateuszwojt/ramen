@@ -82,7 +82,7 @@ private:
 
     virtual void do_create_tracks( anim::track_t *parent);
 
-    virtual std::auto_ptr<undo::command_t> do_create_command();
+    virtual std::unique_ptr<undo::command_t> do_create_command();
 
 	anim::float_curve_t *find_curve( const std::string& name);
 	

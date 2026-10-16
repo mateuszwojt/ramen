@@ -37,7 +37,7 @@ private:
 	
 	shape_t *pick_shape( const ui::mouse_press_event_t& event, int& span_index, float& t);
 	
-	std::auto_ptr<roto::shape_t> new_shape_;
+	std::unique_ptr<roto::shape_t> new_shape_;
 	roto::triple_t *point_;
 };
 

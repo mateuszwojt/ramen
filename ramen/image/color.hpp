@@ -7,7 +7,7 @@
 
 #include<algorithm>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<ramen/algorithm/clamp.hpp>
 

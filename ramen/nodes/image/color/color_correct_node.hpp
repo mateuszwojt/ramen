@@ -36,7 +36,7 @@ private:
 
     virtual void do_create_params();
 
-    std::auto_ptr<composite_param_t> create_param_tab( const std::string& name, const std::string& id,
+    std::unique_ptr<composite_param_t> create_param_tab( const std::string& name, const std::string& id,
 							const std::string& id_prefix);
 
     virtual void do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context);

@@ -4,7 +4,7 @@
 
 #include<algorithm>
 
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathMath.h>
 
 #include<ramen/assert.hpp>
 
@@ -48,7 +48,7 @@ void lanczos3_filter_t::init_table()
 	{
 		float x = ( i - size / 2.0f + 0.5f) / faccuracy;
 		x *= math::constants<float>::pi();
-		float y = Imath::Math<float>::sin( x) / x * Imath::Math<float>::sin( x / 3.0f) / ( x / 3.0f);
+		float y = std::sin( x) / x * std::sin( x / 3.0f) / ( x / 3.0f);
 		ftable.push_back( y);
 	}
 }
@@ -89,7 +89,7 @@ void mitchell_filter_t::init_table()
 
 	for( int i = 0; i < size; ++i)
 	{
-		float x = Imath::Math<float>::fabs( ( i - size / 2.0f + 0.5f) / faccuracy);
+		float x = std::fabs( ( i - size / 2.0f + 0.5f) / faccuracy);
 		float y;
 
 	    if(x < 1.0f)

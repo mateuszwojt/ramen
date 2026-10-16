@@ -130,7 +130,8 @@ void quad_manipulator_t::do_mouse_drag_event( const ui::mouse_drag_event_t& even
 	Imath::V2f q = get_absolute_value<Imath::V2f>( *p);
 	p->set_absolute_value( q + offset);
 	p->update_widgets();
-	app().ui()->update_anim_editors();
+	if( app().ui())
+	    app().ui()->update_anim_editors();
 	
 	if( p->track_mouse())
 		p->param_set()->notify_parent();

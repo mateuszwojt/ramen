@@ -38,11 +38,11 @@ exposure_node_t::exposure_node_t() : pointop_node_t()
 
 void exposure_node_t::do_create_params()
 {
-    std::auto_ptr<float_param_t> p( new float_param_t( "Exp"));
+    std::unique_ptr<float_param_t> p( new float_param_t( "Exp"));
     p->set_id( "exp");
     p->set_default_value( 0.0f);
     p->set_step( 0.1);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 bool exposure_node_t::do_is_identity() const

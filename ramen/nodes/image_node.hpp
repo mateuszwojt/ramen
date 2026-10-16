@@ -7,7 +7,7 @@
 
 #include<ramen/nodes/node.hpp>
 
-#include<OpenEXR/ImathColor.h>
+#include<Imath/ImathColor.h>
 
 #include<ramen/ImathExt/ImathBoxAlgo.h>
 

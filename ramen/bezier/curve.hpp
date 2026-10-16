@@ -10,8 +10,8 @@
 #include<boost/config.hpp>
 #include<boost/static_assert.hpp>
 
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ramen/bezier/bernstein.hpp>
 

@@ -15,11 +15,11 @@ invert_node_t::invert_node_t() : pointop_node_t() { set_name( "invert");}
 
 void invert_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Channels"));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
     p->set_id( "channels");
     p->add_menu_item( "RGB");
     p->add_menu_item( "Alpha");
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void invert_node_t::do_calc_bounds( const render::context_t& context)

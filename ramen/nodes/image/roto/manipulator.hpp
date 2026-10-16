@@ -7,9 +7,9 @@
 
 #include<ramen/manipulators/manipulator.hpp>
 
-#include<OpenEXR/ImathVec.h>
-#include<OpenEXR/ImathColor.h>
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathVec.h>
+#include<Imath/ImathColor.h>
+#include<Imath/ImathMatrix.h>
 
 #include<ramen/bezier/curve.hpp>
 

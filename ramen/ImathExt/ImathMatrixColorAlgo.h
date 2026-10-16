@@ -5,7 +5,7 @@
 #ifndef RAMEN_IMATHEXT_MATRIX_COLOR_ALGO_HPP
 #define RAMEN_IMATHEXT_MATRIX_COLOR_ALGO_HPP
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 namespace ramen
 {

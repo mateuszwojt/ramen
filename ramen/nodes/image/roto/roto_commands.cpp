@@ -22,12 +22,12 @@ namespace ramen
 namespace undo
 {
 
-add_roto_command_t::add_roto_command_t( image::roto_node_t& node, std::auto_ptr<roto::shape_t> shape) : command_t( "Add Shape"), node_( node)
+add_roto_command_t::add_roto_command_t( image::roto_node_t& node, std::unique_ptr<roto::shape_t> shape) : command_t( "Add Shape"), node_( node)
 {
 	RAMEN_ASSERT( shape.get());
 
     shape_ = shape.get();
-	storage_ = shape;
+	storage_ = std::move( shape);
 }
 
 void add_roto_command_t::undo()
@@ -44,7 +44,7 @@ void add_roto_command_t::redo()
 {
 	node_.deselect_all();
 	storage_->select( true);
-	node_.add_shape( storage_);
+	node_.add_shape( std::move( storage_));
 	app().ui()->anim_editor().recreate_tracks( &node_);
 	node_.selection_changed();
 	node_.notify();
@@ -65,7 +65,7 @@ void delete_roto_command_t::undo()
 {
 	node_.deselect_all();
 	node_.selection_changed();
-	node_.add_shape( storage_);
+	node_.add_shape( std::move( storage_));
 	shape_->set_parent( parent_);
 
 	for( int i = 0; i < children_.size(); ++i)

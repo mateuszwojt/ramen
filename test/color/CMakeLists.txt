@@ -4,5 +4,5 @@
 # See CDDL_LICENSE.txt for a copy of the license.                    #
 ######################################################################
 
-ADD_RAMEN_TEST( color3)
-ADD_RAMEN_TEST( color4)
+add_ramen_test( color3)
+add_ramen_test( color4)

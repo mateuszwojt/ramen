@@ -28,11 +28,11 @@ colorspace_node_t::colorspace_node_t() : pointop_node_t() { set_name("cspace");}
 
 void colorspace_node_t::do_create_params()
 {
-    std::auto_ptr<popup_param_t> p( new popup_param_t( "Convert"));
+    std::unique_ptr<popup_param_t> p( new popup_param_t( "Convert"));
     p->set_id( "convert");
     p->menu_items() = boost::assign::list_of( "RGB to YUV")( "RGB to HSV")( "RGB to Lab")
 											( "YUV to RGB")( "HSV to RGB")( "Lab to RGB");
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void colorspace_node_t::do_process( const image::const_image_view_t& src, const image::image_view_t& dst, const render::context_t& context)

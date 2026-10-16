@@ -8,10 +8,11 @@
 #include<ramen/config.hpp>
 
 #include<algorithm>
+#include<cmath>
 
-#include<OpenEXR/ImathBox.h>
-#include<OpenEXR/ImathMatrix.h>
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathBox.h>
+#include<Imath/ImathMatrix.h>
+#include<Imath/ImathMath.h>
 
 namespace ramen
 {
@@ -53,13 +54,13 @@ Imath::Box2i roundBox( const Imath::Box<Imath::Vec2<T> >& b, bool round_up = fal
 
     if( round_up)
     {
-        return Imath::Box2i( Imath::V2i( Imath::Math<T>::floor( b.min.x), Imath::Math<T>::floor( b.min.y)),
-                      Imath::V2i( Imath::Math<T>::ceil( b.max.x) , Imath::Math<T>::ceil( b.max.y)));
+        return Imath::Box2i( Imath::V2i( std::floor( b.min.x), std::floor( b.min.y)),
+                      Imath::V2i( std::ceil( b.max.x) , std::ceil( b.max.y)));
     }
     else
     {
-        return Imath::Box2i( Imath::V2i( Imath::Math<T>::ceil( b.min.x) , Imath::Math<T>::ceil( b.min.y)),
-                      Imath::V2i( Imath::Math<T>::floor( b.max.x), Imath::Math<T>::floor( b.max.y)));
+        return Imath::Box2i( Imath::V2i( std::ceil( b.min.x) , std::ceil( b.min.y)),
+                      Imath::V2i( std::floor( b.max.x), std::floor( b.max.y)));
     }
 }	
 

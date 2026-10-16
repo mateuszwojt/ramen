@@ -5,8 +5,8 @@
 
 #include<vector>
 
-#include<OpenEXR/ImathVec.h>
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathVec.h>
+#include<Imath/ImathMath.h>
 
 #include<ramen/image/typedefs.hpp>
 
@@ -82,8 +82,8 @@ public:
 		if( x < src_area().min.x || x > src_area().max.x)
 	        return pixel_t( 0, 0, 0, 0);
 
-		float max_width = std::max( Imath::Math<float>::fabs( du.x),  std::max( Imath::Math<float>::fabs( du.y),
-							std::max( Imath::Math<float>::fabs( dv.x), Imath::Math<float>::fabs( dv.y))));
+		float max_width = std::max( std::fabs( du.x),  std::max( std::fabs( du.y),
+							std::max( std::fabs( dv.x), std::fabs( dv.y))));
 
 		float width = 2.0f * max_width;
 

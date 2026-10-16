@@ -2,7 +2,7 @@
 
 #include<ramen/nodes/image/generate/checkerboard_node.hpp>
 
-#include<OpenEXR/ImathMath.h>
+#include<Imath/ImathMath.h>
 
 #include<agg2/agg_renderer_scanline.h>
 #include<agg2/agg_rasterizer_scanline_aa.h>
@@ -27,31 +27,31 @@ void checkerboard_node_t::do_create_params()
 {
     generator_node_t::do_create_params();
 
-    std::auto_ptr<color_param_t> q( new color_param_t( "Bg Color"));
+    std::unique_ptr<color_param_t> q( new color_param_t( "Bg Color"));
     q->set_id( "bgcol");
     q->set_is_rgba( true);
     q->set_default_value( Imath::Color4f( 0, 0, 0, 0));
-    add_param( q);
+    add_param( std::move( q));
     
     q.reset( new color_param_t( "Fg Color"));
     q->set_id( "fgcol");
     q->set_is_rgba( true);
     q->set_default_value( Imath::Color4f( 1, 1, 1, 1));
-    add_param( q);
+    add_param( std::move( q));
 
-    std::auto_ptr<float2_param_t> p( new float2_param_t( "Size"));
+    std::unique_ptr<float2_param_t> p( new float2_param_t( "Size"));
     p->set_id( "size");
     p->set_default_value( Imath::V2f( 0.1, 0.1));
     p->set_numeric_type( numeric_param_t::relative_size_xy);
 	p->set_min( 0);
 	p->set_proportional( true);
-    add_param( p);
+    add_param( std::move( p));
 
     p.reset( new float2_param_t( "Translate"));
     p->set_id( "translate");
     p->set_default_value( Imath::V2f( 0, 0));
     p->set_numeric_type( numeric_param_t::relative_xy);
-    add_param( p);
+    add_param( std::move( p));
 }
 
 void checkerboard_node_t::do_process( const render::context_t& context)
@@ -95,8 +95,8 @@ void checkerboard_node_t::do_process( const render::context_t& context)
 	Imath::Box2f area( defined().min - translate, 
 					   defined().max - translate);
 
-	int ix = Imath::Math<float>::floor( area.min.x / size.x);
-	int iy = Imath::Math<float>::floor( area.min.y / size.y);
+	int ix = std::floor( area.min.x / size.x);
+	int iy = std::floor( area.min.y / size.y);
 
 	for( float y = iy * size.y; y < area.max.y; y += size.y, ++iy)
 	{

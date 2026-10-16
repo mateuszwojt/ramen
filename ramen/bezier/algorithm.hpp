@@ -5,7 +5,7 @@
 #ifndef RAMEN_BEZIER_ALGORITHM_HPP
 #define	RAMEN_BEZIER_ALGORITHM_HPP
 
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/bezier/curve.hpp>
 

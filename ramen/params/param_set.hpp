@@ -58,7 +58,7 @@ public:
     iterator end()		{ return params_.end();}
 
     template<class T>
-    void add_param( std::auto_ptr<T> p)
+    void add_param( std::unique_ptr<T> p)
     {
         do_add_param( p.release());
     }
@@ -100,7 +100,7 @@ private:
 
     parameterised_t *parent_;
     boost::ptr_vector<param_t> params_;
-    std::auto_ptr<param_set_command_t> command_;
+    std::unique_ptr<param_set_command_t> command_;
 };
 
 } // namespace

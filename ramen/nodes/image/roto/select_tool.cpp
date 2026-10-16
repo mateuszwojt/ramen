@@ -59,7 +59,7 @@ void select_tool_t::key_press_event( const ui::key_press_event_t& event)
         selected_ = parent().selected();
         if( selected_)
 		{
-			std::auto_ptr<undo::command_t> cmd;
+			std::unique_ptr<undo::command_t> cmd;
 			
 			if( selected_->can_delete_selected_points())
 			{
@@ -72,7 +72,7 @@ void select_tool_t::key_press_event( const ui::key_press_event_t& event)
 				cmd->redo();
 			}
 			
-			app().document().undo_stack().push_back( cmd);
+			app().document().undo_stack().push_back( std::move( cmd));
 			app().ui()->update();
 			parent().notify();
 		}
@@ -290,10 +290,11 @@ void select_tool_t::mouse_release_event( const ui::mouse_release_event_t& event)
 					if( selected_->autokey() || !selected_->anim_curve().empty())
 					{
 						selected_->set_shape_key();
-						app().ui()->update_anim_editors();
+						if( app().ui())
+						    app().ui()->update_anim_editors();
 					}
 					
-					app().document().undo_stack().push_back( cmd_);
+					app().document().undo_stack().push_back( std::move( cmd_));
 					
 					if( !selected_->track_mouse())
 						parent().notify();

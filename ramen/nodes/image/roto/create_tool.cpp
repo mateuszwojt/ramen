@@ -83,10 +83,10 @@ void create_tool_t::mouse_press_event( const ui::mouse_press_event_t& event)
 			s->select( true);
 			parent().selection_changed();
 			
-			std::auto_ptr<undo::command_t> cmd( new undo::modify_shape_command_t( parent(), s));
+			std::unique_ptr<undo::command_t> cmd( new undo::modify_shape_command_t( parent(), s));
 			s->insert_point( span_index, t);
 			
-			app().document().undo_stack().push_back( cmd);
+			app().document().undo_stack().push_back( std::move( cmd));
 			app().ui()->update();
 			parent().notify();
 			return;
@@ -143,9 +143,9 @@ void create_tool_t::close_shape( bool success)
 			if( new_shape_->autokey())
 				new_shape_->set_shape_key( app().document().composition().frame());
 			
-			std::auto_ptr<undo::add_roto_command_t> cmd( new undo::add_roto_command_t( parent(), new_shape_));
+			std::unique_ptr<undo::add_roto_command_t> cmd( new undo::add_roto_command_t( parent(), std::move( new_shape_)));
 			cmd->redo();
-			app().document().undo_stack().push_back( cmd);
+			app().document().undo_stack().push_back( std::move( cmd));
 			app().ui()->update();
 		}
     }

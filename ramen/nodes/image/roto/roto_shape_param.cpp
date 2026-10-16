@@ -292,9 +292,9 @@ void roto_shape_param_t::change_shape_color()
 
 void roto_shape_param_t::set_shape_key()
 {
-	std::auto_ptr<undo::modify_shape_command_t> cmd( new undo::modify_shape_command_t( roto_node(), selected_));
+	std::unique_ptr<undo::modify_shape_command_t> cmd( new undo::modify_shape_command_t( roto_node(), selected_));
 	selected_->set_shape_key();
-	app().document().undo_stack().push_back( cmd);
+	app().document().undo_stack().push_back( std::move( cmd));
 	app().ui()->update();
 }
 
@@ -335,28 +335,28 @@ void roto_shape_param_t::set_shape_parent( int index)
 		}
 	}
 
-	std::auto_ptr<undo::set_roto_parent_command_t> cmd;
+	std::unique_ptr<undo::set_roto_parent_command_t> cmd;
 	cmd.reset( new undo::set_roto_parent_command_t( roto_node(), selected_, new_parent_));
 	cmd->redo();
-	app().document().undo_stack().push_back( cmd);
+	app().document().undo_stack().push_back( std::move( cmd));
 	app().ui()->update();
 }
 
 void roto_shape_param_t::move_shape_order_up()
 {
-	std::auto_ptr<undo::order_shape_command_t> cmd;
+	std::unique_ptr<undo::order_shape_command_t> cmd;
 	cmd.reset( new undo::order_shape_command_t( roto_node(), selected_, true));
 	cmd->redo();
-	app().document().undo_stack().push_back( cmd);
+	app().document().undo_stack().push_back( std::move( cmd));
 	app().ui()->update();
 }
 
 void roto_shape_param_t::move_shape_order_down()
 {
-	std::auto_ptr<undo::order_shape_command_t> cmd;
+	std::unique_ptr<undo::order_shape_command_t> cmd;
 	cmd.reset( new undo::order_shape_command_t( roto_node(), selected_, false));
 	cmd->redo();
-	app().document().undo_stack().push_back( cmd);
+	app().document().undo_stack().push_back( std::move( cmd));
 	app().ui()->update();
 }
 

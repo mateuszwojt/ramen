@@ -20,7 +20,7 @@
 #include<QHBoxLayout>
 #include<QCheckBox>
 #include<QKeyEvent>
-#include<QPlastiqueStyle>
+#include<QStyleFactory>
 
 #include<ramen/assert.hpp>
 
@@ -101,8 +101,7 @@ void user_interface_t::init()
 
 void user_interface_t::init_ui_style()
 {
-	QPlastiqueStyle *style = new QPlastiqueStyle();
-	qApp->setStyle( style);
+	qApp->setStyle( QStyleFactory::create( "Fusion"));
 
 	// init palette
 	palette_t::instance();
@@ -182,7 +181,7 @@ void user_interface_t::open_document( const boost::filesystem::path& p)
         return;
     }
 
-	std::auto_ptr<serialization::yaml_iarchive_t> in;
+	std::unique_ptr<serialization::yaml_iarchive_t> in;
 	
 	try
 	{
@@ -429,7 +428,7 @@ bool user_interface_t::image_sequence_file_selector( const std::string& title, c
     static bool was_relative = false;
     static bool was_sequence = true;
 
-    QFileDialog dialog( 0, title.c_str(), QString::null, types.c_str());
+    QFileDialog dialog( 0, title.c_str(), QString(), types.c_str());
 	dialog.setOption( QFileDialog::DontUseNativeDialog, true);
     dialog.setFileMode( QFileDialog::ExistingFile);
 

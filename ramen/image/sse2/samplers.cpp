@@ -4,12 +4,12 @@
 
 #include<ramen/image/sse2/samplers.hpp>
 
-#include<emmintrin.h>
+#include<ramen/image/sse2/intrinsics.hpp>
 
 #include<cmath>
 
-#include<OpenEXR/ImathMath.h>
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathMath.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/image/filters.hpp>
 

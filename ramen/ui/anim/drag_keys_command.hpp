@@ -9,7 +9,7 @@
 
 #include<map>
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 namespace ramen
 {

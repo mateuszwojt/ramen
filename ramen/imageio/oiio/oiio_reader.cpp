@@ -16,7 +16,7 @@ namespace imageio
 
 oiio_reader_t::oiio_reader_t( const boost::filesystem::path& p) : reader_t( p), is_tiled_( false)
 {
-    std::auto_ptr<OIIO::ImageInput> in( OIIO::ImageInput::create( filesystem::file_string( p)));
+    std::unique_ptr<OIIO::ImageInput> in( OIIO::ImageInput::create( filesystem::file_string( p)));
 
     if( in.get())
     {
@@ -56,7 +56,7 @@ void oiio_reader_t::do_read_image( const image::image_view_t& view,
 		return;
 	}
 	
-    std::auto_ptr<OIIO::ImageInput> in( OIIO::ImageInput::create( filesystem::file_string( path_)));
+    std::unique_ptr<OIIO::ImageInput> in( OIIO::ImageInput::create( filesystem::file_string( path_)));
 
     if( in.get())
     {
@@ -137,7 +137,7 @@ void oiio_reader_t::do_read_tiled_image( const image::image_view_t& view,
                                          const math::box2i_t& crop,
                                          int subsample) const
 {
-    std::auto_ptr<OIIO::ImageInput> in( OIIO::ImageInput::create( filesystem::file_string( path_)));
+    std::unique_ptr<OIIO::ImageInput> in( OIIO::ImageInput::create( filesystem::file_string( path_)));
 
     if( in.get())
     {

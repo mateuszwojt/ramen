@@ -5,7 +5,7 @@
 #ifndef RAMEN_UI_ANIM_EDIT_TANGENTS_VISITORS_HPP
 #define	RAMEN_UI_ANIM_EDIT_TANGENTS_VISITORS_HPP
 
-#include<OpenEXR/ImathVec.h>
+#include<Imath/ImathVec.h>
 
 #include<ramen/anim/any_curve.hpp>
 #include<ramen/anim/float_curve.hpp>

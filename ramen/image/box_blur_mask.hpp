@@ -11,8 +11,8 @@
 #include<tbb/blocked_range.h>
 #include<tbb/parallel_for.h>
 
-#include<OpenEXR/ImathVec.h>
-#include<OpenEXR/ImathFun.h>
+#include<Imath/ImathVec.h>
+#include<Imath/ImathFun.h>
 
 #include<ramen/image/typedefs.hpp>
 #include<ramen/assert.hpp>
@@ -77,7 +77,7 @@ public:
 		min_radius_ = min_radius;
 		max_radius_ = max_radius;
 		
-		pad_ = Imath::Math<float>::ceil( std::max( min_radius_, max_radius_)) + 1;
+		pad_ = std::ceil( std::max( min_radius_, max_radius_)) + 1;
 		table_.resize( src_.width() + 2 * pad_, 0);
 	}
 		
@@ -130,7 +130,7 @@ private:
 	
 	float sample_table( float x) const
 	{
-		int xi = Imath::Math<float>::floor( x);
+		int xi = std::floor( x);
 		float xf = x - xi;
 		return Imath::lerp( table_[xi], table_[xi+1], xf);
 	}

@@ -8,15 +8,14 @@
 #include<boost/optional.hpp>
 #include<boost/array.hpp>
 
-#include<OpenEXR/ImathMatrix.h>
+#include<Imath/ImathMatrix.h>
 
 /*
 #include<Eigen/Core>
 #include<Eigen/LU>
 */
 
-namespace Imath
-{
+IMATH_INTERNAL_NAMESPACE_HEADER_ENTER
 
 template<class T>
 boost::optional<Matrix33<T> > inverse( const Matrix33<T>& m)
@@ -28,7 +27,7 @@ boost::optional<Matrix33<T> > inverse( const Matrix33<T>& m)
 		Matrix33<T> inv_m( m.inverse( true));
 		result = inv_m;
 	}
-	catch( Iex::MathExc& e) {}
+	catch( std::exception& e) {}
 	
 	return result;
 }
@@ -43,7 +42,7 @@ boost::optional<Matrix44<T> > inverse( const Matrix44<T>& m)
 		Matrix44<T> inv_m( m.inverse( true));
 		result = inv_m;
 	}
-	catch( Iex::MathExc& e) {}
+	catch( std::exception& e) {}
 	
 	return result;
 }
@@ -95,6 +94,6 @@ boost::optional<Matrix33<T> > quadToQuadMatrix( const boost::array<Vec2<T> ,4>& 
 }
 */
 
-} // Imath
+IMATH_INTERNAL_NAMESPACE_HEADER_EXIT
 
 #endif

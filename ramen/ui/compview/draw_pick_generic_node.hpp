@@ -5,7 +5,7 @@
 #ifndef RAMEN_COMPVIEW_DRAW_PICK_GENERIC_HPP
 #define RAMEN_COMPVIEW_DRAW_PICK_GENERIC_HPP
 
-#include<OpenEXR/ImathBox.h>
+#include<Imath/ImathBox.h>
 
 #include<ramen/ui/compview/pick_result.hpp>
 

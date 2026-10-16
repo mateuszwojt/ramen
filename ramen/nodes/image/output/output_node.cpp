@@ -54,142 +54,142 @@ output_node_t::output_node_t( const output_node_t& other) : base_output_node_t( 
 
 void output_node_t::do_create_params()
 {
-    std::auto_ptr<file_param_t> out( new file_param_t( "Output"));
+    std::unique_ptr<file_param_t> out( new file_param_t( "Output"));
     out->set_id( "output");
     out->set_is_input( false);
-    add_param( out);
+    add_param( std::move( out));
 
-    std::auto_ptr<ocio_colorspace_param_t> cs( new ocio_colorspace_param_t( "Colorspace"));
+    std::unique_ptr<ocio_colorspace_param_t> cs( new ocio_colorspace_param_t( "Colorspace"));
     cs->set_id( "colorspace");
-    add_param( cs);
+    add_param( std::move( cs));
 
-	std::auto_ptr<float_param_t> f( new float_param_t( "Priority"));
+	std::unique_ptr<float_param_t> f( new float_param_t( "Priority"));
 	f->set_id( "priority");
 	f->set_static( true);
 	f->set_default_value( 100);
 	f->set_round_to_int( true);
 	f->set_include_in_hash( false);
 	f->set_secret( true);
-	add_param( f);
+	add_param( std::move( f));
 	
-    std::auto_ptr<combo_group_param_t> top( new combo_group_param_t( "Format"));
+    std::unique_ptr<combo_group_param_t> top( new combo_group_param_t( "Format"));
     top->set_id( "format");
 
     // exr
     {
-        std::auto_ptr<composite_param_t> group( new composite_param_t( "EXR"));
+        std::unique_ptr<composite_param_t> group( new composite_param_t( "EXR"));
         group->set_id( "exr");
 
-        std::auto_ptr<popup_param_t> p( new popup_param_t( "Channels"));
+        std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
         p->set_id( "exr_channels");
         p->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
-        group->add_param( p);
+        group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Type"));
         p->set_id( "exr_type");
         p->menu_items() = boost::assign::list_of( "Half")( "Float");
-        group->add_param( std::auto_ptr<param_t>( p));
+        group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Compress"));
         p->set_id( "exr_compress");
         p->menu_items() = boost::assign::list_of( "None")( "RLE")( "ZIPS")( "ZIP")( "PIZ")( "PXR24")( "B44")( "B44A");
         p->set_default_value( (int) 4);
-        group->add_param( p);
+        group->add_param( std::move( p));
 
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
    // jpg
     {
-        std::auto_ptr<composite_param_t> group( new composite_param_t( "Jpg"));
+        std::unique_ptr<composite_param_t> group( new composite_param_t( "Jpg"));
         group->set_id( "jpg");
 
-        std::auto_ptr<float_param_t> p( new float_param_t( "Quality"));
+        std::unique_ptr<float_param_t> p( new float_param_t( "Quality"));
         p->set_id( "jpg_quality");
         p->set_static( true);
         p->set_range( 10, 100);
         p->set_default_value( 90);
-        group->add_param( std::auto_ptr<param_t>( p));
+        group->add_param( std::move( p));
 
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
     // cin
     {
-        std::auto_ptr<composite_param_t> group( new composite_param_t( "Cineon"));
+        std::unique_ptr<composite_param_t> group( new composite_param_t( "Cineon"));
         group->set_id( "cineon");
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
     // dpx
     {
-        std::auto_ptr<composite_param_t> group( new composite_param_t( "Dpx"));
+        std::unique_ptr<composite_param_t> group( new composite_param_t( "Dpx"));
         group->set_id( "dpx");
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
     // hdr
     {
-        std::auto_ptr<composite_param_t> group( new composite_param_t( "HDR"));
+        std::unique_ptr<composite_param_t> group( new composite_param_t( "HDR"));
         group->set_id( "hdr");
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
     // tiff
     {
-        std::auto_ptr<composite_param_t> group( new composite_param_t( "Tiff"));
+        std::unique_ptr<composite_param_t> group( new composite_param_t( "Tiff"));
         group->set_id( "tiff");
 
-        std::auto_ptr<popup_param_t> p( new popup_param_t( "Channels"));
+        std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
         p->set_id( "tiff_channels");
         p->menu_items() = boost::assign::list_of( "RGBA")( "RGB");
-        group->add_param( p);
+        group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Type"));
         p->set_id( "tiff_type");
         p->menu_items() = boost::assign::list_of( "8 Bits")( "16 Bits")( "Float");
-        group->add_param( std::auto_ptr<param_t>( p));
+        group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Compress"));
         p->set_id( "tiff_compress");
         p->menu_items() = boost::assign::list_of( "None")( "LZW")( "ZIP");
-        group->add_param( p);
+        group->add_param( std::move( p));
 
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
     // tga
     {
-        std::auto_ptr<composite_param_t> group( new composite_param_t( "Tga"));
+        std::unique_ptr<composite_param_t> group( new composite_param_t( "Tga"));
         group->set_id( "tga");
 
-        std::auto_ptr<popup_param_t> p( new popup_param_t( "Channels"));
+        std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
         p->set_id( "tga_channels");
         p->menu_items() = boost::assign::list_of( "RGBA")( "RGB");
-        group->add_param( p);
+        group->add_param( std::move( p));
 
         p.reset( new popup_param_t( "Compress"));
         p->set_id( "tga_compress");
         p->menu_items() = boost::assign::list_of( "None")( "RLE");
-        group->add_param( p);
+        group->add_param( std::move( p));
 
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
     // png
     {
-        std::auto_ptr<composite_param_t> group( new composite_param_t( "Png"));
+        std::unique_ptr<composite_param_t> group( new composite_param_t( "Png"));
         group->set_id( "png");
 
-        std::auto_ptr<popup_param_t> p( new popup_param_t( "Channels"));
+        std::unique_ptr<popup_param_t> p( new popup_param_t( "Channels"));
         p->set_id( "png_channels");
         p->menu_items() = boost::assign::list_of( "RGBA")( "RGB")( "Alpha");
-        group->add_param( p);
+        group->add_param( std::move( p));
 
-        top->add_param( group);
+        top->add_param( std::move( group));
     }
 
-    add_param( top);
+    add_param( std::move( top));
 }
 
 void output_node_t::param_changed( param_t *p, param_t::change_reason reason)
@@ -260,7 +260,13 @@ void output_node_t::write( const render::context_t& context)
     std::string tag;
     core::dictionary_t params;
     params[ core::name_t( "format")] = core::variant_t( convert_box( format()));
-    params[ core::name_t( "bounds")] = core::variant_t( convert_box( input_defined()));
+
+    // the image only has valid pixels inside the area copied from the input.
+    Imath::Box2i bounds( ImathExt::intersect( input_defined(), defined()));
+
+    if( !bounds.isEmpty())
+        params[ core::name_t( "bounds")] = core::variant_t( convert_box( bounds));
+
     params[ core::name_t( "aspect")] = core::variant_t( aspect_ratio());
 
     switch( get_value<int>( param( "format")))
