@@ -38,7 +38,7 @@ void jpg_writer_t::do_write_image( const std::filesystem::path& p,
     struct jpeg_compress_struct cinfo;
     struct jpeg_error_mgr jerr;
 
-    std::shared_ptr<FILE> fp( fopen( filesystem::file_cstring( p), "wb"),
+    std::shared_ptr<FILE> fp( fopen( filesystem::file_string( p).c_str(), "wb"),
                                  FILE_deleter());
 
     if( !fp)

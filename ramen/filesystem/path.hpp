@@ -12,8 +12,11 @@ namespace ramen
 namespace filesystem
 {
 
+/// Returns the path as an UTF-8 string.
 std::string file_string( const std::filesystem::path& p);
-const char *file_cstring( const std::filesystem::path& p);
+
+/// Makes a path from an UTF-8 string.
+std::filesystem::path path_from_utf8( const std::string& s);
 
 std::string hash_string( const std::filesystem::path& p);
 

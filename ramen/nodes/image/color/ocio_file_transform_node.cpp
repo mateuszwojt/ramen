@@ -69,7 +69,7 @@ void ocio_file_transform_node_t::do_process( const image::const_image_view_t& sr
 	    OCIO::ConstConfigRcPtr config = app().ocio_manager().config();
 
         OCIO::FileTransformRcPtr transform = OCIO::FileTransform::Create();
-        transform->setSrc( filesystem::file_cstring( path));
+        transform->setSrc( filesystem::file_string( path).c_str());
         transform->setCCCId( cccid.c_str());
 
 		if( get_value<int>( param( "direction")) == 0)

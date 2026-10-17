@@ -85,10 +85,10 @@ exr_reader_t::exr_reader_t( const std::filesystem::path& p) : multichannel_reade
 {
     bool tiled;
 
-    if(!Imf::isOpenExrFile( filesystem::file_cstring( p), tiled))
+    if(!Imf::isOpenExrFile( filesystem::file_string( p).c_str(), tiled))
 		throw exception( "Can't open file");
 
-	Imf::InputFile ifile( filesystem::file_cstring( p));
+	Imf::InputFile ifile( filesystem::file_string( p).c_str());
 	header_ = ifile.header();
 
     Imath::Box2i display_window( header_.displayWindow());
@@ -240,7 +240,7 @@ void exr_reader_t::read_exr_image( const std::filesystem::path& p,
                                    const char *achannel,
                                    std::size_t subsample) const
 {
-    Imf::InputFile file( filesystem::file_cstring( p));
+    Imf::InputFile file( filesystem::file_string( p).c_str());
     Imath::Box2i data_window( file.header().dataWindow());
 
     std::size_t width  = data_window.max.x - data_window.min.x + 1;
@@ -310,7 +310,7 @@ void exr_reader_t::read_exr_luma_chroma_image( const std::filesystem::path& p,
     RAMEN_ASSERT( result_view.width() >= std::ceil( (float) (crop.size().x+1) / subsample));
     RAMEN_ASSERT( result_view.height() >= std::ceil( (float) (crop.size().y+1) / subsample));
 
-    Imf::RgbaInputFile file( filesystem::file_cstring( p));
+    Imf::RgbaInputFile file( filesystem::file_string( p).c_str());
     Imath::Box2i data_window( file.header().dataWindow());
 
     std::size_t width  = data_window.max.x - data_window.min.x + 1;

@@ -454,7 +454,7 @@ void main_window_t::open_document()
 
         if( !( fname.isEmpty()))
         {
-            std::filesystem::path p( fname.toStdString());
+            std::filesystem::path p( filesystem::path_from_utf8( fname.toStdString()));
             app().ui()->open_document( p);
         }
     }
@@ -469,7 +469,7 @@ void main_window_t::open_recent_document()
         if( action)
         {
             QString fname = action->data().toString();
-            std::filesystem::path p( fname.toStdString());
+            std::filesystem::path p( filesystem::path_from_utf8( fname.toStdString()));
             app().ui()->open_document( p);
         }
     }
@@ -493,7 +493,7 @@ void main_window_t::save_document_as()
 
     if( !(fname.isEmpty()))
     {
-        std::filesystem::path p( fname.toStdString());
+        std::filesystem::path p( filesystem::path_from_utf8( fname.toStdString()));
 
         if( p.extension() == std::string())
             p.replace_extension( document_extension());
@@ -528,7 +528,7 @@ void main_window_t::import_composition()
         try
         {
             /*
-            std::filesystem::path p( fname.toStdString());
+            std::filesystem::path p( filesystem::path_from_utf8( fname.toStdString()));
             std::unique_ptr<serialization::yaml_iarchive_t> in( ramen::import_composition( p));
             app().document().set_dirty( true);
             app().document().undo_stack().clear_all();
@@ -557,7 +557,7 @@ void main_window_t::export_selection()
 
     if( !(fname.isEmpty()))
     {
-        std::filesystem::path p( fname.toStdString());
+        std::filesystem::path p( filesystem::path_from_utf8( fname.toStdString()));
 
         if( p.extension() == std::string())
             p.replace_extension( document_extension());
@@ -969,7 +969,7 @@ void main_window_t::update()
 
 void main_window_t::update_recent_files_menu( const std::filesystem::path& p)
 {
-    QString fileName( filesystem::file_cstring( p));
+    QString fileName( filesystem::file_string( p).c_str());
 
     QSettings settings( "com.ramen.qt", "Ramen Recent Files");
     QStringList files = settings.value( "recent_file_list").toStringList();

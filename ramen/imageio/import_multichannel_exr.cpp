@@ -8,6 +8,7 @@
 #include<set>
 #include<map>
 
+#include<OpenEXR/ImfHeader.h>
 #include<OpenEXR/ImfInputFile.h>
 #include<OpenEXR/ImfTestFile.h>
 #include<OpenEXR/ImfChannelList.h>
@@ -82,13 +83,13 @@ void import_multichannel_exr( const std::filesystem::path& p, bool relative, boo
 {
     bool tiled;
 
-    if(!Imf::isOpenExrFile( filesystem::file_cstring( p), tiled))
+    if(!Imf::isOpenExrFile( filesystem::file_string( p).c_str(), tiled))
     {
         app().error( "Can't open EXR file");
         return;
     }
 
-    Imf::InputFile ifile( filesystem::file_cstring( p));
+    Imf::InputFile ifile( filesystem::file_string( p).c_str());
     const Imf::ChannelList& ch_list( ifile.header().channels());
 
     std::set<std::string> channel_set;

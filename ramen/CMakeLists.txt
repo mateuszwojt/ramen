@@ -22,14 +22,11 @@ list( REMOVE_ITEM RAMEN_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 ######################################################
 # ramen lib
 
-add_library( ramen SHARED   ${RAMEN_HEADERS}
+# a static library, the executables link all of it ( see below).
+add_library( ramen STATIC   ${RAMEN_HEADERS}
                             ${RAMEN_SOURCES}
                             ${PROJECT_SOURCE_DIR}/resources/resources.qrc
                             )
-
-set_target_properties( ramen PROPERTIES
-                             VERSION ${PROJECT_VERSION}
-                             SOVERSION ${PROJECT_VERSION_MAJOR})
 
 target_include_directories( ramen PUBLIC    ${PROJECT_SOURCE_DIR}
                                             ${PROJECT_SOURCE_DIR}/ramen
@@ -37,6 +34,7 @@ target_include_directories( ramen PUBLIC    ${PROJECT_SOURCE_DIR}
                                             )
 
 target_compile_definitions( ramen PUBLIC    QT_NO_KEYWORDS
+                                            RAMEN_STATIC_LIB
                                             )
 
 if( APPLE)
@@ -61,6 +59,7 @@ target_link_libraries( ramen PUBLIC Qt6::Core
 
                                     GLEW::GLEW
                                     OpenGL::GL
+                                    OpenGL::GLU
 
                                     Boost::headers
                                     TBB::tbb
@@ -72,7 +71,7 @@ target_link_libraries( ramen PUBLIC Qt6::Core
                                     )
 
 if( WIN32)
-    target_link_libraries( ramen PUBLIC Userenv)
+    target_link_libraries( ramen PUBLIC Shell32 Ole32)
 endif()
 
 if( SSE2NEON_INCLUDE_DIR)
@@ -80,15 +79,63 @@ if( SSE2NEON_INCLUDE_DIR)
 endif()
 
 ######################################################
+# ramen binary
+
+if( APPLE)
+    # Ramen.app/Contents/MacOS/Ramen, data files go in Ramen.app/Contents.
+    set( RAMEN_ICON ${PROJECT_SOURCE_DIR}/graphics/ramen.icns)
+    set_source_files_properties( ${RAMEN_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
+    add_executable( ramen.bin MACOSX_BUNDLE main.cpp ${RAMEN_ICON})
+
+    set_target_properties( ramen.bin PROPERTIES
+                                     OUTPUT_NAME Ramen
+                                     MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/cmake/Info.plist.in
+                                     MACOSX_BUNDLE_BUNDLE_NAME Ramen
+                                     MACOSX_BUNDLE_GUI_IDENTIFIER org.ramen.Ramen
+                                     MACOSX_BUNDLE_ICON_FILE ramen.icns
+                                     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
+                                     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+                                     INSTALL_RPATH "@executable_path/../Frameworks")
+
+    set( RAMEN_DATA_DIR $<TARGET_BUNDLE_CONTENT_DIR:ramen.bin>)
+else()
+    # bin/ramen, data files go next to bin.
+    add_executable( ramen.bin main.cpp)
+    set_target_properties( ramen.bin PROPERTIES OUTPUT_NAME ramen)
+
+    set( RAMEN_DATA_DIR ${PROJECT_BINARY_DIR})
+endif()
+
+# nodes, image formats and Qt resources register themselves from static
+# initializers that nothing else references, link the whole library.
+target_link_libraries( ramen.bin PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,ramen>")
+
+######################################################
 # data files
 
-add_custom_command( TARGET ramen POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/ocio ${PROJECT_BINARY_DIR}/ocio
+add_custom_command( TARGET ramen.bin POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/ocio ${RAMEN_DATA_DIR}/ocio
                     VERBATIM)
 
 ######################################################
-# ramen binary
+# install
 
-add_executable( ramen.bin main.cpp)
-target_link_libraries( ramen.bin PRIVATE ramen)
-set_target_properties( ramen.bin PROPERTIES OUTPUT_NAME ramen)
+include( GNUInstallDirs)
+
+if( APPLE)
+    install( TARGETS ramen.bin BUNDLE DESTINATION .)
+    install( DIRECTORY ${PROJECT_SOURCE_DIR}/ocio DESTINATION Ramen.app/Contents)
+else()
+    install( TARGETS ramen.bin RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install( DIRECTORY ${PROJECT_SOURCE_DIR}/ocio DESTINATION .)
+endif()
+
+# copy Qt and its plugins next to the executable ( windeployqt, macdeployqt, ...).
+if( Qt6_VERSION VERSION_GREATER_EQUAL 6.5)
+    qt_generate_deploy_app_script( TARGET ramen.bin
+                                   OUTPUT_SCRIPT RAMEN_DEPLOY_SCRIPT
+                                   NO_UNSUPPORTED_PLATFORM_ERROR)
+
+    install( SCRIPT ${RAMEN_DEPLOY_SCRIPT})
+endif()

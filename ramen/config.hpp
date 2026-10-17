@@ -9,16 +9,12 @@
 #include<ramen/config/compiler.hpp>
 #include<ramen/config/visibility.hpp>
 
-#ifdef ramen_EXPORTS
+#if defined( RAMEN_STATIC_LIB)
+    #define RAMEN_API
+#elif defined( ramen_EXPORTS)
     #define RAMEN_API RAMEN_EXPORT
 #else
     #define RAMEN_API RAMEN_IMPORT
-#endif
-
-// windows specific
-#if defined( RAMEN_CONFIG_OS_WINDOWS)
-     // disable min/max macros on windows.
-    #define NOMINMAX
 #endif
 
 #endif

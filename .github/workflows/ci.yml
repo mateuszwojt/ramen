@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  unix:
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -14,7 +14,7 @@ jobs:
         os: [ubuntu-24.04, macos-15]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
@@ -23,21 +23,88 @@ jobs:
           sudo apt-get install -y ninja-build \
             qt6-base-dev libqt6opengl6-dev libgl1-mesa-dev libglew-dev \
             libboost-dev libtbb-dev libyaml-cpp-dev \
-            libimath-dev libopenexr-dev libopenimageio-dev libopencolorio-dev \
-            libagg-dev libjpeg-dev libpng-dev libtiff-dev zlib1g-dev \
+            libimath-dev libopenexr-dev libopenimageio-dev openimageio-tools libopencv-dev libopencolorio-dev \
+            libjpeg-dev libpng-dev libtiff-dev zlib1g-dev \
             libgtest-dev libgmock-dev
 
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
           brew install ninja qt boost tbb yaml-cpp imath openexr openimageio \
-            opencolorio libagg glew googletest sse2neon
+            opencolorio glew googletest sse2neon
 
       - name: Configure
         run: cmake --preset release
 
       - name: Build
-        run: cmake --build --preset release
+        run: cmake --build --preset release -- -k 0
 
       - name: Test
+        env:
+          QT_QPA_PLATFORM: offscreen
         run: ctest --preset release
+
+  windows:
+    name: windows-2022
+    runs-on: windows-2022
+
+    env:
+      VCPKG_COMMIT: 7d5f3c6241729acbbb7774f54bf687429aaf6492
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/../vcpkg-cache
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.*'
+          arch: win64_msvc2022_64
+          cache: true
+
+      - name: Restore vcpkg binary cache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: vcpkg-windows-${{ env.VCPKG_COMMIT }}-${{ hashFiles('vcpkg.json') }}-${{ github.run_id }}
+          restore-keys: vcpkg-windows-${{ env.VCPKG_COMMIT }}-
+
+      - name: Install vcpkg
+        shell: bash
+        run: |
+          # the Visual Studio environment has its own vcpkg, use a fresh one.
+          VCPKG_ROOT="$RUNNER_TEMP/ramen-vcpkg"
+          echo "VCPKG_ROOT=$VCPKG_ROOT" >> "$GITHUB_ENV"
+          mkdir -p "$VCPKG_DEFAULT_BINARY_CACHE"
+          rm -rf "$VCPKG_ROOT"
+          git init -q "$VCPKG_ROOT"
+          cd "$VCPKG_ROOT"
+          git remote add origin https://github.com/microsoft/vcpkg.git
+          git fetch -q --depth 1 origin "$VCPKG_COMMIT"
+          git checkout -q FETCH_HEAD
+          ./bootstrap-vcpkg.bat -disableMetrics
+
+      - name: Configure
+        run: cmake --preset vcpkg-release -DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON
+
+      # save the built packages even if the build or the tests fail.
+      - name: Save vcpkg binary cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: vcpkg-windows-${{ env.VCPKG_COMMIT }}-${{ hashFiles('vcpkg.json') }}-${{ github.run_id }}
+
+      - name: Build
+        run: cmake --build --preset vcpkg-release -- -k 0
+
+      - name: Test
+        shell: bash
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          export PATH="$QT_ROOT_DIR/bin:$PATH"
+          export QT_PLUGIN_PATH="$QT_ROOT_DIR/plugins"
+          ctest --preset vcpkg-release

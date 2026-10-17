@@ -74,7 +74,7 @@ application_t::application_t( int argc, char **argv) : system_(), preferences_()
     //TODO: re-eanble this...
     //std::filesystem::path bundle_path( system().app_bundle_path());
     //bundle_path /= "lib/Qt_plugins";
-    //qApp->setLibraryPaths( QStringList( QString( ramen::filesystem::file_cstring( bundle_path))));
+    //qApp->setLibraryPaths( QStringList( QString( ramen::filesystem::file_string( bundle_path).c_str())));
 
     // create the application user path, if needed
     std::filesystem::create_directories( system().application_user_path());
@@ -371,9 +371,9 @@ void application_t::print_app_info()
 {
     std::cout << RAMEN_NAME_FULL_VERSION_STR << ", " << __DATE__ << std::endl;
     std::cout << "System = " << system().system_name() << std::endl;
-    std::cout << "Executable = " << system().executable_path().c_str() << std::endl;
-    std::cout << "App dir = " << system().application_path().c_str() << std::endl;
-    std::cout << "App user dir = " << system().application_user_path().c_str() << std::endl;
+    std::cout << "Executable = " << filesystem::file_string( system().executable_path()) << std::endl;
+    std::cout << "App dir = " << filesystem::file_string( system().application_path()) << std::endl;
+    std::cout << "App user dir = " << filesystem::file_string( system().application_user_path()) << std::endl;
     std::cout << "Using " << max_threads_ << " threads" << std::endl;
     std::cout << "Ram Size = " << system().ram_size() / 1024 / 1024 << " Mb" << std::endl;
     std::cout << "Image Cache Memory = " << mem_manager_->image_allocator().max_size() / 1024 / 1024 << " Mb" << std::endl;

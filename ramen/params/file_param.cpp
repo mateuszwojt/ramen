@@ -92,7 +92,7 @@ void file_param_t::do_read( const serialization::yaml_node_t& node)
 {
     std::string val;
     node.get_value<std::string>( "value", val);
-    set_value( std::filesystem::path( val), silent_edit);
+    set_value( filesystem::path_from_utf8( val), silent_edit);
 }
 
 void file_param_t::do_write( serialization::yaml_oarchive_t& out) const
@@ -122,7 +122,7 @@ void file_param_t::update_input_text( const std::filesystem::path& p)
     if( input_)
     {
         input_->blockSignals( true);
-        input_->setText( filesystem::file_cstring( p));
+        input_->setText( filesystem::file_string( p).c_str());
         input_->blockSignals( false);
     }
 }
@@ -251,7 +251,7 @@ void file_param_t::select_pushed()
 
     if( !fname.isEmpty())
     {
-        std::filesystem::path p( fname.toStdString());
+        std::filesystem::path p( filesystem::path_from_utf8( fname.toStdString()));
 
         if( is_input_ && relative)
         {
@@ -269,8 +269,7 @@ void file_param_t::select_pushed()
 
 void file_param_t::text_changed()
 {
-    std::string fname( input_->text().toStdString());
-    std::filesystem::path p( fname);
+    std::filesystem::path p( filesystem::path_from_utf8( input_->text().toStdString()));
     param_set()->begin_edit();
     set_value( p);
     param_set()->end_edit();

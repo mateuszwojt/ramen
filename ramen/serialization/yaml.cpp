@@ -52,7 +52,7 @@ void operator>>( const YAML::Node& in, std::filesystem::path& p)
 {
 	std::string tmp;
 	in >> tmp;
-	p = std::filesystem::path( tmp);
+	p = filesystem::path_from_utf8( tmp);
 }
 
 YAML::Emitter& operator<<( YAML::Emitter& out, const std::filesystem::path& p)

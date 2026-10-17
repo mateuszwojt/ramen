@@ -145,7 +145,7 @@ void exr_writer_t::write_half( const std::filesystem::path& p,
     if( save_alpha)
         frameBuffer.insert( "A", Imf::Slice( Imf::HALF, ptr, xstride, ystride));
 
-    Imf::OutputFile out_file( filesystem::file_cstring( p), header);
+    Imf::OutputFile out_file( filesystem::file_string( p).c_str(), header);
     out_file.setFrameBuffer( frameBuffer);
     out_file.writePixels( img.height());
 }
@@ -167,7 +167,7 @@ void exr_writer_t::write_half_alpha( const std::filesystem::path& p,
 
     frameBuffer.insert( "A", Imf::Slice( Imf::HALF, ptr, xstride, ystride));
 
-    Imf::OutputFile out_file( filesystem::file_cstring( p), header);
+    Imf::OutputFile out_file( filesystem::file_string( p).c_str(), header);
     out_file.setFrameBuffer( frameBuffer);
     out_file.writePixels( img.height());
 }
@@ -198,7 +198,7 @@ void exr_writer_t::write_float( const std::filesystem::path& p,
     if( save_alpha)
         frameBuffer.insert( "A", Imf::Slice( Imf::FLOAT, ptr, xstride, ystride));
 
-    Imf::OutputFile out_file( filesystem::file_cstring( p), header);
+    Imf::OutputFile out_file( filesystem::file_string( p).c_str(), header);
     out_file.setFrameBuffer( frameBuffer);
     out_file.writePixels( view.height());
 }
@@ -219,7 +219,7 @@ void exr_writer_t::write_float_alpha( const std::filesystem::path& p,
 
     frameBuffer.insert( "A", Imf::Slice( Imf::FLOAT, ptr, xstride, ystride));
 
-    Imf::OutputFile out_file( filesystem::file_cstring( p), header);
+    Imf::OutputFile out_file( filesystem::file_string( p).c_str(), header);
     out_file.setFrameBuffer( frameBuffer);
     out_file.writePixels( view.height());
 }

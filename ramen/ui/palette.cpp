@@ -106,6 +106,7 @@ bool palette_t::find_color( const std::string& k) const
 {
 	// TODO: implement this.
 	RAMEN_ASSERT( 0);
+	return false;
 }
 
 void palette_t::set_color( const std::string& k, const Imath::Color3c& c)

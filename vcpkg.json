@@ -1,6 +1,7 @@
 {
   "name": "ramen",
   "version": "0.9.5",
+  "builtin-baseline": "7d5f3c6241729acbbb7774f54bf687429aaf6492",
   "dependencies": [
     "boost-gil",
     "glew",
@@ -12,17 +13,6 @@
     "openexr",
     "openimageio",
     {
-      "name": "qtbase",
-      "default-features": false,
-      "features": [
-        "gui",
-        "jpeg",
-        "opengl",
-        "png",
-        "widgets"
-      ]
-    },
-    {
       "name": "sse2neon",
       "platform": "arm64"
     },
@@ -30,5 +20,26 @@
     "tiff",
     "yaml-cpp",
     "zlib"
-  ]
+  ],
+  "default-features": [
+    "qt"
+  ],
+  "features": {
+    "qt": {
+      "description": "Build Qt with vcpkg. Disable it to use a Qt installed by other means.",
+      "dependencies": [
+        {
+          "name": "qtbase",
+          "default-features": false,
+          "features": [
+            "gui",
+            "jpeg",
+            "opengl",
+            "png",
+            "widgets"
+          ]
+        }
+      ]
+    }
+  }
 }

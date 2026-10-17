@@ -8,20 +8,18 @@
 
 #include<Imath/half.h>
 
-#include<boost/type_traits/is_class.hpp>
-
 #include<boost/gil/channel.hpp>
 #include<boost/gil/channel_algorithm.hpp>
 #include<boost/gil/typedefs.hpp>
 
 namespace boost
 {
-
-// I can't remember why I did this. Is it really needed?
-template<> struct is_class<half> : public false_type{};
-
 namespace gil
 {
+
+// half is a class, but GIL has to treat it like a built-in numeric channel.
+template<> struct channel_traits<half> : detail::channel_traits_impl<half, false> {};
+template<> struct channel_traits<const half> : detail::channel_traits_impl<const half, false> {};
 
 struct half_zero { static half apply() { return half( 0.0f);}};
 struct half_one  { static half apply() { return half( 1.0f);}};

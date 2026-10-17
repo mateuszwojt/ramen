@@ -128,7 +128,7 @@ OCIO::CDLTransformRcPtr cdl_node_t::cdl_transform() const
 
 void cdl_node_t::read_from_file( const std::filesystem::path& p)
 {
-	OCIO::CDLTransformRcPtr transform = OCIO::CDLTransform::CreateFromFile( filesystem::file_cstring( p), "");
+	OCIO::CDLTransformRcPtr transform = OCIO::CDLTransform::CreateFromFile( filesystem::file_string( p).c_str(), "");
 
 	double rgb[3];
 

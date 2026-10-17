@@ -3,13 +3,13 @@
 	-------------
 
 	Requirements: CMake 3.24+, Ninja, a C++20 compiler and Qt 6, Boost.GIL ( header only), oneTBB,
-	yaml-cpp 0.8+, Imath 3, OpenEXR 3, OpenImageIO, OpenColorIO 2, AGG, GLEW,
+	yaml-cpp 0.8+, Imath 3, OpenEXR 3, OpenImageIO, OpenColorIO 2, GLEW,
 	libjpeg, libpng, libtiff, zlib and GoogleTest. On arm64, also sse2neon.
 
 	macOS ( Homebrew):
 
 		brew install cmake ninja qt boost tbb yaml-cpp imath openexr openimageio \
-			opencolorio libagg glew googletest sse2neon
+			opencolorio glew googletest sse2neon
 
 	Build and test:
 
@@ -20,4 +20,7 @@
 	The executable is build/release/bin/ramen.
 
 	The vcpkg-debug and vcpkg-release presets use the vcpkg.json manifest
-	( set VCPKG_ROOT). AGG is not in vcpkg and has to be installed separately.
+	( set VCPKG_ROOT). Add -DVCPKG_MANIFEST_NO_DEFAULT_FEATURES=ON to use an
+	existing Qt instead of building it with vcpkg.
+
+	AGG 2.4 is included in thirdparty/agg.

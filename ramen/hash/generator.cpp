@@ -34,7 +34,7 @@ const generator_t::digest_type& generator_t::digest() const
         MurmurHash3_x64_128( reinterpret_cast<void*>( const_cast<char*>( ss_.str().c_str())),
                              ss_.str().size(),
                              0, // seed
-                             reinterpret_cast<void*>( const_cast<digest_type::iterator>( digest().begin())));
+                             reinterpret_cast<void*>( const_cast<std::uint64_t*>( digest().data())));
     }
 
     return digest_.value();

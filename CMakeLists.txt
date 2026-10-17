@@ -11,7 +11,6 @@ project( ramen VERSION 0.9.5 LANGUAGES C CXX)
 ######################################################
 # cmake stuff
 
-list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 
 if( PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message( FATAL_ERROR "CMake generation for Ramen is not allowed within the source directory!")
@@ -77,14 +76,32 @@ find_package( TIFF REQUIRED)
 find_package( ZLIB REQUIRED)
 find_package( OpenImageIO CONFIG REQUIRED)
 
-find_package( OpenColorIO CONFIG REQUIRED)
+find_package( OpenColorIO CONFIG)
 
-find_package( Agg REQUIRED)
+if( NOT OpenColorIO_FOUND)
+    # some distributions only ship a pkg-config file.
+    find_package( PkgConfig REQUIRED)
+    pkg_check_modules( OpenColorIO REQUIRED IMPORTED_TARGET OpenColorIO)
+    add_library( OpenColorIO::OpenColorIO ALIAS PkgConfig::OpenColorIO)
+endif()
+
 
 # the SSE2 image processing code runs on top of NEON on arm.
 if( CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64|ARM64)$")
     find_path( SSE2NEON_INCLUDE_DIR NAMES sse2neon.h PATH_SUFFIXES sse2neon REQUIRED)
 endif()
+
+if( MSVC)
+    add_compile_options( /permissive- /Zc:__cplusplus /utf-8 /bigobj /MP)
+
+    # windows.h min / max macros, M_PI and friends.
+    add_compile_definitions( NOMINMAX _USE_MATH_DEFINES _CRT_SECURE_NO_WARNINGS)
+endif()
+
+######################################################
+# third party
+
+add_subdirectory( thirdparty/agg)
 
 ######################################################
 # ramen

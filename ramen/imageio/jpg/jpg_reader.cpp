@@ -37,7 +37,7 @@ jpg_reader_t::jpg_reader_t( const std::filesystem::path& p) : reader_t( p)
 {
     int width, height;
 
-    if( !get_jpeg_size( filesystem::file_cstring( p), width, height ))
+    if( !get_jpeg_size( filesystem::file_string( p).c_str(), width, height ))
 		throw unknown_image_format();
 
     info_[core::name_t( "format")] = core::variant_t( math::box2i_t( math::point2i_t( 0, 0),
@@ -54,7 +54,7 @@ void jpg_reader_t::do_read_image( const image::image_view_t& view,
     cinfo.err = jpeg_std_error( &jerr);
     jpeg_create_decompress( &cinfo);
 
-    std::shared_ptr<FILE> fp( fopen( filesystem::file_cstring( path_), "rb"),
+    std::shared_ptr<FILE> fp( fopen( filesystem::file_string( path_).c_str(), "rb"),
                                 FILE_deleter());
 
     if ( !fp)

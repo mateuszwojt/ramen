@@ -124,7 +124,7 @@ bool splash_screen_t::do_render_splash( const std::filesystem::path& p)
 		if( !std::filesystem::exists( p))
 			return false;
 		
-		std::ifstream istream( filesystem::file_cstring( p));
+		std::ifstream istream( filesystem::file_string( p).c_str());
 		if( !istream)
 			return false;
 		

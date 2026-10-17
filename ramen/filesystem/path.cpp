@@ -17,10 +17,16 @@ namespace ramen
 namespace filesystem
 {
 
-std::string file_string( const std::filesystem::path& p) { return p.string();}
+std::string file_string( const std::filesystem::path& p)
+{
+    std::u8string s( p.u8string());
+    return std::string( s.begin(), s.end());
+}
 
-// TODO: paths are wide strings on Windows, this needs a conversion there.
-const char *file_cstring( const std::filesystem::path& p) { return p.c_str();}
+std::filesystem::path path_from_utf8( const std::string& s)
+{
+    return std::filesystem::path( std::u8string( s.begin(), s.end()));
+}
 
 std::string hash_string( const std::filesystem::path& p)
 {
@@ -41,10 +47,10 @@ std::filesystem::path make_absolute_path( const std::filesystem::path& p,
     RAMEN_ASSERT( p.is_relative());
     RAMEN_ASSERT( from.is_absolute());
 
-    QDir dir( QString( file_cstring( from)));
-    QString fname( QString( file_cstring( p)));
+    QDir dir( QString::fromStdString( file_string( from)));
+    QString fname( QString::fromStdString( file_string( p)));
     QString abs_path( QDir::cleanPath( dir.absoluteFilePath( fname)));
-    return std::filesystem::path( abs_path.toStdString());
+    return path_from_utf8( abs_path.toStdString());
 }
 
 std::filesystem::path make_relative_path( const std::filesystem::path& p,
@@ -53,10 +59,10 @@ std::filesystem::path make_relative_path( const std::filesystem::path& p,
     RAMEN_ASSERT( p.is_absolute());
     RAMEN_ASSERT( from.is_absolute());
 
-    QDir dir( QString( file_cstring( from)));
-    QString fname( QString( file_cstring( p)));
+    QDir dir( QString::fromStdString( file_string( from)));
+    QString fname( QString::fromStdString( file_string( p)));
     QString rel_path( dir.relativeFilePath( fname));
-    return std::filesystem::path( rel_path.toStdString());
+    return path_from_utf8( rel_path.toStdString());
 }
 
 std::filesystem::path convert_relative_path( const std::filesystem::path& p,

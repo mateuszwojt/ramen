@@ -114,7 +114,7 @@ void user_interface_t::save_window_state()
 {
     QByteArray window_state = window_->saveState();
     std::filesystem::path p = app().system().application_user_path() / "wstate.ui";
-    QFile file( filesystem::file_cstring( p));
+    QFile file( filesystem::file_string( p).c_str());
 
     if( file.open( QIODevice::WriteOnly))
         file.write( window_state);
@@ -124,7 +124,7 @@ void user_interface_t::restore_window_state()
 {
     std::filesystem::path p = app().system().application_user_path() / "wstate.ui";
 	{
-	    QFile file(filesystem::file_cstring( p));
+	    QFile file(filesystem::file_string( p).c_str());
 
 	    if( file.open( QIODevice::ReadOnly))
 	    {
@@ -468,7 +468,7 @@ bool user_interface_t::image_sequence_file_selector( const std::string& title, c
     if( dialog.exec())
     {
         filenames = dialog.selectedFiles();
-        p = filenames[0].toStdString();
+        p = filesystem::path_from_utf8( filenames[0].toStdString());
 
         relative = relative_check->isChecked();
         was_relative = relative;

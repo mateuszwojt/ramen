@@ -15,6 +15,7 @@
 #include<QMainWindow>
 #include<QDockWidget>
 
+#include<filesystem>
 #include<fstream>
 
 #include<ramen/core/memory.hpp>
