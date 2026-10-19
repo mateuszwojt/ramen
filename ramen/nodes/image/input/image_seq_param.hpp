@@ -9,21 +9,20 @@
 
 #include<ramen/core/signal.hpp>
 
-#include<QPointer>
-
 #include<ramen/filesystem/path.hpp>
-
-#include<ramen/ui/widgets/line_edit_fwd.hpp>
-
-class QPushButton;
 
 namespace ramen
 {
 
+namespace ui
+{
+class image_seq_param_widget_t;
+} // ui
+
 class image_seq_param_t : public static_param_t
 {
-    Q_OBJECT
-    
+    friend class ui::image_seq_param_widget_t;
+
 public:
 
     image_seq_param_t( const std::string& name, int proxy_level);
@@ -36,20 +35,12 @@ protected:
 
     image_seq_param_t( const image_seq_param_t& other);
     void operator=( const image_seq_param_t& other);
-
-private Q_SLOTS:
-
-    void select_pushed();
 	
 private:
 
     virtual param_t *do_clone() const { return new image_seq_param_t( *this);}
 	
-    virtual QWidget *do_create_widgets();
-    virtual void do_enable_widgets( bool e);
 
-    QPointer<ui::line_edit_t> input_;
-    QPointer<QPushButton> button_;
 	int proxy_level_;
 	std::string input_text_;
 };

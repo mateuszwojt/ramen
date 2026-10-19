@@ -10,18 +10,17 @@
 #include<string>
 #include<vector>
 
-
-
-#include<QPointer>
-
-class QComboBox;
-
 namespace ramen
 {
 
+namespace ui
+{
+class popup_param_widget_t;
+} // ui
+
 class RAMEN_API popup_param_t : public static_param_t
 {
-    Q_OBJECT
+    friend class ui::popup_param_widget_t;
 
 public:
 
@@ -56,15 +55,6 @@ private:
 
     std::vector<std::string> menu_items_;
 
-    virtual QWidget *do_create_widgets();
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
-    QPointer<QComboBox> menu_;
-
-private Q_SLOTS:
-
-    void item_picked( int index);
 };
 
 } // namespace

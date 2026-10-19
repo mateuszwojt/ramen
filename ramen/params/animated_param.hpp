@@ -21,7 +21,6 @@ namespace ramen
 
 class RAMEN_API animated_param_t : public param_t
 {
-    Q_OBJECT
 
 public:
 

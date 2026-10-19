@@ -10,16 +10,17 @@
 #include<string>
 #include<vector>
 
-#include<QPointer>
-
-#include<ramen/ui/widgets/ocio_colorspace_combo_fwd.hpp>
-
 namespace ramen
 {
 
+namespace ui
+{
+class ocio_colorspace_param_widget_t;
+} // ui
+
 class RAMEN_API ocio_colorspace_param_t : public static_param_t
 {
-    Q_OBJECT
+    friend class ui::ocio_colorspace_param_widget_t;
 
 public:
 
@@ -42,17 +43,7 @@ private:
     virtual void do_read( const serialization::yaml_node_t& node);
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 
-    virtual QWidget *do_create_widgets();
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
     std::string default_colorspace() const;
-
-    QPointer<ui::ocio_colorspace_combo_t> menu_;
-
-private Q_SLOTS:
-
-    void colorspace_picked( const std::string& cs);
 };
 
 } // namespace

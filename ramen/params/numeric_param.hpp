@@ -20,7 +20,6 @@ namespace ramen
 
 class RAMEN_API numeric_param_t : public animated_param_t
 {
-    Q_OBJECT
 
 public:
 

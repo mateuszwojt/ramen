@@ -8,39 +8,13 @@
 
 #include<algorithm>
 
-#include<QTabWidget>
-
-#include<ramen/ui/inspector/inspector.hpp>
-
 namespace ramen
 {
 
 tab_group_param_t::tab_group_param_t() : composite_param_t() {}
 tab_group_param_t::tab_group_param_t( const std::string& name) : composite_param_t( name) {}
 
-tab_group_param_t::tab_group_param_t( const tab_group_param_t& other) : composite_param_t( other), tab_(0) {}
-
-QWidget *tab_group_param_t::do_create_widgets()
-{
-    tab_ = new QTabWidget();
-
-    for( param_t& p : params())
-    {
-		QWidget *w = p.create_widgets();
-
-		if( w)
-		    tab_->addTab( w, p.name().c_str());
-    }
-
-    tab_->setCurrentIndex( 0);
-    return tab_;
-}
-
-void tab_group_param_t::do_enable_widgets( bool e)
-{
-    if( tab_)
-		tab_->setEnabled( e);
-}
+tab_group_param_t::tab_group_param_t( const tab_group_param_t& other) : composite_param_t( other) {}
 
 void tab_group_param_t::do_create_tracks( anim::track_t *parent)
 {

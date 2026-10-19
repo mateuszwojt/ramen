@@ -7,16 +7,17 @@
 
 #include<ramen/params/numeric_param.hpp>
 
-#include<QPointer>
-
-#include<ramen/ui/widgets/param_spinbox_fwd.hpp>
-
 namespace ramen
 {
 
+namespace ui
+{
+class float_param_widget_t;
+} // ui
+
 class RAMEN_API float_param_t : public numeric_param_t
 {
-    Q_OBJECT
+    friend class ui::float_param_widget_t;
 
 public:
 
@@ -53,19 +54,6 @@ private:
 
     virtual void do_format_changed( const Imath::Box2i& new_domain, float aspect, const Imath::V2f& proxy_scale);
 
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
-    virtual QWidget *do_create_widgets();
-
-    QPointer<ui::param_spinbox_t> input_;
-
-private Q_SLOTS:
-
-    void value_changed( double value);
-    void spinbox_pressed();
-    void spinbox_dragged( double value);
-    void spinbox_released();
 };
 
 } // namespace

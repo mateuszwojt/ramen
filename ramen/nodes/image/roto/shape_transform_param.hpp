@@ -14,7 +14,6 @@ namespace ramen
 
 class shape_transform_param_t : public composite_param_t
 {
-    Q_OBJECT
 
 public:
 

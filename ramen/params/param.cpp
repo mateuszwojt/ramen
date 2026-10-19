@@ -16,17 +16,17 @@
 namespace ramen
 {
 
-param_t::param_t() : QObject(), param_set_(0)
+param_t::param_t() : param_set_(0)
 {
     flags_ = persist_bit | can_undo_bit | enabled_bit | include_in_hash_bit;
 }
 
-param_t::param_t( const std::string& name) : QObject(), param_set_(0), name_(name)
+param_t::param_t( const std::string& name) : param_set_(0), name_(name)
 {
     flags_ = persist_bit | can_undo_bit | enabled_bit | include_in_hash_bit;
 }
 
-param_t::param_t( const param_t& other) : QObject(), param_set_(0), id_( other.id_), name_( other.name_),
+param_t::param_t( const param_t& other) : param_set_(0), id_( other.id_), name_( other.name_),
                                             value_( other.value_), flags_( other.flags_)
 {
 }
@@ -244,20 +244,21 @@ void param_t::do_write( serialization::yaml_oarchive_t& out) const
 }
 
 // widgets
-QWidget *param_t::create_widgets()
+void param_t::update_widgets()
 {
-    if( !secret())
-        return do_create_widgets();
-
-    return 0;
+    do_update_widgets();
+    update_widgets_signal();
 }
-QWidget *param_t::do_create_widgets() { return 0;}
 
-void param_t::update_widgets()      { do_update_widgets();}
-void param_t::do_update_widgets()   {}
+void param_t::do_update_widgets() {}
 
-void param_t::enable_widgets( bool e)       { do_enable_widgets( e);}
-void param_t::do_enable_widgets( bool e)    {}
+void param_t::enable_widgets( bool e)
+{
+    do_enable_widgets( e);
+    enable_widgets_signal( e);
+}
+
+void param_t::do_enable_widgets( bool e) {}
 
 param_t *new_clone( const param_t& other) { return other.clone();}
 

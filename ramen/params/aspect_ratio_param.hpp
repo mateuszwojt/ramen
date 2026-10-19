@@ -10,18 +10,17 @@
 #include<vector>
 #include<utility>
 
-#include<QPointer>
-
-#include<ramen/ui/widgets/double_spinbox_fwd.hpp>
-
-class QComboBox;
-
 namespace ramen
 {
 
+namespace ui
+{
+class aspect_ratio_param_widget_t;
+} // ui
+
 class RAMEN_API aspect_ratio_param_t : public static_param_t
 {
-    Q_OBJECT
+    friend class ui::aspect_ratio_param_widget_t;
 
 public:
 
@@ -48,9 +47,6 @@ private:
     virtual void do_read( const serialization::yaml_node_t& node);
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
     typedef std::vector<std::pair<std::string, float> > presets_type;
 
     static const presets_type& presets();
@@ -58,15 +54,6 @@ private:
 
     static presets_type presets_;
 
-    virtual QWidget *do_create_widgets();
-
-    QPointer<QComboBox> menu_;
-    QPointer<ui::double_spinbox_t> input_;
-
-private Q_SLOTS:
-
-    void item_picked( int index);
-    void value_changed( double value);
 };
 
 } // namespace

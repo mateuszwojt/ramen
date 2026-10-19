@@ -18,9 +18,14 @@
 namespace ramen
 {
 
+namespace ui
+{
+class composite_param_widget_t;
+} // ui
+
 class RAMEN_API composite_param_t : public param_t
 {
-    Q_OBJECT
+    friend class ui::composite_param_widget_t;
 
 public:
 
@@ -42,8 +47,6 @@ protected:
 
     composite_param_t( const composite_param_t& other);
     void operator=( const composite_param_t& other);
-
-    void create_widgets_inside_widget( QWidget *parent);
 
 private:
 
@@ -79,8 +82,6 @@ private:
     // serialization
     virtual void do_read( serialization::yaml_iarchive_t& node);
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
-
-    virtual QWidget *do_create_widgets();
 
     container::ptr_vector<param_t> params_;
     bool create_track_;

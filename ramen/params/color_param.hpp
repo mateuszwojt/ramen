@@ -9,20 +9,17 @@
 
 #include<Imath/ImathColor.h>
 
-#include<QPointer>
-#include<QToolButton>
-
-#include<ramen/ui/widgets/color.hpp>
-#include<ramen/ui/widgets/param_spinbox_fwd.hpp>
-#include<ramen/ui/widgets/color_button_fwd.hpp>
-#include<ramen/ui/widgets/eyedropper_button_fwd.hpp>
-
 namespace ramen
 {
 
+namespace ui
+{
+class color_param_widget_t;
+} // ui
+
 class RAMEN_API color_param_t : public animated_param_t
 {
-    Q_OBJECT
+    friend class ui::color_param_widget_t;
 
 public:
 
@@ -56,27 +53,8 @@ private:
     virtual void do_read( const serialization::yaml_node_t& node);
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
     bool is_rgba_;
 
-    virtual QWidget *do_create_widgets();
-
-    void set_component_value_from_slot();
-
-   QPointer<ui::param_spinbox_t> input0_, input1_, input2_, input3_;
-   QPointer<ui::color_button_t> button_;
-   QPointer<ui::eyedropper_button_t> eyedropper_;
-
-private Q_SLOTS:
-
-    void value_changed( double value);
-    void spinbox_pressed();
-    void spinbox_dragged( double value);
-    void spinbox_released();
-    void eyedropper_color_picked( const ramen::ui::color_t& c);
-    void color_button_pressed();
 };
 
 } // namespace

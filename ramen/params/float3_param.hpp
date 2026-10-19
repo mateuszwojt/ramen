@@ -9,16 +9,17 @@
 
 #include<Imath/ImathVec.h>
 
-#include<QPointer>
-
-#include<ramen/ui/widgets/param_spinbox_fwd.hpp>
-
 namespace ramen
 {
 
+namespace ui
+{
+class float3_param_widget_t;
+} // ui
+
 class RAMEN_API float3_param_t : public proportional_param_t
 {
-    Q_OBJECT
+    friend class ui::float3_param_widget_t;
 
 public:
 
@@ -45,26 +46,12 @@ private:
 
     virtual param_t *do_clone() const { return new float3_param_t( *this);}
 
-    void calc_proportional_factors();
-    void set_component_value_from_slot();
 
     virtual void do_add_to_hash( hash::generator_t& hash_gen) const;
 
     virtual void do_read( const serialization::yaml_node_t& node);
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 
-    virtual QWidget *do_create_widgets();
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
-    QPointer<ui::param_spinbox_t> input0_, input1_, input2_;
-
-private Q_SLOTS:
-
-    void value_changed( double value);
-    void spinbox_pressed();
-    void spinbox_dragged( double value);
-    void spinbox_released();
 };
 
 } // namespace

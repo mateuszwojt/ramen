@@ -6,13 +6,6 @@
 
 #include<algorithm>
 
-
-
-#include<QStackedWidget>
-#include<QComboBox>
-#include<QVBoxLayout>
-#include<QLabel>
-
 #include<ramen/app/application.hpp>
 
 #include<ramen/nodes/node.hpp>
@@ -20,9 +13,6 @@
 #include<ramen/params/static_param_command.hpp>
 
 #include<ramen/serialization/yaml_oarchive.hpp>
-
-#include<ramen/ui/user_interface.hpp>
-#include<ramen/ui/inspector/inspector.hpp>
 
 namespace ramen
 {
@@ -34,8 +24,6 @@ combo_group_param_t::combo_group_param_t( const std::string& name) : composite_p
 
 combo_group_param_t::combo_group_param_t( const combo_group_param_t& other) : composite_param_t( other)
 {
-    menu_ = 0;
-    stack_ = 0;
 }
 
 void combo_group_param_t::set_default_value( int x)
@@ -89,94 +77,6 @@ void combo_group_param_t::do_write( serialization::yaml_oarchive_t& out) const
     out << YAML::Key << "value" << YAML::Value;
     out << params()[v].name();
     out.check_errors();
-}
-
-void combo_group_param_t::do_update_widgets()
-{
-    if( menu_)
-    {
-        menu_->blockSignals( true);
-        menu_->setCurrentIndex( get_value<int>( *this));
-        stack_->setCurrentIndex( get_value<int>( *this));
-        menu_->blockSignals( false);
-        std::ranges::for_each( params(), std::bind( &param_t::update_widgets, std::placeholders::_1));
-    }
-}
-
-void combo_group_param_t::do_enable_widgets( bool e)
-{
-    if( menu_)
-    {
-        menu_->setEnabled( e);
-        stack_->setEnabled( e);
-    }
-}
-
-QWidget *combo_group_param_t::do_create_widgets()
-{
-    QWidget *top = new QWidget();
-
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->setContentsMargins( 0, 0, 0, 0);
-    layout->setSpacing( 5);
-    layout->setSizeConstraint( QLayout::SetFixedSize);
-
-    QWidget *selector = new QWidget();
-    QLabel *label = new QLabel( selector);
-
-    menu_ = new QComboBox( selector);
-    menu_->setFocusPolicy( Qt::NoFocus);
-
-    stack_ = new QStackedWidget();
-
-    for( param_t& p : params())
-    {
-        QWidget *w = p.create_widgets();
-
-        if( w)
-        {
-            stack_->addWidget( w);
-            menu_->addItem( p.name().c_str());
-        }
-    }
-
-    QSize s = menu_->sizeHint();
-
-    label->move( 0, 0);
-    label->resize( app().ui()->inspector().left_margin() - 5, s.height());
-    label->setAlignment( Qt::AlignRight | Qt::AlignVCenter);
-    label->setText( name().c_str());
-    label->setToolTip( id().c_str());
-
-    menu_->move( app().ui()->inspector().left_margin(), 0);
-    menu_->resize( s.width(), s.height());
-    menu_->setEnabled( enabled());
-
-    menu_->setCurrentIndex( get_value<int>( *this));
-    stack_->setCurrentIndex( get_value<int>( *this));
-    stack_->setEnabled( enabled());
-    connect( menu_, SIGNAL( currentIndexChanged( int)), this, SLOT( item_picked( int)));
-
-    selector->setMinimumSize( app().ui()->inspector().width(), s.height());
-    selector->setMaximumSize( app().ui()->inspector().width(), s.height());
-    selector->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    layout->addWidget( selector);
-    layout->addWidget( stack_);
-
-    top->setLayout( layout);
-    return top;
-}
-
-void combo_group_param_t::item_picked( int index)
-{
-    param_set()->begin_edit();
-    set_value( index);
-
-    if( stack_)
-        stack_->setCurrentIndex( index);
-
-    param_set()->end_edit();
 }
 
 } // namespace

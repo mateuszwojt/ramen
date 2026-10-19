@@ -10,7 +10,6 @@ namespace ramen
 
 class RAMEN_API static_param_t : public param_t
 {
-    Q_OBJECT
 
 public:
 

@@ -4,6 +4,8 @@
 
 #include<ramen/ui/user_interface.hpp>
 
+#include<ramen/ui/params/param_widget.hpp>
+
 #include<utility>
 #include<iostream>
 
@@ -92,6 +94,7 @@ user_interface_t::~user_interface_t()
 void user_interface_t::init()
 {
     init_ui_style();
+    register_builtin_param_widgets();
 
     create_new_document();
 
