@@ -9,19 +9,15 @@
 #include<functional>
 
 #include<ramen/app/application.hpp>
+#include<ramen/app/ui_notifications.hpp>
 #include<ramen/app/composition.hpp>
 
 #include<ramen/params/parameterised.hpp>
 
-#include<ramen/ui/user_interface.hpp>
-#include<ramen/ui/anim/anim_editor.hpp>
-#include<ramen/ui/viewer/viewer.hpp>
 
 #include<ramen/serialization/yaml_node.hpp>
 #include<ramen/serialization/yaml_oarchive.hpp>
 
-#include<ramen/ui/inspector/inspector.hpp>
-#include<ramen/ui/widgets/param_spinbox.hpp>
 
 namespace ramen
 {
@@ -111,8 +107,7 @@ void float_param_t::do_format_changed( const Imath::Box2i& new_domain, float asp
         get_scale_and_offset( scale, offset);
         curve().set_scale( scale);
         curve().set_offset( offset);
-        if( app().ui())
-            app().ui()->update_anim_editors();
+        ui_notifications().update_anim_editors();
     }
 
     update_widgets();

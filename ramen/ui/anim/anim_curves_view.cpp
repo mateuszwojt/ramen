@@ -272,7 +272,7 @@ void anim_curves_view_t::paintEvent( QPaintEvent *event)
 
     // draw bg
     QBrush brush;
-    brush.setColor( palette_t::instance().qcolor( "background"));
+    brush.setColor( ui::palette_qcolor( "background"));
     brush.setStyle( Qt::SolidPattern);
     painter.setBrush( brush);
     painter.drawRect( 0, 0, width(), height());
@@ -299,7 +299,7 @@ void anim_curves_view_t::paintEvent( QPaintEvent *event)
     // draw in screen space
     painter.setWorldTransform( QTransform());
 
-	pen.setColor( palette_t::instance().qcolor( "text"));
+	pen.setColor( ui::palette_qcolor( "text"));
     painter.setPen( pen);
 
     draw_keyframes_visitor v2( *this, show_tangents());
@@ -357,7 +357,7 @@ void anim_curves_view_t::draw_grid() const
     const int spacing = 30;
 
     QPen pen;
-    pen.setColor( palette_t::instance().qcolor( "grid"));
+    pen.setColor( ui::palette_qcolor( "grid"));
     pen.setWidth( 1);
     painter_->setPen( pen);
 

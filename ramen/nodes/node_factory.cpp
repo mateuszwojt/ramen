@@ -186,6 +186,20 @@ std::unique_ptr<node_t> node_factory_t::create_by_id_with_version( const std::st
     return n;
 }
 
+void node_factory_t::set_gui_creator( const std::string& id, node_t *(*create_gui)())
+{
+    for( node_metaclass_t& m : metaclasses_)
+    {
+        if( m.id == id)
+            m.create_gui = create_gui;
+    }
+
+    std::map<std::string, node_metaclass_t>::iterator it( newest_node_infos_.find( id));
+
+    if( it != newest_node_infos_.end())
+        it->second.create_gui = create_gui;
+}
+
 bool node_factory_t::is_latest_version( const std::string& id) const
 {
     const_iterator it( newest_node_infos_.find( id));

@@ -17,6 +17,7 @@
 #include<QCheckBox>
 
 #include<ramen/app/application.hpp>
+#include<ramen/app/ui_notifications.hpp>
 
 #include<ramen/assert.hpp>
 #include<ramen/algorithm/clamp.hpp>
@@ -43,8 +44,6 @@
 #include<ramen/imageio/factory.hpp>
 
 #include<ramen/ocio/manager.hpp>
-
-#include<ramen/ui/user_interface.hpp>
 
 #include<ramen/serialization/yaml_node.hpp>
 #include<ramen/serialization/yaml_oarchive.hpp>
@@ -624,22 +623,11 @@ void input_node_t::file_picked( const std::filesystem::path& p,
 
 	notify();
 	app().document().undo_stack().push_back( std::move( c));
-	app().ui()->update();
+	ui_notifications().update();
 }
 
 // factory
 node_t *create_image_input_node() { return new input_node_t();}
-
-node_t *create_gui_image_input_node()
-{
-    bool sequence, relative;
-    std::filesystem::path p, dir;
-
-    if( app().ui()->image_sequence_file_selector( p, sequence, relative))
-        return new input_node_t( p, sequence, app().document().composition().composition_dir());
-
-    return 0;
-}
 
 const node_metaclass_t *input_node_t::metaclass() const { return &image_input_node_metaclass();}
 
@@ -657,7 +645,6 @@ const node_metaclass_t& input_node_t::image_input_node_metaclass()
         info.submenu = "Input";
         info.menu_item = "Image...";
         info.create = &create_image_input_node;
-        info.create_gui = &create_gui_image_input_node;
         inited = true;
     }
 

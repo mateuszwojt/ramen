@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/color/color_correct_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<ramen/gil/extension/algorithm/tbb/tbb_transform2.hpp>
 #include<ramen/gil/extension/algorithm/tbb/tbb_transform3.hpp>
@@ -23,7 +24,7 @@ namespace image
 color_correct_node_t::color_correct_node_t() : pointop_node_t()
 {
     set_name( "correct");
-    add_input_plug( "mask", true, ui::palette_t::instance().color( "matte plug"), "Mask");
+    add_input_plug( "mask", true, palette_t::instance().color( "matte plug"), "Mask");
 }
 
 void color_correct_node_t::do_create_params()

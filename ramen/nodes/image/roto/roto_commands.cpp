@@ -4,9 +4,8 @@
 
 #include<ramen/nodes/image/roto/roto_commands.hpp>
 
-
-
 #include<ramen/app/application.hpp>
+#include<ramen/app/ui_notifications.hpp>
 
 #include<ramen/assert.hpp>
 
@@ -14,8 +13,6 @@
 #include<ramen/nodes/image/roto/shape.hpp>
 
 #include<ramen/app/document.hpp>
-#include<ramen/ui/user_interface.hpp>
-#include<ramen/ui/anim/anim_editor.hpp>
 
 namespace ramen
 {
@@ -35,7 +32,7 @@ void add_roto_command_t::undo()
 	node_.deselect_all();
 	node_.selection_changed();
 	storage_ = node_.release_shape( shape_);
-	app().ui()->anim_editor().recreate_tracks( &node_);
+	ui_notifications().recreate_anim_tracks( &node_);
 	node_.notify();
     undo::command_t::undo();
 }
@@ -45,7 +42,7 @@ void add_roto_command_t::redo()
 	node_.deselect_all();
 	storage_->select( true);
 	node_.add_shape( std::move( storage_));
-	app().ui()->anim_editor().recreate_tracks( &node_);
+	ui_notifications().recreate_anim_tracks( &node_);
 	node_.selection_changed();
 	node_.notify();
     undo::command_t::redo();
@@ -73,7 +70,7 @@ void delete_roto_command_t::undo()
 	
 	shape_->update_xforms();
 	
-	app().ui()->anim_editor().recreate_tracks( &node_);
+	ui_notifications().recreate_anim_tracks( &node_);
 	node_.deselect_all();
 	node_.notify();
     undo::command_t::undo();	
@@ -84,7 +81,7 @@ void delete_roto_command_t::redo()
 	node_.deselect_all();
 	node_.selection_changed();
 	storage_ = node_.release_shape( shape_);
-	app().ui()->anim_editor().recreate_tracks( &node_);
+	ui_notifications().recreate_anim_tracks( &node_);
 	node_.notify();
     undo::command_t::redo();	
 }

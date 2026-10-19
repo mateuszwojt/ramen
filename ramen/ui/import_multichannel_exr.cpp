@@ -2,7 +2,7 @@
 // Licensed under the terms of the CDDL License.
 // See CDDL_LICENSE.txt for a copy of the license.
 
-#include<ramen/imageio/import_multichannel_exr.hpp>
+#include<ramen/ui/import_multichannel_exr.hpp>
 
 #include<vector>
 #include<set>
@@ -30,7 +30,7 @@
 
 namespace ramen
 {
-namespace imageio
+namespace ui
 {
 
 void import_layer( node_t *node, std::vector<std::string>& channels, std::set<std::string>& channel_set)

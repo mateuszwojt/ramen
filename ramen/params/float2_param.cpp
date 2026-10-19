@@ -10,17 +10,13 @@
 
 
 #include<ramen/app/application.hpp>
+#include<ramen/app/ui_notifications.hpp>
 #include<ramen/app/document.hpp>
 
 #include<ramen/nodes/node.hpp>
 
 #include<ramen/algorithm/clamp.hpp>
 
-#include<ramen/ui/user_interface.hpp>
-#include<ramen/ui/anim/anim_editor.hpp>
-#include<ramen/ui/viewer/viewer.hpp>
-#include<ramen/ui/widgets/param_spinbox.hpp>
-#include<ramen/ui/inspector/inspector.hpp>
 
 namespace ramen
 {
@@ -131,8 +127,7 @@ void float2_param_t::do_format_changed( const Imath::Box2i& new_domain, float as
     curve( 0).set_offset( offset.x);
     curve( 1).set_scale( scale.y);
     curve( 1).set_offset( offset.y);
-    if( app().ui())
-        app().ui()->update_anim_editors();
+    ui_notifications().update_anim_editors();
 
     update_widgets();
 }

@@ -3,49 +3,28 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #ifndef RAMEN_UI_PALETTE_HPP
-#define	RAMEN_UI_PALETTE_HPP
+#define RAMEN_UI_PALETTE_HPP
 
-#include<map>
+#include<ramen/config.hpp>
 
-#include<ramen/core/noncopyable.hpp>
-
-#include<Imath/ImathColor.h>
+#include<string>
 
 #include<QColor>
 
-#include<ramen/core/memory.hpp>
+#include<ramen/app/palette.hpp>
 
 namespace ramen
 {
 namespace ui
 {
 
-class palette_t
-{
-public:
+/// Sets the palette background and text colors from the application style.
+RAMEN_API void init_palette();
 
-    static palette_t& instance();
+/// Returns a palette color as a QColor.
+RAMEN_API QColor palette_qcolor( const std::string& k);
 
-	void rebuild();
-
-    const Imath::Color3c& color( const std::string& k) const;
-	QColor qcolor( const std::string& k) const;
-
-	bool find_color( const std::string& k) const;
-
-	void set_color( const std::string& k, const Imath::Color3c& c);
-	void set_color( const std::string& k, const QColor& c);
-
-private:
-
-    palette_t();
-	~palette_t();
-
-	struct impl;
-    core::auto_ptr_t<impl> pimpl_;
-};
-
-} // namespace
-} // namespace
+} // ui
+} // ramen
 
 #endif

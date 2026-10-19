@@ -2,14 +2,14 @@
 // Licensed under the terms of the CDDL License.
 // See CDDL_LICENSE.txt for a copy of the license.
 
-#ifndef RAMEN_IMAGEIO_IMPORT_MULTICHANNEL_EXR_HPP
-#define	RAMEN_IMAGEIO_IMPORT_MULTICHANNEL_EXR_HPP
+#ifndef RAMEN_UI_IMPORT_MULTICHANNEL_EXR_HPP
+#define	RAMEN_UI_IMPORT_MULTICHANNEL_EXR_HPP
 
 #include<ramen/filesystem/path.hpp>
 
 namespace ramen
 {
-namespace imageio
+namespace ui
 {
 
 void import_multichannel_exr( const std::filesystem::path& p, bool relative, bool sequence);

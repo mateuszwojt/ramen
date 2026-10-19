@@ -17,7 +17,7 @@
 #include<ramen/app/application.hpp>
 #include<ramen/app/composition.hpp>
 
-#include<ramen/ui/palette.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<iostream>
 
@@ -33,7 +33,7 @@ void image_node_t::accept( node_visitor& v) { v.visit( this);}
 
 void image_node_t::add_output_plug()
 {
-    node_t::add_output_plug( "output", ui::palette_t::instance().color( "out plug"), "output" );
+    node_t::add_output_plug( "output", palette_t::instance().color( "out plug"), "output" );
 }
 
 void image_node_t::do_notify()

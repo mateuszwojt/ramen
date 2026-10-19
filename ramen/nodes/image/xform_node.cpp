@@ -4,8 +4,6 @@
 
 #include<ramen/nodes/image/xform_node.hpp>
 
-#include<ramen/ui/user_interface.hpp>
-
 namespace ramen
 {
 namespace image

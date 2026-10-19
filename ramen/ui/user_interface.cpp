@@ -5,6 +5,8 @@
 #include<ramen/ui/user_interface.hpp>
 
 #include<ramen/ui/params/param_widget.hpp>
+#include<ramen/ui/node_gui_creators.hpp>
+#include<ramen/app/ui_notifications.hpp>
 
 #include<utility>
 #include<iostream>
@@ -86,6 +88,9 @@ user_interface_t::user_interface_t() : QObject()
 
 user_interface_t::~user_interface_t()
 {
+    for( core::connection_t& c : connections_)
+        c.disconnect();
+
     viewer_->deleteLater();
     inspector_->deleteLater();
     anim_editor_->deleteLater();
@@ -95,6 +100,15 @@ void user_interface_t::init()
 {
     init_ui_style();
     register_builtin_param_widgets();
+    register_node_gui_creators();
+
+    connections_.push_back( ui_notifications().update.connect( [this]() { update();}));
+    connections_.push_back( ui_notifications().update_anim_editors.connect( [this]() { update_anim_editors();}));
+    connections_.push_back( ui_notifications().recreate_anim_tracks.connect( [this]( node_t *n)
+    {
+        if( anim_editor_)
+            anim_editor().recreate_tracks( n);
+    }));
 
     create_new_document();
 
@@ -110,7 +124,7 @@ void user_interface_t::init_ui_style()
 	qApp->setStyle( QStyleFactory::create( "Fusion"));
 
 	// init palette
-	palette_t::instance();
+	init_palette();
 }
 
 void user_interface_t::save_window_state()

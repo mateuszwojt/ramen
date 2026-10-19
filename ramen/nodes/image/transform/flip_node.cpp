@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/transform/flip_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<Imath/ImathMatrix.h>
 
@@ -20,7 +21,7 @@ namespace image
 flip_node_t::flip_node_t() : image_node_t()
 {
     set_name("flip");
-    add_input_plug( "front", false, ui::palette_t::instance().color("front plug"), "Front");
+    add_input_plug( "front", false, palette_t::instance().color("front plug"), "Front");
     add_output_plug();
 }
 

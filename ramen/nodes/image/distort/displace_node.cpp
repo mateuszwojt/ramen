@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/distort/displace_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<ramen/algorithm/clamp.hpp>
 
@@ -75,7 +76,7 @@ private:
 displace_node_t::displace_node_t() : distort_node_t()
 {
     set_name( "displace");
-    add_input_plug( "displacement", false, ui::palette_t::instance().color( "front plug"), "Displacement Map");
+    add_input_plug( "displacement", false, palette_t::instance().color( "front plug"), "Displacement Map");
 }
 
 void displace_node_t::do_create_params()
