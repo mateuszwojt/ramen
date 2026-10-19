@@ -85,7 +85,7 @@ struct mask_fun
 
 private:
 
-    const image::const_image_view_t& mask_;
+    const image::const_image_view_t mask_;
     Imath::Box2i area_;
 };
 

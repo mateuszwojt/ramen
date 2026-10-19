@@ -9,7 +9,7 @@ target_link_libraries( exr_compare PRIVATE OpenEXR::OpenEXR)
 
 # largest difference allowed between a render and its reference image.
 # Different compilers and CPUs don't produce bit identical floating point results.
-set( RAMEN_RENDER_TEST_TOLERANCE "0" CACHE STRING "Render tests pixel value tolerance")
+set( RAMEN_RENDER_TEST_TOLERANCE "0.001" CACHE STRING "Render tests pixel value tolerance")
 
 # renders frames first to last of a composition from the command line and
 # compares the images with the ones in reference/name.

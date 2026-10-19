@@ -84,10 +84,10 @@ struct apply_chroma_joint_bilateral
 
 private:
 
-    const image::const_image_view_t& src_;
-    const image::image_view_t& dst_;
+    const image::const_image_view_t src_;
+    const image::image_view_t dst_;
 	
-    const image::const_gray_image_view_t& filter_;
+    const image::const_gray_image_view_t filter_;
 	int xoff_, yoff_;
 	
     float color_sigma_;

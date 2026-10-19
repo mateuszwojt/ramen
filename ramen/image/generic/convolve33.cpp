@@ -123,8 +123,8 @@ struct convolve33_fun
 
 private:
 
-    const image::const_image_view_t& src_;
-    const image::image_view_t& dst_;
+    const image::const_image_view_t src_;
+    const image::image_view_t dst_;
     Imath::M33f k_;
     float inv_sum_weights_;
 };

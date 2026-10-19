@@ -100,10 +100,10 @@ private:
 	float scale_;
 	float xcenter_;
 
-	const image::const_image_view_t& src_;
+	const image::const_image_view_t src_;
 	Imath::Box2i src_area_;
 
-	const image::image_view_t& dst_;
+	const image::image_view_t dst_;
 	Imath::Box2i dst_area_;
 };
 
@@ -180,10 +180,10 @@ private:
 	float scale_;
 	int ycenter_;
 
-	const image::const_image_view_t& src_;
+	const image::const_image_view_t src_;
 	int src_min_, src_max_;
 
-	const image::image_view_t& dst_;
+	const image::image_view_t dst_;
 	int dst_min_, dst_max_;
 };
 
@@ -279,10 +279,10 @@ struct resize_half_fun
 
 private:
 
-	const image::const_image_view_t& src_;
+	const image::const_image_view_t src_;
 	Imath::Box2i src_area_;
 
-	const image::image_view_t& dst_;
+	const image::image_view_t dst_;
 	Imath::Box2i dst_area_;
 
 	float weights_[3][3];

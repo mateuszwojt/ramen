@@ -39,7 +39,7 @@ public:
     
 private:
 
-    const image::image_view_t& dst_;
+    const image::image_view_t dst_;
     Imath::Box2i defined_;
     Fun f_;
 };

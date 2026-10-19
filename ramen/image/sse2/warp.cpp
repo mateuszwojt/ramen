@@ -47,7 +47,7 @@ private:
 
 	Sampler s_;
 	Imath::Box2i dst_area_;
-	const image_view_t& dst_;
+	const image_view_t dst_;
 	warp_function_t fun_;
 };
 
@@ -81,7 +81,7 @@ private:
 
 	Sampler s_;
 	Imath::Box2i dst_area_;
-	const image_view_t& dst_;
+	const image_view_t dst_;
 	warp_function_t fun_;
 };
 

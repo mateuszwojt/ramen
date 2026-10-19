@@ -62,8 +62,8 @@ struct grad_magnitude_fun
 
 private:
 
-    const image::const_gray_image_view_t& src_;
-    const image::gray_image_view_t& dst_;
+    const image::const_gray_image_view_t src_;
+    const image::gray_image_view_t dst_;
     float thereshold_;
 };
 

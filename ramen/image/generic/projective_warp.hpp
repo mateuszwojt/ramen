@@ -60,7 +60,7 @@ private:
 
     Sampler s_;
     const Imath::Box2i& dst_area_;
-    const image_view_t& dst_;
+    const image_view_t dst_;
     const matrix3_t& inv_xform_;
 };
 
@@ -129,7 +129,7 @@ private:
 
     Sampler s_;
     const Imath::Box2i& dst_area_;
-    const image_view_t& dst_;
+    const image_view_t dst_;
     const matrix3_t& inv_xform_;
 };
 
