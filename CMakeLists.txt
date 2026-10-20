@@ -57,8 +57,6 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 find_package( Threads REQUIRED)
 
-find_package( OpenGL REQUIRED)
-find_package( GLEW REQUIRED)
 
 # Boost.GIL ( header only) is the only Boost library used.
 find_package( Boost CONFIG REQUIRED)

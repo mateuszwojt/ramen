@@ -9,7 +9,6 @@
 
 #include<utility>
 
-#include<ramen/GL/glew.hpp>
 
 #include<QOpenGLWidget>
 

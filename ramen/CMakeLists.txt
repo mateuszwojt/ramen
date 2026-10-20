@@ -57,10 +57,6 @@ target_link_libraries( ramen PUBLIC Qt6::Core
                                     PNG::PNG
                                     TIFF::TIFF
 
-                                    GLEW::GLEW
-                                    OpenGL::GL
-                                    OpenGL::GLU
-
                                     Boost::headers
                                     TBB::tbb
                                     yaml-cpp::yaml-cpp

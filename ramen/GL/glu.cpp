@@ -7,9 +7,6 @@
 namespace ramen
 {
 
-void glu_ortho2d( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top)
-{
-	gluOrtho2D( left, right, bottom, top);
-}
+void glu_ortho2d( double left, double right, double bottom, double top) { gl_ortho( left, right, bottom, top, -1.0, 1.0);}
 
 } // ramen

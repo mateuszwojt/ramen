@@ -29,7 +29,7 @@ void gl_lut3d_t::recreate( OCIO::ConstConfigRcPtr config, OCIO::DisplayViewTrans
 							OCIO::ConstProcessorRcPtr processor, const std::string& fun_name)
 {
     OCIO::GpuShaderDescRcPtr desc = OCIO::GpuShaderDesc::CreateShaderDesc();
-    desc->setLanguage( OCIO::GPU_LANGUAGE_GLSL_1_2);
+    desc->setLanguage( OCIO::GPU_LANGUAGE_GLSL_4_0);
     desc->setFunctionName( fun_name.c_str());
 
     // bake the whole transform into one 3D lut.

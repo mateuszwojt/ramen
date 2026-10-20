@@ -298,35 +298,9 @@ void viewer_context_t::wheelEvent( QWheelEvent *event)
 
 void viewer_context_t::test_gl_extensions()
 {
-    GLenum err = glewInit();
-
-    if( GLEW_OK != err)
-        app().fatal_error( "Video card not supported: Error initializing GLEW");
-
-    // test common extensions here
-    if( !glewIsSupported("GL_VERSION_2_0"))
-        app().fatal_error( "Video card not supported: Not OpenGL 2.0");
-
-    if( !GLEW_ARB_texture_non_power_of_two)
-        app().fatal_error( "Video card not supported: Not non power of two textures");
-
-    if( !GLEW_ARB_texture_float)
-        app().fatal_error( "Video card not supported: Not float textures");
-
-    if( !GLEW_ARB_fragment_shader)
-        app().fatal_error( "Video card not supported: Not fragment programs");
-
-    // OCIO GPU path support
-    if( !GLEW_VERSION_1_2 && !GLEW_EXT_texture3D)
-        app().fatal_error( "Video card not supported: No 3D textures");
-
-    if( !GLEW_VERSION_1_3 && !GLEW_ARB_multitexture)
-        app().fatal_error( "Video card not supported: No multitexture");
-
-    GLint tx_units;
-    glGetIntegerv( GL_MAX_TEXTURE_UNITS, &tx_units);
-    if( tx_units < 2)
-        app().fatal_error( "Video card not supported: Not enough texture units");
+    // float, 3D and non power of two textures and shaders are all in OpenGL 4.1.
+    if( !gl_context_supported())
+        app().fatal_error( "Video card not supported: OpenGL 4.1 core profile is required");
 
     // let each implementation test other extensions
     std::ranges::for_each( strategies_,

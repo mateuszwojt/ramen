@@ -30,6 +30,7 @@ class QPushButton;
 class QComboBox;
 class QDoubleSpinBox;
 class QToolButton;
+class QOpenGLWidget;
 class QLabel;
 
 namespace ramen
@@ -50,6 +51,9 @@ public:
 	int height() const;
 	
     QWidget *widget() { return window_;}
+
+    /// The OpenGL widget that draws the images.
+    QOpenGLWidget *gl_widget();
 
     int toolbar_height() const;
 

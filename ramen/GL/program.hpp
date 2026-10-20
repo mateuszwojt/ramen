@@ -34,7 +34,7 @@ public:
 private:
 
 	GLenum shader_type_;
-    GLuint program_, shader_;
+    GLuint program_, shader_, vertex_shader_;
 };
 
 } // namespace

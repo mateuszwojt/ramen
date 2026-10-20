@@ -18,23 +18,26 @@ namespace
 {
 static const char *ocio_display_shader_source =
 {
-"uniform sampler2D tex;"
-"uniform float exposure;"
-"uniform float gamma;"
-"uniform vec4 channel_mask;"
-"uniform float alpha;"
-"void main( void)"
-"{"
-	"vec4 col = texture2D( tex, gl_TexCoord[0].st);"
-	"vec4 acol = vec4( col.a, col.a, col.a, col.a);"
-	"vec4 expv = vec4( exposure, exposure, exposure, 1);"
-	"col *= expv;"
-	"col = apply_lut( col) * channel_mask;"
-    "vec4 gammav = vec4( gamma, gamma, gamma, 1);"
-    "col = pow( col, gammav);"
-	"col = (col * ( 1.0 - alpha)) + ( alpha * acol);"
-	"gl_FragColor = max( col, vec4( 0, 0, 0, 0));"
-"}"
+"in vec2 ramen_uv;\n"
+"in vec4 ramen_vcolor;\n"
+"out vec4 ramen_frag_color;\n"
+"uniform sampler2D tex;\n"
+"uniform float exposure;\n"
+"uniform float gamma;\n"
+"uniform vec4 channel_mask;\n"
+"uniform float alpha;\n"
+"void main( void)\n"
+"{\n"
+	"vec4 col = texture( tex, ramen_uv);\n"
+	"vec4 acol = vec4( col.a, col.a, col.a, col.a);\n"
+	"vec4 expv = vec4( exposure, exposure, exposure, 1.0);\n"
+	"col *= expv;\n"
+	"col = apply_lut( col) * channel_mask;\n"
+    "vec4 gammav = vec4( gamma, gamma, gamma, 1.0);\n"
+    "col = pow( col, gammav);\n"
+	"col = (col * ( 1.0 - alpha)) + ( alpha * acol);\n"
+	"ramen_frag_color = max( col, vec4( 0.0, 0.0, 0.0, 0.0));\n"
+"}\n"
 };
 
 } // unnamed
@@ -69,8 +72,7 @@ void gl_display_manager_t::set_display_transform( OCIO::ConstConfigRcPtr config,
 	OCIO::ConstContextRcPtr context = get_local_context();
     processor_ = config->getProcessor( context, transform, OCIO::TRANSFORM_DIR_FORWARD);
     lut_->recreate( config, transform, processor_, "apply_lut");
-	// without a version directive, strict drivers compile the shaders as GLSL 1.10.
-	std::string lut_fun( "#version 120\n");
+		std::string lut_fun( "#version 410 core\n");
 	lut_fun += lut_->lookup_function();
 	program_.compile( lut_fun.c_str(), ocio_display_shader_source);
 }

@@ -6,7 +6,6 @@
 
 #include<sstream>
 
-#include<ramen/GL/glew.hpp>
 
 #include<exception>
 

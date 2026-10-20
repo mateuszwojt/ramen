@@ -23,6 +23,8 @@
 
 #include<QApplication>
 
+#include<ramen/GL/gl.hpp>
+
 #include<ramen/version.hpp>
 
 #include<ramen/app/preferences.hpp>
@@ -70,6 +72,9 @@ application_t::application_t( int argc, char **argv) : system_(), preferences_()
     cmd_parser_.reset( new util::command_line_parser_t( argc, argv));
 
     // Create QApplication
+    // OpenGL contexts have to be configured before creating the application.
+    gl_set_default_format();
+
     QApplication *q_app = new QApplication( cmd_parser_->argc, cmd_parser_->argv);
     //TODO: re-eanble this...
     //std::filesystem::path bundle_path( system().app_bundle_path());

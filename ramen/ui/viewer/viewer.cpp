@@ -163,6 +163,8 @@ viewer_t::viewer_t() : QObject()
 
 viewer_t::~viewer_t() {}
 
+QOpenGLWidget *viewer_t::gl_widget() { return view_;}
+
 int viewer_t::width() const	{ return view_->width();}
 int viewer_t::height() const	{ return view_->height();}
 

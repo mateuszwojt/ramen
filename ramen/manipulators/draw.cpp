@@ -146,12 +146,12 @@ void draw_bezier_curve( const Imath::V2f& a, const Imath::V2f& b, const Imath::V
 	// for some reason, this code generates 
 	// an OpenGL error, and Ramen crashes...
 	gl_color3ub( 0, 0, 0);
-    glMap1f( GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
+    gl_map1f( GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
 
-    glBegin( GL_LINE_STRIP);
+    gl_begin( GL_LINE_STRIP);
     for (int i = 0; i <= steps; ++i)
-		glEvalCoord1f( ( GLfloat) i/ (float) steps);
-    glEnd();
+		gl_eval_coord1f( ( GLfloat) i/ (float) steps);
+    gl_end();
 
     ctrlpoints[0][0] = a.x;
     ctrlpoints[0][1] = a.y;
@@ -170,12 +170,12 @@ void draw_bezier_curve( const Imath::V2f& a, const Imath::V2f& b, const Imath::V
     ctrlpoints[3][2] = 0;
 
 	gl_color( color);
-    glMap1f( GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
+    gl_map1f( GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
 
-    glBegin( GL_LINE_STRIP);
+    gl_begin( GL_LINE_STRIP);
     for (int i = 0; i <= steps; ++i)
-		glEvalCoord1f( ( GLfloat) i / (float) steps);
-    glEnd();
+		gl_eval_coord1f( ( GLfloat) i / (float) steps);
+    gl_end();
 }
 
 // axes

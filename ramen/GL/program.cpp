@@ -16,6 +16,7 @@ namespace gl
 program_t::program_t( GLenum shader_type) : shader_type_( shader_type)
 {
 	shader_ = 0;
+	vertex_shader_ = 0;
 	program_ = 0;
 }
 
@@ -23,63 +24,74 @@ program_t::~program_t()
 {
 	gl_delete_program( program_);
 	gl_delete_shader( shader_);
+	gl_delete_shader( vertex_shader_);
 }
+
+namespace
+{
+
+void print_shader_log( GLuint shader)
+{
+    GLint result;
+    gl_functions()->glGetShaderiv( shader, GL_COMPILE_STATUS, &result);
+
+    if( result == GL_FALSE)
+    {
+        char buffer[1025];
+        GLsizei size = 0;
+        gl_functions()->glGetShaderInfoLog( shader, 1024, &size, buffer);
+        buffer[ size] = 0;
+        std::cout << buffer << "\n";
+    }
+}
+
+} // unnamed
 
 void program_t::compile( const char *src0, const char *src1)
 {
+	RAMEN_ASSERT( shader_type_ == GL_FRAGMENT_SHADER);
+
 	if( !program_)
 	{
-		shader_ = gl_create_shader( shader_type_);
 		program_ = gl_create_program();
+
+		// the drawing functions provide the vertex shader.
+		vertex_shader_ = gl_create_shader( GL_VERTEX_SHADER);
+		const GLchar *vs_src = gl_vertex_shader_source();
+		gl_shader_source( vertex_shader_, 1, &vs_src, 0);
+		gl_compile_shader( vertex_shader_);
+		print_shader_log( vertex_shader_);
+		gl_attach_shader( program_, vertex_shader_);
+		gl_bind_vertex_attributes( program_);
 	}
 	else
+	{
 		gl_detach_shader( program_, shader_);
+		gl_delete_shader( shader_);
+	}
+
+	shader_ = gl_create_shader( shader_type_);
 
     const GLchar *shader_src[2];
     shader_src[0] = (GLchar *) src0;
     shader_src[1] = (GLchar *) src1;
 
-	/*
-	#ifndef NDEBUG
-		std::cout << "Shader souce =\n";
-		std::cout << "------------\n\n";
-		std::cout << src0 << "\n";
-		if( src1)
-			std::cout << src1 << "\n";
-		std::cout << "\n";
-	#endif
-	*/
-
 	gl_shader_source( shader_, src1 ? 2 : 1, shader_src, 0);
     gl_compile_shader( shader_);
-
-    GLint result;
-    glGetShaderiv( shader_, GL_COMPILE_STATUS, &result);
-	check_gl_errors();
-
-    if( result == GL_FALSE)
-    {
-        char buffer[1025];
-        GLsizei size;
-        glGetShaderInfoLog( shader_, 1024, &size, buffer);
-		check_gl_errors();
-
-        buffer[ size] = 0;
-        std::cout << buffer << "\n";
-    }
+    print_shader_log( shader_);
 
     gl_attach_shader( program_, shader_);
     gl_link_program( program_);
 
-    glGetProgramiv( program_, GL_LINK_STATUS, &result);
+    GLint result;
+    gl_functions()->glGetProgramiv( program_, GL_LINK_STATUS, &result);
 	check_gl_errors();
 
     if( result == GL_FALSE)
     {
         char buffer[1025];
-        GLsizei size;
-        glGetProgramInfoLog( program_, 1024, &size, buffer);
-		check_gl_errors();
+        GLsizei size = 0;
+        gl_functions()->glGetProgramInfoLog( program_, 1024, &size, buffer);
         buffer[ size] = 0;
         std::cout << buffer << "\n";
     }
@@ -96,7 +108,7 @@ void program_t::unbind() { gl_use_program( 0);}
 void program_t::uniform_1i( const char *param, int v)
 {
 	RAMEN_ASSERT( program_);
-    gl_uniform1i( glGetUniformLocation( program_, param), v);
+    gl_uniform1i( gl_get_uniform_location( program_, param), v);
 	check_gl_errors();
 }
 

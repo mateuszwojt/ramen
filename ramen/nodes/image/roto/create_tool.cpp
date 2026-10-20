@@ -35,13 +35,12 @@ void create_tool_t::draw_overlay( const ui::paint_event_t& event) const
 		gl_push_matrix();
 		gl_scalef( event.aspect_ratio, 1);
 
-		glEnable( GL_MAP1_VERTEX_3);
+		gl_enable( GL_MAP1_VERTEX_3);
 		roto::manipulator_t::draw_shape( *new_shape_, event, parent().aspect_ratio(), false);
-		glDisable( GL_MAP1_VERTEX_3);
+		gl_disable( GL_MAP1_VERTEX_3);
 		
 		// clear gl errors
-		while( glGetError() != GL_NO_ERROR)
-			;
+		clear_gl_errors();
 
 		gl_pop_matrix();
 	}

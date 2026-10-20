@@ -40,13 +40,12 @@ void manipulator_t::do_draw_overlay( const ui::paint_event_t& event) const
 	gl_push_matrix();
 	gl_scalef( event.aspect_ratio, 1);
 	
-	glEnable( GL_MAP1_VERTEX_3);
+	gl_enable( GL_MAP1_VERTEX_3);
     std::ranges::for_each( roto->scene(), std::bind( &roto::manipulator_t::draw_shape, std::placeholders::_1, std::cref( event), roto->aspect_ratio(), true));
-	glDisable( GL_MAP1_VERTEX_3);
+	gl_disable( GL_MAP1_VERTEX_3);
 	
 	// clear errors
-	while( glGetError() != GL_NO_ERROR)
-		;
+	clear_gl_errors();
 	
 	gl_pop_matrix();
 	
@@ -231,12 +230,12 @@ void manipulator_t::draw_bezier_curve( const Imath::V2f& a, const Imath::V2f& b,
 
 	// for some reason, this code generates 
 	// an OpenGL error, and Ramen crashes...
-    glMap1f( GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
+    gl_map1f( GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]);
 
-    glBegin( GL_LINE_STRIP);
+    gl_begin( GL_LINE_STRIP);
     for (int i = 0; i <= 30; ++i)
-		glEvalCoord1f( ( GLfloat) i/30.0f);
-    glEnd();
+		gl_eval_coord1f( ( GLfloat) i/30.0f);
+    gl_end();
 }
 
 } // namespace

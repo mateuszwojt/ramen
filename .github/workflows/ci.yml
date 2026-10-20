@@ -21,7 +21,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ninja-build \
-            qt6-base-dev libqt6opengl6-dev libgl1-mesa-dev libglew-dev \
+            qt6-base-dev libqt6opengl6-dev libgl1-mesa-dev \
             libboost-dev libtbb-dev libyaml-cpp-dev \
             libimath-dev libopenexr-dev libopenimageio-dev openimageio-tools libopencv-dev libopencolorio-dev \
             libjpeg-dev libpng-dev libtiff-dev zlib1g-dev \
@@ -31,7 +31,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install ninja qt boost tbb yaml-cpp imath openexr openimageio \
-            opencolorio glew googletest sse2neon
+            opencolorio googletest sse2neon
 
       - name: Configure
         run: cmake --preset release

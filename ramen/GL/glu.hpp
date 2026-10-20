@@ -7,16 +7,10 @@
 
 #include<ramen/GL/gl.hpp>
 
-#ifdef __APPLE__
-    #include<OpenGL/glu.h>
-#else
-    #include<GL/glu.h>
-#endif
-
 namespace ramen
 {
 
-void glu_ortho2d( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top);
+void glu_ortho2d( double left, double right, double bottom, double top);
 
 } // ramen
 

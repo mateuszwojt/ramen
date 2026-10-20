@@ -4,7 +4,6 @@
   "builtin-baseline": "7d5f3c6241729acbbb7774f54bf687429aaf6492",
   "dependencies": [
     "boost-gil",
-    "glew",
     "gtest",
     "imath",
     "libjpeg-turbo",

@@ -47,11 +47,11 @@ void lut3d_t::update_gl_texture()
 
 	#ifndef NDEBUG
 		int size;
-		glGetTexLevelParameteriv( GL_TEXTURE_3D, 0, GL_TEXTURE_WIDTH, &size);
+		gl_functions()->glGetTexLevelParameteriv( GL_TEXTURE_3D, 0, GL_TEXTURE_WIDTH, &size);
 		RAMEN_ASSERT( size == lut_size());
-		glGetTexLevelParameteriv( GL_TEXTURE_3D, 0, GL_TEXTURE_HEIGHT, &size);
+		gl_functions()->glGetTexLevelParameteriv( GL_TEXTURE_3D, 0, GL_TEXTURE_HEIGHT, &size);
 		RAMEN_ASSERT( size == lut_size());
-		glGetTexLevelParameteriv( GL_TEXTURE_3D, 0, GL_TEXTURE_DEPTH, &size);
+		gl_functions()->glGetTexLevelParameteriv( GL_TEXTURE_3D, 0, GL_TEXTURE_DEPTH, &size);
 		RAMEN_ASSERT( size == lut_size());
 	#endif
 
