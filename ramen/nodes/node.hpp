@@ -13,7 +13,6 @@
 #include<set>
 #include<utility>
 
-#include<QWidget>
 
 #include<ramen/params/composite_parameterised.hpp>
 
@@ -215,7 +214,6 @@ public:
     // user interface
     virtual const char *help_string() const;
 
-    virtual std::unique_ptr<QWidget> create_toolbar() { return std::unique_ptr<QWidget>();}
 
     // paths
     virtual void convert_relative_paths( const std::filesystem::path& old_base,

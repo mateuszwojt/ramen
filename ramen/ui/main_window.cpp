@@ -898,7 +898,6 @@ void main_window_t::create_node()
     {
         p->set_composition( &( app().document().composition()));
         p->create_params();
-        p->create_manipulators();
     }
     catch( std::exception& e)
     {

@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/ui/viewer/image_view/image_viewer_strategy.hpp>
+#include<ramen/ui/manipulators/manipulable.hpp>
 
 #include<sstream>
 
@@ -494,14 +495,15 @@ void image_viewer_strategy_t::paint()
     if( overlay_)
     {
         node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
 
-        if( active_node)
+        if( active_node && overlay)
         {
             gl_enable( GL_BLEND);
             gl_blend_func( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             gl_enable( GL_LINE_SMOOTH);
 
-            active_node->draw_overlay( paint_event_);
+            overlay->draw_overlay( paint_event_);
             check_gl_errors();
             gl_disable( GL_LINE_SMOOTH);
             gl_disable( GL_BLEND);
@@ -521,9 +523,10 @@ void image_viewer_strategy_t::enter_event( QEvent *event)
     if( overlay_)
     {
         node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
 
-        if( active_node)
-            active_node->mouse_enter_event( enter_event_);
+        if( active_node && overlay)
+            overlay->mouse_enter_event( enter_event_);
     }
 
     event->accept();
@@ -539,9 +542,10 @@ void image_viewer_strategy_t::leave_event( QEvent *event)
     if( overlay_)
     {
         node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
 
-        if( active_node)
-            active_node->mouse_leave_event( leave_event_);
+        if( active_node && overlay)
+            overlay->mouse_leave_event( leave_event_);
     }
 
     event->accept();
@@ -607,10 +611,11 @@ void image_viewer_strategy_t::key_press_event( QKeyEvent *event)
             if( overlay_)
             {
                 node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
                 event_accepted_by_node_ = false;
 
-                if( active_node)
-                    event_accepted_by_node_ = active_node->key_press_event( key_press_event_);
+                if( active_node && overlay)
+                    event_accepted_by_node_ = overlay->key_press_event( key_press_event_);
             }
 
             if( event_accepted_by_node_)
@@ -645,9 +650,10 @@ void image_viewer_strategy_t::key_release_event( QKeyEvent *event)
             if( overlay_)
             {
                 node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
 
-                if( active_node && event_accepted_by_node_)
-                    active_node->key_release_event( key_release_event_);
+                if( active_node && overlay && event_accepted_by_node_)
+                    overlay->key_release_event( key_release_event_);
             }
 
             if( event_accepted_by_node_)
@@ -711,10 +717,11 @@ void image_viewer_strategy_t::mouse_press_event( QMouseEvent *event)
             if( overlay_)
             {
                 node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
                 event_accepted_by_node_ = false;
 
-                if( active_node)
-                    event_accepted_by_node_ = active_node->mouse_press_event( press_event_);
+                if( active_node && overlay)
+                    event_accepted_by_node_ = overlay->mouse_press_event( press_event_);
 
                 if( event_accepted_by_node_)
                 {
@@ -760,9 +767,10 @@ void image_viewer_strategy_t::mouse_move_event( QMouseEvent *event)
             move_event_.modifiers = translate_modifiers( event);
 
             node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
 
-            if( active_node)
-                active_node->mouse_move_event( move_event_);
+            if( active_node && overlay)
+                overlay->mouse_move_event( move_event_);
         }
 
         event->accept();
@@ -801,10 +809,11 @@ void image_viewer_strategy_t::mouse_move_event( QMouseEvent *event)
                     if( overlay_)
                     {
                         node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
 
-                        if( active_node && event_accepted_by_node_)
+                        if( active_node && overlay && event_accepted_by_node_)
                         {
-                            active_node->mouse_drag_event( drag_event_);
+                            overlay->mouse_drag_event( drag_event_);
                             event->accept();
                         }
                         else
@@ -843,10 +852,11 @@ void image_viewer_strategy_t::mouse_release_event( QMouseEvent *event)
         if( overlay_)
         {
             node_t *active_node  = app().ui()->active_node();
+        manipulable_t *overlay = app().ui()->viewer().active_overlay();
 
-            if( active_node && event_accepted_by_node_)
+            if( active_node && overlay && event_accepted_by_node_)
             {
-                active_node->mouse_release_event( release_event_);
+                overlay->mouse_release_event( release_event_);
                 app().ui()->end_interaction();
                 event->accept();
             }

@@ -10,6 +10,7 @@
 #include<string>
 #include<vector>
 #include<map>
+#include<memory>
 
 #include<QObject>
 
@@ -17,6 +18,8 @@
 #include<functional>
 
 #include<ramen/nodes/node_fwd.hpp>
+
+#include<ramen/ui/manipulators/manipulable_fwd.hpp>
 
 #include<ramen/ui/viewer/viewer_strategy_fwd.hpp>
 #include<ramen/ui/viewer/viewer_context_fwd.hpp>
@@ -64,6 +67,9 @@ public:
 
     void node_added( node_t *n);
     void node_released( node_t *n);
+
+    /// The viewer overlay of the active node, or null.
+    manipulable_t *active_overlay() { return active_overlay_;}
 
     void frame_changed();
 
@@ -120,6 +126,9 @@ private:
     // toolbars
     std::map<node_t*, QWidget*> node_toolbars_;
     std::map<node_t*, QWidget*>::iterator current_node_toolbar_;
+
+    std::map<node_t*, std::unique_ptr<manipulable_t> > overlays_;
+    manipulable_t *active_overlay_;
 
     // OpenColorIO
     std::vector<std::string> display_devices_;

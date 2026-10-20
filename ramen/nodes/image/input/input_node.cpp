@@ -12,9 +12,6 @@
 
 #include<Imath/ImathFun.h>
 
-#include<QGridLayout>
-#include<QHBoxLayout>
-#include<QCheckBox>
 
 #include<ramen/app/application.hpp>
 #include<ramen/app/ui_notifications.hpp>

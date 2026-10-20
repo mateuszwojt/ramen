@@ -12,7 +12,6 @@
 #include<ramen/params/float_param.hpp>
 #include<ramen/params/popup_param.hpp>
 
-#include<ramen/manipulators/circle_manipulator.hpp>
 
 // spherize y(x) = sqtr( 1 - x*x);
 
@@ -107,14 +106,6 @@ void twirl_node_t::do_create_params()
     q->set_id( "borders");
     q->menu_items() = { "Black", "Tile", "Mirror"};
     add_param( std::move( q));	
-}
-
-void twirl_node_t::do_create_manipulators()
-{
-	float_param_t *radius = dynamic_cast<float_param_t*>( &param( "radius"));
-	float2_param_t *center = dynamic_cast<float2_param_t*>( &param( "center"));
-	std::unique_ptr<circle_manipulator_t> m( new circle_manipulator_t( radius, center));
-	add_manipulator( std::move( m));
 }
 
 bool twirl_node_t::do_is_identity() const

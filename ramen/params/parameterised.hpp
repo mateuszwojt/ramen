@@ -5,8 +5,6 @@
 #ifndef RAMEN_PARAMETERISED_HPP
 #define	RAMEN_PARAMETERISED_HPP
 
-#include<ramen/manipulators/manipulable.hpp>
-
 #include<utility>
 
 #include<ramen/core/noncopyable.hpp>
@@ -29,7 +27,7 @@ namespace ramen
 \ingroup params
 \brief Base class for objects that contains params.
 */
-class RAMEN_API parameterised_t : public manipulable_t
+class RAMEN_API parameterised_t
 {
 public:
 
@@ -47,6 +45,12 @@ public:
 
     /// Emitted when this object is deleted.
     core::signal_t<void ( parameterised_t*)> deleted;
+
+    /// Emitted when the viewer overlay of this object needs redrawing.
+    core::signal_t<void ( parameterised_t*)> overlay_changed;
+
+    /// Emits the overlay_changed signal.
+    void update_overlay() { overlay_changed( this);}
 
     /// Returns the parameterised name.
     const std::string& name() const			{ return name_;}

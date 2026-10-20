@@ -29,7 +29,6 @@ private:
     node_t *do_clone() const { return new twirl_node_t( *this);}
 
     virtual void do_create_params();
-	virtual void do_create_manipulators();
 	
 	virtual bool do_is_identity() const;
 	

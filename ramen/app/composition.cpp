@@ -404,7 +404,6 @@ std::unique_ptr<node_t> composition_t::create_node( const std::string& id, const
 	{
 		p->set_composition( this);
 	    p->create_params();
-	    p->create_manipulators();
 	}
 	catch( ...)
 	{

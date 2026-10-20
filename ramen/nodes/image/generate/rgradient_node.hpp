@@ -29,7 +29,6 @@ private:
     virtual node_t *do_clone() const { return new rgradient_node_t( *this);}
 
     virtual void do_create_params();
-    virtual void do_create_manipulators();
 
 	virtual void do_calc_bounds( const render::context_t& context);
 	virtual void do_calc_defined( const render::context_t& context);

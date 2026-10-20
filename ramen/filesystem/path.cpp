@@ -8,7 +8,6 @@
 
 #include<filesystem>
 
-#include<QDir>
 
 #include<ramen/assert.hpp>
 
@@ -47,10 +46,7 @@ std::filesystem::path make_absolute_path( const std::filesystem::path& p,
     RAMEN_ASSERT( p.is_relative());
     RAMEN_ASSERT( from.is_absolute());
 
-    QDir dir( QString::fromStdString( file_string( from)));
-    QString fname( QString::fromStdString( file_string( p)));
-    QString abs_path( QDir::cleanPath( dir.absoluteFilePath( fname)));
-    return path_from_utf8( abs_path.toStdString());
+    return ( from / p).lexically_normal();
 }
 
 std::filesystem::path make_relative_path( const std::filesystem::path& p,
@@ -59,10 +55,13 @@ std::filesystem::path make_relative_path( const std::filesystem::path& p,
     RAMEN_ASSERT( p.is_absolute());
     RAMEN_ASSERT( from.is_absolute());
 
-    QDir dir( QString::fromStdString( file_string( from)));
-    QString fname( QString::fromStdString( file_string( p)));
-    QString rel_path( dir.relativeFilePath( fname));
-    return path_from_utf8( rel_path.toStdString());
+    std::filesystem::path result( p.lexically_normal().lexically_relative( from.lexically_normal()));
+
+    // paths in different drives can't be made relative.
+    if( result.empty())
+        return p;
+
+    return result;
 }
 
 std::filesystem::path convert_relative_path( const std::filesystem::path& p,

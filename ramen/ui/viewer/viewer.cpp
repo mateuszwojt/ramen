@@ -4,6 +4,8 @@
 
 #include<ramen/ui/viewer/viewer.hpp>
 
+#include<ramen/ui/manipulators/overlays.hpp>
+
 #include<QHBoxLayout>
 #include<QVBoxLayout>
 #include<QFrame>
@@ -28,7 +30,7 @@ namespace ramen
 namespace ui
 {
 
-viewer_t::viewer_t() : QObject()
+viewer_t::viewer_t() : QObject(), active_overlay_( 0)
 {
     // TODO: don't harcode this. Get it from some widgets
     toolbar_height_ = 30;
@@ -244,13 +246,27 @@ void viewer_t::set_active_node( node_t *n)
         current_node_toolbar_ = node_toolbars_.end();
     }
 
+    active_overlay_ = 0;
+
     if(n != 0)
     {
+        // the overlay draws the node manipulators and handles their events.
+        std::map<node_t*, std::unique_ptr<manipulable_t> >::iterator oit( overlays_.find( n));
+
+        if( oit == overlays_.end())
+            oit = overlays_.emplace( n, ui::create_overlay( *n)).first;
+
+        active_overlay_ = oit->second.get();
+
         std::map<node_t*,QWidget*>::const_iterator it = node_toolbars_.find( n);
 
         if( it == node_toolbars_.end())
         {
-            std::unique_ptr<QWidget> toolbar = n->create_toolbar();
+            std::unique_ptr<QWidget> toolbar;
+
+            if( active_overlay_)
+                toolbar = active_overlay_->create_toolbar();
+
             node_toolbars_[ n] = toolbar.release();
         }
 
@@ -274,6 +290,16 @@ void viewer_t::node_released( node_t *n)
     {
         delete it->second;
         node_toolbars_.erase( n);
+    }
+
+    std::map<node_t*, std::unique_ptr<manipulable_t> >::iterator oit( overlays_.find( n));
+
+    if( oit != overlays_.end())
+    {
+        if( active_overlay_ == oit->second.get())
+            active_overlay_ = 0;
+
+        overlays_.erase( oit);
     }
 
     view_->node_released( n);

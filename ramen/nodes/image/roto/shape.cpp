@@ -24,7 +24,6 @@
 #include<ramen/bezier/algorithm.hpp>
 #include<ramen/ImathExt/ImathMatrixAlgo.h>
 
-#include<ramen/ui/viewer/viewer.hpp>
 
 #include<ramen/nodes/image/roto/scene.hpp>
 #include<ramen/nodes/image/roto/roto_node.hpp>
@@ -265,7 +264,6 @@ void shape_t::param_changed( param_t *p, param_t::change_reason reason)
     }
 }
 
-void shape_t::do_create_manipulators() {}
 
 void shape_t::deselect_all_points() const
 {

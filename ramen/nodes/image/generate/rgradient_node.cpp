@@ -20,7 +20,6 @@
 
 #include<ramen/image/processing.hpp>
 
-#include<ramen/manipulators/point2_manipulator.hpp>
 
 #include<ramen/half/halfExpLog.h>
 
@@ -159,12 +158,6 @@ void rgradient_node_t::do_create_params()
 	b->set_default_value( false);
 	b->set_include_in_hash( false);
 	add_param( std::move( b));	
-}
-
-void rgradient_node_t::do_create_manipulators()
-{
-    std::unique_ptr<point2_manipulator_t> m( new point2_manipulator_t( dynamic_cast<float2_param_t*>( &param( "center"))));
-    add_manipulator( std::move( m));
 }
 
 void rgradient_node_t::do_calc_bounds( const render::context_t& context)

@@ -13,7 +13,6 @@
 
 #include<ramen/image/processing.hpp>
 
-#include<ramen/manipulators/point2_manipulator.hpp>
 
 #include<ramen/half/halfExpLog.h>
 
@@ -106,15 +105,6 @@ void gradient_node_t::do_create_params()
 	b->set_id( "premult");
 	b->set_default_value( false);
 	add_param( std::move( b));
-}
-
-void gradient_node_t::do_create_manipulators()
-{
-    std::unique_ptr<point2_manipulator_t> m( new point2_manipulator_t( dynamic_cast<float2_param_t*>( &param( "start"))));
-    add_manipulator( std::move( m));
-
-    m.reset( new point2_manipulator_t( dynamic_cast<float2_param_t*>( &param( "end"))));
-    add_manipulator( std::move( m));
 }
 
 void gradient_node_t::do_process( const render::context_t& context)

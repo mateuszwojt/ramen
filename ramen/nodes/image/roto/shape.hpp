@@ -249,7 +249,6 @@ private:
     virtual void do_create_params();
     void param_changed( param_t *p, param_t::change_reason reason);
 
-    virtual void do_create_manipulators();
 
     virtual void do_set_frame( float f);
 

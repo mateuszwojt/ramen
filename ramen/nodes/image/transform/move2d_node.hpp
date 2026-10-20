@@ -31,7 +31,6 @@ private:
     virtual void do_create_params();
     void param_changed( param_t *p, param_t::change_reason reason);
 	
-    virtual void do_create_manipulators();
 
     virtual matrix3_type do_calc_transform_matrix_at_frame( float frame, int subsample = 1) const;
 };

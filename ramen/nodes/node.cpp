@@ -61,8 +61,6 @@ void node_t::cloned()
 {
     for( int i = 0; i < num_inputs(); ++i)
         connected( 0, i);
-
-    create_manipulators();
 }
 
 // visitor

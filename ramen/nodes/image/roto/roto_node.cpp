@@ -21,8 +21,6 @@
 #include<ramen/params/inspector_param.hpp>
 
 #include<ramen/nodes/image/roto/roto_shape_param.hpp>
-#include<ramen/nodes/image/roto/toolbar.hpp>
-#include<ramen/nodes/image/roto/manipulator.hpp>
 #include<ramen/nodes/image/roto/scene_renderer.hpp>
 
 #include<ramen/app/composition.hpp>
@@ -61,7 +59,7 @@ enum
 
 } // unnamed
 
-roto_node_t::roto_node_t() : image_node_t(), toolbar_( 0), scene_( this)
+roto_node_t::roto_node_t() : image_node_t(), scene_( this)
 {
     set_name( "roto");
     add_input_plug( "front", false, palette_t::instance().color("front plug"), "Front");
@@ -75,7 +73,6 @@ roto_node_t::roto_node_t( const roto_node_t& other) : image_node_t( other), scen
 {
 	scene_.set_parent( this);
 	scene_.update_all_xforms();
-	toolbar_ = 0;
 	inspector_ = 0;
     param_set().param_changed.connect( std::bind( &roto_node_t::param_changed, this, std::placeholders::_1, std::placeholders::_2));
 
@@ -130,31 +127,6 @@ void roto_node_t::for_each_param( const std::function<void ( param_t*)>& f)
 {
 	parameterised_t::for_each_param( f);
     std::ranges::for_each( scene_, std::bind( &parameterised_t::for_each_param, std::placeholders::_1, f));
-}
-
-void roto_node_t::do_create_manipulators()
-{
-	std::unique_ptr<manipulator_t> m( new roto::manipulator_t());
-	add_manipulator( std::move( m));
-}
-
-std::unique_ptr<QWidget> roto_node_t::create_toolbar()
-{
-	RAMEN_ASSERT( !toolbar_);
-	toolbar_ = new roto::toolbar_t( *this);
-	return std::unique_ptr<QWidget>( toolbar_);
-}
-
-const roto::toolbar_t& roto_node_t::toolbar() const
-{
-	RAMEN_ASSERT( toolbar_);
-	return *toolbar_;
-}
-
-roto::toolbar_t& roto_node_t::toolbar()
-{
-	RAMEN_ASSERT( toolbar_);
-	return *toolbar_;
 }
 
 bool roto_node_t::track_mouse() const

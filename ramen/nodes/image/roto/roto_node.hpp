@@ -8,7 +8,6 @@
 #include<ramen/nodes/image_node.hpp>
 
 #include<ramen/nodes/image/roto/scene.hpp>
-#include<ramen/nodes/image/roto/toolbar_fwd.hpp>
 
 namespace ramen
 {
@@ -28,11 +27,6 @@ public:
 
     roto_node_t();
 	
-    virtual std::unique_ptr<QWidget> create_toolbar();
-
-	const roto::toolbar_t& toolbar() const;
-	roto::toolbar_t& toolbar();
-
 	bool track_mouse() const;
 	
 	// shapes
@@ -66,7 +60,6 @@ private:
 	virtual void do_create_params();
     void param_changed( param_t *p, param_t::change_reason reason);
 	
-	virtual void do_create_manipulators();
 
 	// time, anim & hash
 	virtual void do_set_frame( float f);
@@ -92,7 +85,6 @@ private:
 	
 	roto::scene_t scene_;
 	
-	roto::toolbar_t *toolbar_;
 
 	roto_shape_param_t *shape_param_;
 	inspector_param_t *inspector_;

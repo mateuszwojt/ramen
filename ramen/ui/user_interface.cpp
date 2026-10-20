@@ -6,6 +6,7 @@
 
 #include<ramen/ui/params/param_widget.hpp>
 #include<ramen/ui/node_gui_creators.hpp>
+#include<ramen/ui/manipulators/overlays.hpp>
 #include<ramen/app/ui_notifications.hpp>
 
 #include<utility>
@@ -101,6 +102,7 @@ void user_interface_t::init()
     init_ui_style();
     register_builtin_param_widgets();
     register_node_gui_creators();
+    register_builtin_overlays();
 
     connections_.push_back( ui_notifications().update.connect( [this]() { update();}));
     connections_.push_back( ui_notifications().update_anim_editors.connect( [this]() { update_anim_editors();}));
