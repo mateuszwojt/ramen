@@ -7,17 +7,18 @@
 
 #include<ramen/params/param.hpp>
 
-#include<QPointer>
-
-class QPushButton;
-
 namespace ramen
 {
 
+namespace ui
+{
+class button_param_widget_t;
+} // ui
+
 class RAMEN_API button_param_t : public param_t
 {
-    Q_OBJECT
-    
+    friend class ui::button_param_widget_t;
+
 public:
 
     explicit button_param_t( const std::string& name);
@@ -31,15 +32,7 @@ private:
 
     virtual param_t *do_clone() const { return new button_param_t( *this);}
 	
-    virtual void do_enable_widgets( bool e);
 
-    virtual QWidget *do_create_widgets();
-	
-    QPointer<QPushButton> button_;
-
-private Q_SLOTS:
-
-    void button_pressed();
 };
 
 } // namespace

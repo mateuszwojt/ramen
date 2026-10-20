@@ -7,18 +7,17 @@
 
 #include<ramen/params/static_param.hpp>
 
-#include<QPointer>
-
-#include<ramen/ui/widgets/line_edit_fwd.hpp>
-
-class QPushButton;
-
 namespace ramen
 {
 
+namespace ui
+{
+class file_param_widget_t;
+} // ui
+
 class RAMEN_API file_param_t : public static_param_t
 {
-    Q_OBJECT
+    friend class ui::file_param_widget_t;
 
 public:
 
@@ -58,25 +57,10 @@ private:
     virtual void do_read( const serialization::yaml_node_t& node);
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
-    void update_input_text( const std::filesystem::path& p);
-    void update_input_text();
-
-    virtual QWidget *do_create_widgets();
 
     bool is_input_;
 
-    QPointer<ui::line_edit_t> input_;
-    QPointer<QPushButton> button_;
-
     std::string ext_list_string_;
-
-private Q_SLOTS:
-
-    void select_pushed();
-    void text_changed();
 };
 
 } // namespace

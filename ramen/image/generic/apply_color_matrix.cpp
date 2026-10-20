@@ -54,8 +54,8 @@ public:
 
 private:
 
-    const const_image_view_t& src_;
-    const image_view_t& dst_;
+    const const_image_view_t src_;
+    const image_view_t dst_;
     Imath::M44f m_;
 };
 

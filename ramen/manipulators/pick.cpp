@@ -12,7 +12,6 @@
 
 #include<ramen/app/application.hpp>
 
-#include<ramen/ui/viewer/image_view/image_viewer_strategy.hpp>
 
 namespace ramen
 {

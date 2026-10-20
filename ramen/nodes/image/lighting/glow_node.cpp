@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/lighting/glow_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<ramen/params/float_param.hpp>
 #include<ramen/params/float2_param.hpp>
@@ -96,8 +97,8 @@ private:
 glow_node_t::glow_node_t() : image_node_t()
 { 
 	set_name( "glow");
-    add_input_plug( "front", false, ui::palette_t::instance().color( "front plug"), "Front");
-    add_input_plug( "mask", true, ui::palette_t::instance().color( "matte plug"), "Mask");
+    add_input_plug( "front", false, palette_t::instance().color( "front plug"), "Front");
+    add_input_plug( "mask", true, palette_t::instance().color( "matte plug"), "Mask");
     add_output_plug();
 }
 

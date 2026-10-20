@@ -62,8 +62,8 @@ struct gauss_blur_rgba_fn
 		}
     }
 
-    const const_image_view_t& src_;
-    const image_view_t& dst_;
+    const const_image_view_t src_;
+    const image_view_t dst_;
 	__m128 *kernel_;
 	int k_size_;
 };

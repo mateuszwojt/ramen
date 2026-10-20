@@ -138,8 +138,8 @@ struct smart_blur_fn
 		}
     }
 
-    const const_image_view_t& src_;
-    const image_view_t& dst_;
+    const const_image_view_t src_;
+    const image_view_t dst_;
 	float *kernel_;
 	int k_size_;
 	float thereshold_;

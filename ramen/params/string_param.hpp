@@ -7,17 +7,17 @@
 
 #include<ramen/params/static_param.hpp>
 
-#include<QPointer>
-
-#include<ramen/ui/widgets/line_edit_fwd.hpp>
-#include<ramen/ui/widgets/text_edit_fwd.hpp>
-
 namespace ramen
 {
 
+namespace ui
+{
+class string_param_widget_t;
+} // ui
+
 class string_param_t : public static_param_t
 {
-    Q_OBJECT
+    friend class ui::string_param_widget_t;
 
 public:
 
@@ -47,18 +47,8 @@ private:
     virtual void do_read( const serialization::yaml_node_t& node);
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 
-    virtual QWidget *do_create_widgets();
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
-    QPointer<ui::line_edit_t> input_;
-    QPointer<ui::text_edit_t> multi_input_;
     bool read_only_;
     bool multiline_;
-
-private Q_SLOTS:
-
-    void text_changed();
 };
 
 } // namespace

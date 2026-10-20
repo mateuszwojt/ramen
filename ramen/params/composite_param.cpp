@@ -9,18 +9,11 @@
 
 #include<functional>
 
-
 #include<algorithm>
-
-#include<QWidget>
-#include<QVBoxLayout>
-#include<QFrame>
 
 #include<ramen/params/param_set.hpp>
 
 #include<ramen/anim/track.hpp>
-
-#include<ramen/ui/inspector/inspector.hpp>
 
 namespace ramen
 {
@@ -172,35 +165,6 @@ void composite_param_t::do_write( serialization::yaml_oarchive_t& out) const
         out.begin_seq();
             std::ranges::for_each( params(), std::bind( &param_t::write, std::placeholders::_1, std::ref( out)));
         out.end_seq();
-}
-
-QWidget *composite_param_t::do_create_widgets()
-{
-    QWidget *widget = new QWidget();
-    create_widgets_inside_widget( widget);
-    return widget;
-}
-
-void composite_param_t::create_widgets_inside_widget( QWidget *parent)
-{
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->setContentsMargins( 0, 0, 0, 0);
-    layout->setSpacing( 5);
-    layout->setSizeConstraint( QLayout::SetFixedSize);
-
-    for( param_t& p : params())
-    {
-        if( !p.secret())
-        {
-            QWidget *w = p.create_widgets();
-
-            if( w)
-                layout->addWidget( w);
-        }
-    }
-
-    layout->addStretch();
-    parent->setLayout( layout);
 }
 
 } // namespace

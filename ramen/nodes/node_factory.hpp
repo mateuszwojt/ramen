@@ -47,6 +47,9 @@ public:
 
     bool is_latest_version( const std::string& id) const;
 
+    /// Sets the function used to create nodes of class id from the user interface.
+    void set_gui_creator( const std::string& id, node_t *(*create_gui)());
+
     // creation
     std::unique_ptr<node_t> create_by_id( const std::string& id, bool ui = false);
     std::unique_ptr<node_t> create_by_id_with_version( const std::string& id, const std::pair<int, int>& version);

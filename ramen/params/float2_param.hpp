@@ -9,16 +9,17 @@
 
 #include<Imath/ImathVec.h>
 
-#include<QPointer>
-
-#include<ramen/ui/widgets/param_spinbox_fwd.hpp>
-
 namespace ramen
 {
 
+namespace ui
+{
+class float2_param_widget_t;
+} // ui
+
 class RAMEN_API float2_param_t : public proportional_param_t
 {
-    Q_OBJECT
+    friend class ui::float2_param_widget_t;
 
 public:
 
@@ -55,22 +56,6 @@ private:
 
     virtual void do_format_changed( const Imath::Box2i& new_domain, float aspect, const Imath::V2f& proxy_scale);
 
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
-    virtual QWidget *do_create_widgets();
-
-    void calc_proportional_factors();
-    void set_component_value_from_slot();
-
-    QPointer<ui::param_spinbox_t> input0_, input1_;
-
-private Q_SLOTS:
-
-    void value_changed( double value);
-    void spinbox_pressed();
-    void spinbox_dragged( double value);
-    void spinbox_released();
 };
 
 } // namespace

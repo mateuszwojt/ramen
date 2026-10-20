@@ -30,7 +30,7 @@ nodes:
     comp_pos: [0, 240]
     params:
       - id: output
-        value: "@CMAKE_CURRENT_BINARY_DIR@/color_bars_blur.%04d.exr"
+        value: "@OUTPUT_DIR@/out.%04d.exr"
 edges:
   - [bars, gamma, 0]
   - [gamma, blur, 0]

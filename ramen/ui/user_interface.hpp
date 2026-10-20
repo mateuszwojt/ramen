@@ -14,8 +14,10 @@
 #include<ramen/ui/user_interface_fwd.hpp>
 
 #include<memory>
+#include<vector>
 
 #include<ramen/core/noncopyable.hpp>
+#include<ramen/core/signal.hpp>
 #include<future>
 
 #include<ramen/filesystem/path.hpp>
@@ -151,6 +153,9 @@ private:
     node_t *active_, *context_;
 
     bool rendering_;
+
+    // connections to the core notifications.
+    std::vector<core::connection_t> connections_;
     bool interacting_;
 
     QString image_types_str_;

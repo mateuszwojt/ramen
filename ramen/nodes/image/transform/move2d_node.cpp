@@ -1,6 +1,7 @@
 // Copyright (c) 2010 Esteban Tovagliari
 
 #include<ramen/nodes/image/transform/move2d_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<functional>
 
@@ -55,8 +56,8 @@ private:
 	    manipulators::draw_xy_axes( p, 70 / event.pixel_scale, 70 / event.pixel_scale,
 									get_value<float>( param_->rotate_param()),
 									event.aspect_ratio / node()->aspect_ratio(),
-									  ui::palette_t::instance().color("x_axis"),
-									  ui::palette_t::instance().color("y_axis"), event.pixel_scale);
+									  palette_t::instance().color("x_axis"),
+									  palette_t::instance().color("y_axis"), event.pixel_scale);
 
 	    manipulators::draw_cross( p, 3 / event.pixel_scale, 3 / event.pixel_scale, default_color(), event.pixel_scale);
 		manipulators::draw_ellipse( p, 7 / event.pixel_scale, 7 / event.pixel_scale, Imath::Color3c( 255, 255, 255), 20);

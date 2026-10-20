@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/keyer_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<ramen/app/composition.hpp>
 
@@ -15,11 +16,11 @@ namespace image
 
 keyer_node_t::keyer_node_t( bool add_mask_input) : image_node_t()
 {
-    add_input_plug( "front", false, ui::palette_t::instance().color( "front plug"), "Front");
+    add_input_plug( "front", false, palette_t::instance().color( "front plug"), "Front");
     add_output_plug();
 	
 	if( add_mask_input)
-		add_input_plug( "mask", true, ui::palette_t::instance().color( "matte plug"), "Mask");
+		add_input_plug( "mask", true, palette_t::instance().color( "matte plug"), "Mask");
 }
 
 keyer_node_t::keyer_node_t( const keyer_node_t& other) : image_node_t( other) {}

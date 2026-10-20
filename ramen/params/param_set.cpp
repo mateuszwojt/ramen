@@ -19,6 +19,7 @@
 
 
 #include<ramen/app/application.hpp>
+#include<ramen/app/ui_notifications.hpp>
 #include<ramen/app/document.hpp>
 
 #include<ramen/params/parameterised.hpp>
@@ -27,9 +28,6 @@
 
 #include<ramen/undo/stack.hpp>
 
-#include<ramen/ui/user_interface.hpp>
-#include<ramen/ui/anim/anim_editor.hpp>
-#include<ramen/ui/viewer/viewer.hpp>
 
 #include<ramen/serialization/yaml_oarchive.hpp>
 #include<ramen/serialization/yaml_node.hpp>
@@ -172,9 +170,8 @@ void param_set_t::end_edit( bool notify)
     if( notify)
         notify_parent();
 
-    app().ui()->update();
-    if( app().ui())
-        app().ui()->update_anim_editors();
+    ui_notifications().update();
+    ui_notifications().update_anim_editors();
 }
 
 bool param_set_t::editing() const { return command_.get();}

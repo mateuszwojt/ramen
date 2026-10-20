@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<vector>
 #include<stdexcept>
@@ -202,7 +203,7 @@ void node_t::add_new_input_plug()
 {
     RAMEN_ASSERT( 0);
     /*
-    add_input_plug( input_plug_info_t( ui::palette_t::instance().color("back plug")), true);
+    add_input_plug( input_plug_info_t( palette_t::instance().color("back plug")), true);
     reconnect_node();
     */
 }

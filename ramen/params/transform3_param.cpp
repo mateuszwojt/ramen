@@ -14,8 +14,6 @@
 #include<ramen/params/float2_param.hpp>
 #include<ramen/params/float3_param.hpp>
 
-#include<ramen/ui/anim/anim_editor.hpp>
-
 namespace ramen
 {
 

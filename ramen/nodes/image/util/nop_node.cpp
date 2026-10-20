@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/util/nop_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<ramen/params/float_param.hpp>
 
@@ -14,7 +15,7 @@ namespace image
 nop_node_t::nop_node_t() : image_node_t()
 {
     set_name( "nop");
-    add_input_plug( "front", false, ui::palette_t::instance().color("front plug"), "Front");
+    add_input_plug( "front", false, palette_t::instance().color("front plug"), "Front");
     add_output_plug();
 }
 

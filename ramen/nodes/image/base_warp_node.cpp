@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/base_warp_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<ramen/app/application.hpp>
 
@@ -17,7 +18,7 @@ namespace image
 
 base_warp_node_t::base_warp_node_t() : image_node_t(), notify_pending_( false)
 {
-    add_input_plug( "Front", false, ui::palette_t::instance().color( "front plug"), "Front");
+    add_input_plug( "Front", false, palette_t::instance().color( "front plug"), "Front");
     add_output_plug();
 }
 

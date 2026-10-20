@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/layer/alpha_layer_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<ramen/params/popup_param.hpp>
 #include<ramen/params/float_param.hpp>
@@ -31,8 +32,8 @@ enum
 alpha_layer_node_t::alpha_layer_node_t() : base_layer_node_t()
 {
     set_name( "layer");
-    add_input_plug( "back", false, ui::palette_t::instance().color( "back plug"), "Back");
-    add_input_plug( "front", false, ui::palette_t::instance().color( "front plug"), "Front");
+    add_input_plug( "back", false, palette_t::instance().color( "back plug"), "Back");
+    add_input_plug( "front", false, palette_t::instance().color( "front plug"), "Front");
     add_output_plug();
 }
 

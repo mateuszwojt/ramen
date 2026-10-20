@@ -1,0 +1,279 @@
+magic: Ramen composition
+version: 1
+start_frame: 1
+end_frame: 2
+frame: 1
+frame_rate: 25
+autokey: false
+format: [320, 180, 1]
+nodes:
+  - class: [image.builtin.color_bars, 1, 0]
+    name: "c0_color_bars"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.gamma, 1, 0]
+    name: "c0_gamma"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.gauss_blur, 1, 0]
+    name: "c0_gauss_blur"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out0"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out0.%04d.exr"
+  - class: [image.builtin.fractal_noise, 1, 0]
+    name: "c1_fractal_noise"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.twirl, 1, 0]
+    name: "c1_twirl"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.color_correct, 1, 0]
+    name: "c1_color_correct"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out1"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out1.%04d.exr"
+  - class: [image.builtin.checkerboard, 1, 0]
+    name: "c2_checkerboard"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.move2d, 1, 0]
+    name: "c2_move2d"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.resize, 1, 0]
+    name: "c2_resize"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out2"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out2.%04d.exr"
+  - class: [image.builtin.color_bars, 1, 0]
+    name: "c3_color_bars"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.colorspace, 1, 0]
+    name: "c3_colorspace"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.hsv_colorize, 1, 0]
+    name: "c3_hsv_colorize"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.unsharp_mask, 1, 0]
+    name: "c3_unsharp_mask"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.curves, 1, 0]
+    name: "c3_curves"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out3"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out3.%04d.exr"
+  - class: [image.builtin.gradient, 1, 0]
+    name: "c4_gradient"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.turb_displace, 1, 0]
+    name: "c4_turb_displace"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.smart_blur, 1, 0]
+    name: "c4_smart_blur"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.percentile_filter, 1, 0]
+    name: "c4_percentile_filter"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out4"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out4.%04d.exr"
+  - class: [image.builtin.color_bars, 1, 0]
+    name: "c5_color_bars"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.camshake, 1, 0]
+    name: "c5_camshake"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.transform_blur, 1, 0]
+    name: "c5_transform_blur"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.flip, 1, 0]
+    name: "c5_flip"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.crop, 1, 0]
+    name: "c5_crop"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out5"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out5.%04d.exr"
+  - class: [image.builtin.checkerboard, 1, 0]
+    name: "c6_checkerboard"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.cdl, 1, 0]
+    name: "c6_cdl"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.channel_mixer, 1, 0]
+    name: "c6_channel_mixer"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.clamp_colors, 1, 0]
+    name: "c6_clamp_colors"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.alpha_levels, 1, 0]
+    name: "c6_alpha_levels"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.premult, 1, 0]
+    name: "c6_premult"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out6"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out6.%04d.exr"
+  - class: [image.builtin.color_bars, 1, 0]
+    name: "c7_color_bars"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.blur, 1, 0]
+    name: "c7_blur"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.chroma_blur, 1, 0]
+    name: "c7_chroma_blur"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.glow, 1, 0]
+    name: "c7_glow"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.global_tonemap, 1, 0]
+    name: "c7_global_tonemap"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.expand, 1, 0]
+    name: "c7_expand"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.setdod, 1, 0]
+    name: "c7_setdod"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out7"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out7.%04d.exr"
+  - class: [image.builtin.grid, 1, 0]
+    name: "c9_grid"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.rgradient, 1, 0]
+    name: "c9_rgrad"
+    comp_pos: [0, 0]
+    params:
+      - id: format
+        value: [320, 180, 1]
+  - class: [image.builtin.layer, 1, 0]
+    name: "c9_layer"
+    comp_pos: [0, 0]
+    params: []
+  - class: [image.builtin.img.image_seq_output, 1, 0]
+    name: "out9"
+    comp_pos: [0, 0]
+    params:
+      - id: output
+        value: "@OUTPUT_DIR@/out9.%04d.exr"
+edges:
+  - [c0_color_bars, c0_gamma, 0]
+  - [c0_gamma, c0_gauss_blur, 0]
+  - [c0_gauss_blur, out0, 0]
+  - [c1_fractal_noise, c1_twirl, 0]
+  - [c1_twirl, c1_color_correct, 0]
+  - [c1_color_correct, out1, 0]
+  - [c2_checkerboard, c2_move2d, 0]
+  - [c2_move2d, c2_resize, 0]
+  - [c2_resize, out2, 0]
+  - [c3_color_bars, c3_colorspace, 0]
+  - [c3_colorspace, c3_hsv_colorize, 0]
+  - [c3_hsv_colorize, c3_unsharp_mask, 0]
+  - [c3_unsharp_mask, c3_curves, 0]
+  - [c3_curves, out3, 0]
+  - [c4_gradient, c4_turb_displace, 0]
+  - [c4_turb_displace, c4_smart_blur, 0]
+  - [c4_smart_blur, c4_percentile_filter, 0]
+  - [c4_percentile_filter, out4, 0]
+  - [c5_color_bars, c5_camshake, 0]
+  - [c5_camshake, c5_transform_blur, 0]
+  - [c5_transform_blur, c5_flip, 0]
+  - [c5_flip, c5_crop, 0]
+  - [c5_crop, out5, 0]
+  - [c6_checkerboard, c6_cdl, 0]
+  - [c6_cdl, c6_channel_mixer, 0]
+  - [c6_channel_mixer, c6_clamp_colors, 0]
+  - [c6_clamp_colors, c6_alpha_levels, 0]
+  - [c6_alpha_levels, c6_premult, 0]
+  - [c6_premult, out6, 0]
+  - [c7_color_bars, c7_blur, 0]
+  - [c7_blur, c7_chroma_blur, 0]
+  - [c7_chroma_blur, c7_glow, 0]
+  - [c7_glow, c7_global_tonemap, 0]
+  - [c7_global_tonemap, c7_expand, 0]
+  - [c7_expand, c7_setdod, 0]
+  - [c7_setdod, out7, 0]
+  - [c9_grid, c9_layer, 0]
+  - [c9_rgrad, c9_layer, 1]
+  - [c9_layer, out9, 0]

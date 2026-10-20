@@ -11,6 +11,7 @@
 #include<QVBoxLayout>
 
 #include<ramen/ui/inspector/inspector.hpp>
+#include<ramen/ui/params/param_widget.hpp>
 
 #include<ramen/params/parameterised.hpp>
 #include<ramen/ui/user_interface.hpp>
@@ -30,7 +31,7 @@ panel_t::panel_t( parameterised_t *p) : p_( p), panel_( 0)
 
     for( param_t& param : p_->param_set())
     {
-        QWidget *w = param.create_widgets();
+        QWidget *w = create_param_widgets( param);
 
         if( w)
             layout->addWidget( w);

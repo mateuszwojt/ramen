@@ -7,17 +7,17 @@
 
 #include<ramen/params/composite_param.hpp>
 
-#include<QPointer>
-
-class QComboBox;
-class QStackedWidget;
-
 namespace ramen
 {
 
+namespace ui
+{
+class combo_group_param_widget_t;
+} // ui
+
 class RAMEN_API combo_group_param_t : public composite_param_t
 {
-    Q_OBJECT
+    friend class ui::combo_group_param_widget_t;
 
 public:
 
@@ -34,10 +34,10 @@ protected:
 
 private:
 
-    virtual param_t *do_clone() const { return new combo_group_param_t( *this);}
+    // the widget disables the whole group, keep the children state.
+    virtual void do_enable_widgets( bool e) {}
 
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
+    virtual param_t *do_clone() const { return new combo_group_param_t( *this);}
 
     virtual void do_add_to_hash( hash::generator_t& hash_gen) const;
 
@@ -46,14 +46,6 @@ private:
     virtual void do_read( const serialization::yaml_node_t& node);
     virtual void do_write( serialization::yaml_oarchive_t& out) const;
 
-    virtual QWidget *do_create_widgets();
-
-    QPointer<QComboBox> menu_;
-    QPointer<QStackedWidget> stack_;
-
-private Q_SLOTS:
-
-    void item_picked( int index);
 };
 
 } // namespace

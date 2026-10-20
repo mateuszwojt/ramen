@@ -6,7 +6,7 @@
 
 #include<ramen/GL/Imath_gl.hpp>
 
-#include<ramen/ui/palette.hpp>
+#include<ramen/app/palette.hpp>
 
 namespace ramen
 {
@@ -112,12 +112,12 @@ float manipulator_t::default_line_width() 			{ return 1.5f;}
 
 const Imath::Color3c& manipulator_t::default_color()
 {
-	return ui::palette_t::instance().color( "manipulator");
+	return palette_t::instance().color( "manipulator");
 }
 
 const Imath::Color3c& manipulator_t::selected_color()
 {
-	return ui::palette_t::instance().color( "active_manipulator");
+	return palette_t::instance().color( "active_manipulator");
 }
 
 } // namespace

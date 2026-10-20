@@ -9,15 +9,12 @@
 
 #include<Imath/ImathVec.h>
 
-#include<QPointer>
-#include<QToolButton>
 
 namespace ramen
 {
 
 class RAMEN_API proportional_param_t : public numeric_param_t
 {
-    Q_OBJECT
 
 public:
 
@@ -26,22 +23,20 @@ public:
     bool proportional() const	    { return flags() & proportional_bit;}
     void set_proportional( bool p);
 
-    bool proportional_checked() const;
+    /// True if proportional editing is enabled in the user interface.
+    bool proportional_checked() const           { return proportional_checked_;}
+    void set_proportional_checked( bool b)      { proportional_checked_ = b;}
 
-private Q_SLOTS:
-
-	void proportional_toggle( bool state);
-		
 protected:
 
     proportional_param_t( const proportional_param_t& other);
     void operator=( const proportional_param_t& other);
 
-    void create_proportional_button( QWidget *parent, int height);
-
-    QPointer<QToolButton> prop_button_;
-
     static Imath::V3f proportional_factor;
+
+private:
+
+    bool proportional_checked_;
 };
 
 } // namespace

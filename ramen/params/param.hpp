@@ -19,7 +19,6 @@
 
 #include<Imath/ImathBox.h>
 
-#include<QObject>
 
 #include<ramen/assert.hpp>
 
@@ -33,6 +32,8 @@
 
 #include<ramen/anim/track_fwd.hpp>
 
+#include<ramen/core/signal.hpp>
+
 #include<ramen/undo/command.hpp>
 
 #include<ramen/hash/generator.hpp>
@@ -40,9 +41,7 @@
 #include<ramen/serialization/yaml_iarchive.hpp>
 #include<ramen/serialization/yaml_oarchive.hpp>
 
-#include<ramen/ui/widgets/param_spinbox_fwd.hpp>
 
-class QWidget;
 
 namespace ramen
 {
@@ -51,10 +50,8 @@ namespace ramen
 \ingroup params
 \brief param class
 */
-class RAMEN_API param_t : public QObject
+class RAMEN_API param_t
 {
-    Q_OBJECT
-
 protected:
 
     enum flag_bits
@@ -184,10 +181,12 @@ public:
     // util
     void apply_function( const std::function<void ( param_t*)>& f);
 
-    // widgets
-    QWidget *create_widgets();
+    // widgets. The user interface connects to the signals.
     void update_widgets();
     void enable_widgets( bool e);
+
+    core::signal_t<void ()> update_widgets_signal;
+    core::signal_t<void ( bool)> enable_widgets_signal;
 
 protected:
 
@@ -242,7 +241,6 @@ private:
     virtual void do_apply_function( const std::function<void ( param_t*)>& f);
 
     // widgets
-    virtual QWidget *do_create_widgets();
     virtual void do_update_widgets();
     virtual void do_enable_widgets( bool e);
 

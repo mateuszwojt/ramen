@@ -13,8 +13,6 @@
 
 #include<ramen/image/buffer.hpp>
 
-#include<ramen/ui/palette.hpp>
-
 namespace ramen
 {
 

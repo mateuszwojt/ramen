@@ -41,7 +41,7 @@ struct ocio_transform_fun
 
 private:
 
-    const image::image_view_t& img_;
+    const image::image_view_t img_;
     OCIO::ConstCPUProcessorRcPtr proc_;
 };
 

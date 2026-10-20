@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/color/color_match_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<ramen/gil/extension/algorithm/tbb/tbb_transform.hpp>
 
@@ -144,9 +145,9 @@ private:
 color_match_node_t::color_match_node_t()
 {
     set_name( "color_match");
-    add_input_plug( "front", false, ui::palette_t::instance().color( "front plug"), "Front");
-    add_input_plug( "target", false, ui::palette_t::instance().color( "front plug"), "Target Color");
-    add_input_plug( "source", true, ui::palette_t::instance().color( "back plug") , "Source Color");
+    add_input_plug( "front", false, palette_t::instance().color( "front plug"), "Front");
+    add_input_plug( "target", false, palette_t::instance().color( "front plug"), "Target Color");
+    add_input_plug( "source", true, palette_t::instance().color( "back plug") , "Source Color");
     add_output_plug();
 }
 

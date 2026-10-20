@@ -18,7 +18,6 @@ namespace ramen
 
 class transform3_param_t : public composite_param_t
 {
-    Q_OBJECT
 
 public:
 

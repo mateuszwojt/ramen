@@ -8,10 +8,15 @@
 namespace ramen
 {
 
+namespace ui
+{
+class separator_param_widget_t;
+} // ui
+
 class RAMEN_API separator_param_t : public param_t
 {
-    Q_OBJECT
-    
+    friend class ui::separator_param_widget_t;
+
 public:
 
     separator_param_t();
@@ -26,7 +31,6 @@ private:
 
     virtual param_t *do_clone() const { return new separator_param_t( *this);}
 
-    virtual QWidget *do_create_widgets();
 };
 
 } // namespace

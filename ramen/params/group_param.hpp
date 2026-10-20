@@ -7,16 +7,17 @@
 
 #include<ramen/params/composite_param.hpp>
 
-#include<QPointer>
-
-class QGroupBox;
-
 namespace ramen
 {
 
+namespace ui
+{
+class group_param_widget_t;
+} // ui
+
 class RAMEN_API group_param_t : public composite_param_t
 {
-    Q_OBJECT
+    friend class ui::group_param_widget_t;
 
 public:
 
@@ -32,12 +33,11 @@ protected:
 
 private:
 
+    // the widget disables the whole group, keep the children state.
+    virtual void do_enable_widgets( bool e) {}
+
     virtual param_t *do_clone() const { return new group_param_t( *this);}
 
-    virtual QWidget *do_create_widgets();
-    virtual void do_enable_widgets( bool e);
-
-    QPointer<QGroupBox> group_;
     bool can_collapse_;
 };
 

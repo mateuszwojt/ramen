@@ -7,6 +7,7 @@
 #include<Imath/ImathFun.h>
 
 #include<ramen/app/application.hpp>
+#include<ramen/app/ui_notifications.hpp>
 
 #include<ramen/assert.hpp>
 
@@ -15,7 +16,6 @@
 #include<ramen/params/float2_param.hpp>
 #include<ramen/params/float_param.hpp>
 
-#include<ramen/ui/user_interface.hpp>
 
 namespace ramen
 {
@@ -131,8 +131,7 @@ void shape_transform_param_t::apply_track( float start_frame, float end_frame, c
 	param_set()->end_edit( true);
 
 	parameterised()->update_widgets();
-	if( app().ui())
-	    app().ui()->update_anim_editors();
+	ui_notifications().update_anim_editors();
 }
 */
 

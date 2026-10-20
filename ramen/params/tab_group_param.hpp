@@ -7,16 +7,17 @@
 
 #include<ramen/params/composite_param.hpp>
 
-#include<QPointer>
-
-class QTabWidget;
-
 namespace ramen
 {
 
+namespace ui
+{
+class tab_group_param_widget_t;
+} // ui
+
 class tab_group_param_t : public composite_param_t
 {
-    Q_OBJECT
+    friend class ui::tab_group_param_widget_t;
 
 public:
 
@@ -30,14 +31,13 @@ protected:
 
 private:
 
-    virtual param_t *do_clone() const { return new tab_group_param_t( *this);}
+    // the widget disables the whole group, keep the children state.
+    virtual void do_enable_widgets( bool e) {}
 
-    virtual QWidget *do_create_widgets();
-    virtual void do_enable_widgets( bool e);
+    virtual param_t *do_clone() const { return new tab_group_param_t( *this);}
 
     virtual void do_create_tracks( anim::track_t *parent);
 
-    QPointer<QTabWidget> tab_;
 };
 
 } // namespace

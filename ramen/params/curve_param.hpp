@@ -14,7 +14,6 @@ namespace ramen
 
 class RAMEN_API curve_param_t : public animated_param_t
 {
-    Q_OBJECT
 
 public:
 

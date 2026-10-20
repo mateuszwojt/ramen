@@ -13,17 +13,19 @@
 
 #include<tuple>
 
-#include<QPointer>
-#include<QComboBox>
-
 namespace ramen
 {
+
+namespace ui
+{
+class image_channels_param_widget_t;
+} // ui
 
 typedef std::tuple<int,int,int,int> tuple4i_t;
 	
 class image_channels_param_t : public static_param_t
 {
-    Q_OBJECT
+    friend class ui::image_channels_param_widget_t;
 
 public:
 
@@ -45,22 +47,12 @@ protected:
     image_channels_param_t( const image_channels_param_t& other);
     void operator=( const image_channels_param_t& other);
 
-private Q_SLOTS:
-
-    void channel_picked( int index);
-
 private:
 
     virtual param_t *do_clone() const { return new image_channels_param_t( *this);}
 
-    virtual QWidget *do_create_widgets();
-    virtual void do_update_widgets();
-    virtual void do_enable_widgets( bool e);
-
-	void update_popup( QComboBox *popup, int value);
 	
 	std::vector<std::string> channel_list_;
-    QPointer<QComboBox> red_combo_, green_combo_, blue_combo_, alpha_combo_;
 };
 
 } // namespace

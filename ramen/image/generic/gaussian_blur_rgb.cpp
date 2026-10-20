@@ -98,8 +98,8 @@ struct gaussian_blur_rgb_fn
 		}
     }
 
-    const const_rgb_image_view_t& src_;
-    const rgb_image_view_t& dst_;
+    const const_rgb_image_view_t src_;
+    const rgb_image_view_t dst_;
 	float *kernel_;
 	int k_size_;
 };

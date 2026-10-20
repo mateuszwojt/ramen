@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/distort/turbulent_displace_node.hpp>
+#include<ramen/app/palette.hpp>
 
 #include<Imath/ImathFun.h>
 
@@ -85,7 +86,7 @@ struct mask_fun
 
 private:
 
-    const image::const_image_view_t& mask_;
+    const image::const_image_view_t mask_;
     Imath::Box2i area_;
 };
 
@@ -120,7 +121,7 @@ private:
 turbulent_displace_node_t::turbulent_displace_node_t() : distort_node_t()
 {
     set_name( "turb_disp");
-    add_input_plug( "mask", false, ui::palette_t::instance().color( "matte plug"), "Mask");
+    add_input_plug( "mask", false, palette_t::instance().color( "matte plug"), "Mask");
 }
 
 void turbulent_displace_node_t::do_create_params()

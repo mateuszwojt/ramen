@@ -9,17 +9,13 @@
 
 #include<ramen/core/signal.hpp>
 
-#include<QPointer>
 
-#include<ramen/ui/widgets/container_widget.hpp>
 
 namespace ramen
 {
 
 class RAMEN_API inspector_param_t : public param_t
-{
-    Q_OBJECT
-    
+{    
 public:
 
     explicit inspector_param_t( const std::string& id);
@@ -29,6 +25,9 @@ public:
 	parameterised_t *parameterised()				{ return contents_;}
 	
 	void set_parameterised( parameterised_t *p);
+
+	/// Emitted when the contained parameterised changes.
+	core::signal_t<void ()> contents_changed;
 	
 protected:
 
@@ -39,11 +38,9 @@ private:
 	
     virtual param_t *do_clone() const { return new inspector_param_t( *this);}
 
-    virtual QWidget *do_create_widgets();
 	
 	void parameterised_deleted( parameterised_t *p);
 	
-	QPointer<ui::container_widget_t> widget_;
 	parameterised_t *contents_;
 	core::connection_t connection_;
 };

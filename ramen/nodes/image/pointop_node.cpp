@@ -3,6 +3,7 @@
 // See CDDL_LICENSE.txt for a copy of the license.
 
 #include<ramen/nodes/image/pointop_node.hpp>
+#include<ramen/app/palette.hpp>
 
 namespace ramen
 {
@@ -11,7 +12,7 @@ namespace image
 
 pointop_node_t::pointop_node_t() : image_node_t()
 {
-    add_input_plug( "front", false, ui::palette_t::instance().color("front plug"), "Front");
+    add_input_plug( "front", false, palette_t::instance().color("front plug"), "Front");
     add_output_plug();
 }
 
